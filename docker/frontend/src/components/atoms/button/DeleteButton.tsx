@@ -6,11 +6,11 @@ type Props = {
   onClick: () => void;
 };
 
-export const PrimaryButton: VFC<Props> = memo((props) => {
+export const DeleteButton: VFC<Props> = memo((props) => {
   const { children, onClick } = props;
   return (
     <Button
-      bg="#03acf5"
+      bg="#f50303"
       color="white"
       _hover={{ opacity: 0.8 }}
       onClick={onClick}

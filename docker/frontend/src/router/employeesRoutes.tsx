@@ -1,4 +1,4 @@
-import { Employee } from "../components/pages/Employee";
+import { Employee } from "../components/pages/EmployeeManagement";
 import { EmployeeRegistry } from "../components/pages/EmployeeRegistry";
 import { Page404 } from "../components/pages/Page404";
 

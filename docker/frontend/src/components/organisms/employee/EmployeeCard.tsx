@@ -10,6 +10,7 @@ type Props = {
   phoneNumber: string;
   email: string;
   workingForm: string;
+  onClick: (employeeId: number) => void;
 };
 
 export const EmployeeCard: VFC<Props> = memo((props) => {
@@ -22,6 +23,7 @@ export const EmployeeCard: VFC<Props> = memo((props) => {
     phoneNumber,
     email,
     workingForm,
+    onClick,
   } = props;
 
   return (
@@ -33,6 +35,7 @@ export const EmployeeCard: VFC<Props> = memo((props) => {
       shadow="md"
       p={8}
       _hover={{ cursor: "pointer", opacity: 0.8 }}
+      onClick={() => onClick(employeeId)}
     >
       <Stack>
         <Text>従業員No: {employeeId}</Text>
