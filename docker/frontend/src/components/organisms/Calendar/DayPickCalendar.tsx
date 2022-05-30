@@ -1,10 +1,14 @@
-import { memo, useState, VFC } from "react";
+import { memo, VFC } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
-export const DayPickCalendar: VFC = memo(() => {
-  const initialDays: Date[] = [];
-  const [days, setDays] = useState<Date[] | undefined>(initialDays);
+type Props = {
+  days: Date[] | undefined;
+  setDays: (days: Date[] | undefined) => void;
+};
+
+export const DayPickCalendar: VFC<Props> = memo((props) => {
+  const { days, setDays } = props;
 
   const footer =
     days && days.length > 0 ? (
