@@ -1,6 +1,6 @@
 import { Page404 } from "../components/pages/Page404";
-import { Request } from "../components/pages/Request";
-import { RequestList } from "../components/pages/RequestList";
+import { VacationRequest } from "../components/pages/VacationRequest";
+import { VacationRequestList } from "../components/pages/VacationRequestList";
 import { ShiftCreation } from "../components/pages/ShiftCreation";
 import { Shift } from "../components/pages/Shift";
 
@@ -18,12 +18,12 @@ export const shiftRoutes = [
   {
     path: "/request",
     exact: true,
-    children: <Request />,
+    children: <VacationRequest />,
   },
   {
     path: "/request/list",
     exact: true,
-    children: <RequestList />,
+    children: <VacationRequestList />,
   },
   {
     path: "*",

@@ -6,7 +6,7 @@ import "react-day-picker/dist/style.css";
 import { DayPickCalendar } from "../organisms/Calendar/DayPickCalendar";
 import axios from "axios";
 
-export const Request: VFC = memo(() => {
+export const VacationRequest: VFC = memo(() => {
   const history = useHistory();
   const onClickShift = useCallback(
     () => history.push("/shiftwork_management/shift"),
@@ -33,10 +33,12 @@ export const Request: VFC = memo(() => {
   };
 
   return (
-    <Box textAlign="center" p="5" width="350px">
-      <DayPickCalendar days={days} setDays={setDays} />
-      <PrimaryButton onClick={onClickShift}>戻る</PrimaryButton>
-      <PrimaryButton onClick={onClickPostRequest}>提出</PrimaryButton>
+    <Box align="center" p="5">
+      <Box w="350px" textAlign="center">
+        <DayPickCalendar days={days} setDays={setDays} />
+        <PrimaryButton onClick={onClickShift}>戻る</PrimaryButton>
+        <PrimaryButton onClick={onClickPostRequest}>提出</PrimaryButton>
+      </Box>
     </Box>
   );
 });
