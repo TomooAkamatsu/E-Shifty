@@ -22,23 +22,24 @@ export const DayPickCalendar: VFC<Props> = memo((props) => {
       <p>休み希望日を選択してください</p>
     );
 
-  const date = new Date();
-  date.setDate(1);
-  date.setMonth(date.getMonth() + 1);
-  const defaultMonth = date;
-
-  const startDate = new Date(defaultMonth);
-  const endDate = new Date(defaultMonth);
-  endDate.setMonth(endDate.getMonth() + 1);
-  endDate.setDate(0);
+  const today = new Date();
+  const beginningOfNextMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    1
+  );
+  const endOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 
   const dateList = [];
 
-  for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+  for (
+    var d = new Date(beginningOfNextMonth);
+    d <= endOfNextMonth;
+    d.setDate(d.getDate() + 1)
+  ) {
     const e = new Date(d);
     dateList.push(e);
   }
-
   const weekends = dateList.filter((x) => x.getDay() === 0 || x.getDay() === 6);
 
   return (
@@ -51,7 +52,7 @@ export const DayPickCalendar: VFC<Props> = memo((props) => {
         onSelect={setDays}
         footer={footer}
         disabled={weekends}
-        defaultMonth={defaultMonth}
+        defaultMonth={beginningOfNextMonth}
         disableNavigation
         modifiersClassNames={{
           selected: "my-selected",
@@ -62,12 +63,12 @@ export const DayPickCalendar: VFC<Props> = memo((props) => {
 });
 
 const css = `
-.my-selected:not([disabled]) { 
-  font-weight: bold; 
+.my-selected:not([disabled]) {
+  font-weight: bold;
   border: 1px solid currentColor;
   background-color: #FF9999;
 }
-.my-selected:hover:not([disabled]) { 
+.my-selected:hover:not([disabled]) {
   border-color: blue;
   color: blue;
   background-color: #FF9999;

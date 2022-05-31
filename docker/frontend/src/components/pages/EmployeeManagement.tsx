@@ -1,6 +1,6 @@
 import { Box, useDisclosure, Wrap, WrapItem } from "@chakra-ui/react";
 import { memo, useCallback, VFC } from "react";
-import { dummyEmployeeList } from "../../Dummy/dummyEmployeeList";
+import { dummyEmployeeList } from "../../dummy/dummyEmployeeList";
 import { EmployeeCard } from "../organisms/employee/EmployeeCard";
 import { EmployeeDetailModal } from "../organisms/employee/EmployeeDetailModal";
 import { useSelectEmployee } from "../../hooks/useSelectEmployee";
@@ -19,14 +19,14 @@ export const Employee: VFC = memo(() => {
     [onOpen, onSelectEmployee]
   );
 
-  const onClickEmployeeCreation = useCallback(() => {
+  const onClickEmployeeRegistry = useCallback(() => {
     history.push("/shiftwork_management/employees/new");
   }, [history]);
 
   return (
     <Box>
       <Box align="right" pr={30} pt={5}>
-        <PrimaryButton onClick={onClickEmployeeCreation}>
+        <PrimaryButton onClick={onClickEmployeeRegistry}>
           従業員の新規登録
         </PrimaryButton>
       </Box>

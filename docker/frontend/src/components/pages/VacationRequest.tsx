@@ -3,7 +3,7 @@ import { memo, useCallback, useState, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import "react-day-picker/dist/style.css";
-import { DayPickCalendar } from "../organisms/Calendar/DayPickCalendar";
+import { DayPickCalendar } from "../organisms/calendar/DayPickCalendar";
 import axios from "axios";
 
 export const VacationRequest: VFC = memo(() => {

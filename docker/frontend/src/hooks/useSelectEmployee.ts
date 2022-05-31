@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { dummyEmployeeList } from "../Dummy/dummyEmployeeList";
+import { dummyEmployeeList } from "../dummy/dummyEmployeeList";
 import { Employee } from "../type/employee";
 
 type Props = {
