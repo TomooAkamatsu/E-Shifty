@@ -2,8 +2,8 @@ import { Box, Stack, useDisclosure } from "@chakra-ui/react";
 import { memo, useCallback, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
-import { ShiftConfirmModal } from "../organisms/shiftTable/ShiftConfirmModal";
-import { ShiftTable } from "../organisms/shiftTable/ShiftTable";
+import { ShiftConfirmModal } from "../organisms/shift/shiftTable/ShiftConfirmModal";
+import { ShiftTable } from "../organisms/shift/shiftTable/ShiftTable";
 
 export const ShiftCreation: VFC = memo(() => {
   const history = useHistory();

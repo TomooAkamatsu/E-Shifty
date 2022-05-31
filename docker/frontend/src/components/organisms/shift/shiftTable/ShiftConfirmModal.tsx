@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import { VFC } from "react";
-import { PrimaryButton } from "../../atoms/button/PrimaryButton";
+import { PrimaryButton } from "../../../atoms/button/PrimaryButton";
 
 type Props = {
   isOpen: boolean;

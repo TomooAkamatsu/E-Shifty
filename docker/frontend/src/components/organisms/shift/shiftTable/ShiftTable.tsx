@@ -1,7 +1,7 @@
 import { Table, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { memo, VFC } from "react";
-import { dummyNextMonthShiftData } from "../../../dummy/dummyNextMonthShiftData";
-import { useDateList } from "../../../hooks/useDateList";
+import { dummyNextMonthShiftData } from "../../../../dummy/dummyNextMonthShiftData";
+import { useDateList } from "../../../../hooks/useDateList";
 import { ShiftTableBodyTr } from "./ShitTableBodyTr";
 
 export const ShiftTable: VFC = memo(() => {
