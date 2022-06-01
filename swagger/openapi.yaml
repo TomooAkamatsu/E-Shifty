@@ -288,6 +288,13 @@ paths:
         - putの場合どう書けば...
       tags: ["employees"]
       deprecated: false
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "更新対象の従業員ID"
+          required: true
+          schema: { type:number }
+          example: "1"
       requestBody:
         description: "仮シフトの修正情報を送信"
         content:
@@ -310,6 +317,13 @@ paths:
         - requestBodyをobjectではなくstringにして良いのか....
       tags: ["employees"]
       deprecated: false
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "削除対象の対象ID"
+          required: true
+          schema: { type:number }
+          example: "1"
       requestBody:
         description: "仮シフトの修正情報を送信"
         content:
