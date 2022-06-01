@@ -22,6 +22,7 @@ export const VacationRequest: VFC = memo(() => {
   };
 
   const onClickPostRequest = () => {
+    alert("後で実装");
     axios
       .post("http://localhost:8080/api/shift/requests", postRequestData)
       .then((res) => {

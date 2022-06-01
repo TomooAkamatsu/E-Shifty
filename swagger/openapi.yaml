@@ -1,0 +1,323 @@
+openapi: "3.0.3"
+
+info:
+  title: "Shiftwork Management API"
+  description: |
+    - シフト一覧のGET/POST
+    - 休み希望のGET/POST
+    - 休み希望一覧のGET
+    - シフトパターンのGET
+    - 仮シフトのGET/PUT
+    - 従業員一覧のGET
+    - 従業員詳細情報のPOST/PUT/DELETE
+  version: "1.0.0"
+
+servers:
+  - url: "http://localhost:8080"
+    description: "Local development"
+
+tags:
+  - name: shift
+    description: シフトに関する操作
+  - name: employees
+    description: 従業員の情報に関する操作
+
+paths:
+  "/api/shift/{year}/{month}":
+    get:
+      summary: "月毎のシフト一覧取得"
+      description: "月毎の全従業員のシフト一覧を取得する"
+      tags: ["shift"]
+      deprecated: false
+      parameters:
+        - name: "year"
+          in: "path"
+          description: "取得したいシフトの年"
+          required: true
+          schema: { type:number }
+          example: "2022"
+        - name: "month"
+          in: "path"
+          description: "取得したいシフトの月"
+          required: true
+          schema: { type:number }
+          example: "5"
+      responses:
+        "200":
+          description: "取得の成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shift:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employeeName: { type: string }
+                        patternArray:
+                          type: array
+                          items: { type: string }
+  "/api/shift/requests/{id}":
+    get:
+      summary: "休み希望の取得"
+      description: "従業員個人が登録済みの(未登録であれば空)の来月の休み希望を取得する"
+      tags: ["shift"]
+      deprecated: false
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "休み希望を取得する対象ID"
+          required: true
+          schema: { type:number }
+          example: "1"
+      responses:
+        "200":
+          description: "登録の成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employeeId: { type: number }
+                  requestDate:
+                    type: array
+                    items: { type: string }
+    post:
+      summary: "休み希望の登録&更新"
+      description: "従業員個人が来月の休み希望を登録または更新する"
+      tags: ["shift"]
+      deprecated: false
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "休み希望を取得する対象ID"
+          required: true
+          schema: { type:number }
+          example: "1"
+      requestBody:
+        description: "休み希望の送信"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeId: { type: number }
+                requestDate:
+                  type: array
+                  items: { type: string }
+      responses:
+        "201":
+          description: "登録の成功"
+  "/api/shift/requests":
+    get:
+      summary: "休み希望一覧取得(管理者用)"
+      description: "管理者用に全従業員が提出した来月の休み希望一覧を取得する"
+      tags: ["shift"]
+      deprecated: false
+      responses:
+        "200":
+          description: "取得の成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestDate:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employeeId: { type: number }
+                        employeeName: { type: string }
+                        requestDate:
+                          type: array
+                          items: { type: string }
+  "/api/shift/draft":
+    get:
+      summary: "シフト作成用の仮シフトの取得(管理者用)"
+      description: |
+        - 休み希望を反映した全従業員の来月の仮シフトを取得する"
+        - "shift":{"date":"string"}の部分はdateが対象月の日付によって動的に変化する、書き方がわかりません...
+      tags: ["shift"]
+      deprecated: false
+      responses:
+        "200":
+          description: "取得の成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstHalf:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employeeName: { type: string }
+                        shift:
+                          type: object
+                          properties:
+                            "対象月の日付": { type: string }
+                            # dateとあるが対象月の日にちが入るため月によって動的に変化する
+                            # 例 { "20220601":"A", "22020602": "休み", ...}
+                            # 書き方わかりません。。。
+                  latterHalf:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employeeName: { type: string }
+                        shift:
+                          type: object
+                          properties:
+                            "対象月の日付": { type: string }
+                            # 上と同じ
+    put:
+      summary: "シフト作成画面で仮シフト更新(管理者用)"
+      description: "シフト作成画面にて仮シフトの修正情報を送信"
+      tags: ["shift"]
+      deprecated: false
+      requestBody:
+        description: "仮シフトの修正情報を送信"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeName: { type: string }
+                changeDate: { type: string }
+                changedPattern: { type: string }
+      responses:
+        "201":
+          description: "登録の成功"
+  "/api/shift/draft/confirm":
+    post:
+      summary: "仮シフトの確定(管理者用)"
+      description: |
+        - 仮シフトを確定させる
+        - 確定を知らせるだけの場合、objectではなくてstringにしてもよいのか..?
+      tags: ["shift"]
+      deprecated: false
+      requestBody:
+        description: "仮シフトの修正情報を送信"
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "confirm"
+              # こういう場合はオブジェクトではなくても良いのか...?
+      responses:
+        "201":
+          description: "登録の成功"
+  "/api/shift/pattern":
+    get:
+      summary: "シフトパターンの取得(管理者用)"
+      description: "シフト作成画面でのプルダウン用にシフトパターンを情報を取得"
+      tags: ["shift"]
+      deprecated: false
+      responses:
+        "200":
+          description: "取得の成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shiftPattern:
+                    type: array
+                    items: { type: string }
+  "/api/employees":
+    get:
+      summary: "従業員一覧の取得"
+      description: "従業員一覧と詳細情報の取得"
+      tags: ["employees"]
+      deprecated: false
+      responses:
+        "200":
+          description: "取得の成功"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employees:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        employeeId: { type: number }
+                        name: { type: string }
+                        birthday: { type: string }
+                        age: { type: number }
+                        gender: { type: string }
+                        phoneNumber: { type: string }
+                        email: { type: string }
+                        employmentDate: { type: string }
+                        workingForm: { type: string }
+    post:
+      summary: "従業員の新規登録(管理者用)"
+      description: "従業員の新規登録情報の送信"
+      tags: ["employees"]
+      deprecated: false
+      requestBody:
+        description: "登録情報を送信"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeId: { type: number }
+                name: { type: string }
+                birthday: { type: string }
+                age: { type: number }
+                gender: { type: string }
+                phoneNumber: { type: string }
+                email: { type: string }
+                employmentDate: { type: string }
+                workingForm: { type: string }
+      responses:
+        "201":
+          description: "登録の成功"
+  "/api/employees/{id}":
+    put:
+      summary: "従業員詳細情報の更新(管理者用)"
+      description: |
+        - 従業員詳細情報画面にて情報を更新
+        - putの場合どう書けば...
+      tags: ["employees"]
+      deprecated: false
+      requestBody:
+        description: "仮シフトの修正情報を送信"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employeeId: { type: number }
+                changedItem:
+                  type: object
+                  properties:
+                    "対象項目": { type: string }
+      responses:
+        "201":
+          description: "更新の成功"
+    delete:
+      summary: "従業員詳細情報の削除(管理者用)"
+      description: |
+        - 従業員詳細情報画面にて情報を削除
+        - requestBodyをobjectではなくstringにして良いのか....
+      tags: ["employees"]
+      deprecated: false
+      requestBody:
+        description: "仮シフトの修正情報を送信"
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "1"
+              # 削除対象のidを送信
+      responses:
+        "200":
+          description: "削除の成功"

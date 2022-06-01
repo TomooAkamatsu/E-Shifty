@@ -81,6 +81,7 @@ export const EmployeeRegistry: VFC = memo(() => {
   // console.log(postNewEmployeeDate);
 
   const onClickRegistry = () => {
+    alert("後ほど実装");
     const postNewEmployeeDate = {
       lastName: { newLastName },
       firstName: { newFirstName },

@@ -45,48 +45,46 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
                 <FormControl>
                   <FormLabel>名前</FormLabel>
                   <Input
-                    value={`${selectedEmployee?.lastName} ${selectedEmployee?.firstName}`}
-                    isReadOnly
+                    defaultValue={`${selectedEmployee?.lastName} ${selectedEmployee?.firstName}`}
                   />
                 </FormControl>
                 <FormControl>
                   <FormLabel>ローマ字</FormLabel>
                   <Input
-                    value={`${selectedEmployee?.romanLastName} ${selectedEmployee?.romanFirstName}`}
-                    isReadOnly
+                    defaultValue={`${selectedEmployee?.romanLastName} ${selectedEmployee?.romanFirstName}`}
                   />
                 </FormControl>
               </HStack>
               <HStack>
                 <FormControl>
                   <FormLabel>生年月日</FormLabel>
-                  <Input value={selectedEmployee?.birthday} isReadOnly />
+                  <Input defaultValue={selectedEmployee?.birthday} />
                 </FormControl>
                 <FormControl>
                   <FormLabel>性別</FormLabel>
-                  <Input value={selectedEmployee?.gender} isReadOnly />
+                  <Input defaultValue={selectedEmployee?.gender} />
                 </FormControl>
                 <FormControl>
                   <FormLabel>年齢</FormLabel>
-                  <Input value={selectedEmployee?.age} isReadOnly />
+                  <Input defaultValue={selectedEmployee?.age} />
                 </FormControl>
               </HStack>
               <FormControl>
                 <FormLabel>TEL</FormLabel>
-                <Input value={selectedEmployee?.phoneNumber} isReadOnly />
+                <Input defaultValue={selectedEmployee?.phoneNumber} />
               </FormControl>
               <FormControl>
                 <FormLabel>Email</FormLabel>
-                <Input value={selectedEmployee?.email} isReadOnly />
+                <Input defaultValue={selectedEmployee?.email} />
               </FormControl>
               <HStack>
                 <FormControl>
                   <FormLabel>雇用形態</FormLabel>
-                  <Input value={selectedEmployee?.workingForm} isReadOnly />
+                  <Input defaultValue={selectedEmployee?.workingForm} />
                 </FormControl>
                 <FormControl>
                   <FormLabel>雇用開始日</FormLabel>
-                  <Input value={selectedEmployee?.employmentDate} isReadOnly />
+                  <Input defaultValue={selectedEmployee?.employmentDate} />
                 </FormControl>
               </HStack>
             </Stack>
