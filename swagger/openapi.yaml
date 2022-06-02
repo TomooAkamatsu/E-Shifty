@@ -174,7 +174,7 @@ paths:
                           properties:
                             "対象月の日付": { type: string }
                             # 上と同じ
-    put:
+    patch:
       summary: "シフト作成画面で仮シフト更新(管理者用)"
       description: "シフト作成画面にて仮シフトの修正情報を送信"
       tags: ["shift"]
@@ -191,7 +191,7 @@ paths:
                 changedPattern: { type: string }
       responses:
         "201":
-          description: "登録の成功"
+          description: "更新の成功"
   "/api/shift/draft/confirm":
     post:
       summary: "仮シフトの確定(管理者用)"
@@ -281,7 +281,7 @@ paths:
         "201":
           description: "登録の成功"
   "/api/employees/{id}":
-    put:
+    patch:
       summary: "従業員詳細情報の更新(管理者用)"
       description: |
         - 従業員詳細情報画面にて情報を更新
