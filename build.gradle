@@ -34,5 +34,7 @@ tasks.named('test') {
 }
 
 bootRun {
-	jvmArgs = ["-Dspring.profiles.active=develop"]
+	jvmArgs = ["-Dspring.profiles.active=develop",
+			   "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+	]
 }

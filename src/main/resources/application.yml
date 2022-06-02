@@ -6,9 +6,9 @@ spring:
   profiles: develop
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db:3306/demo_db
-    username: user
-    password: password
+    url: jdbc:mysql://db:3306/shift_management_app
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
