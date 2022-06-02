@@ -249,6 +249,7 @@ paths:
                       properties:
                         employeeId: { type: number }
                         name: { type: string }
+                        romanName: {type: string}
                         birthday: { type: string }
                         age: { type: number }
                         gender: { type: string }
@@ -270,6 +271,7 @@ paths:
               properties:
                 employeeId: { type: number }
                 name: { type: string }
+                romanName: {type: string}
                 birthday: { type: string }
                 age: { type: number }
                 gender: { type: string }
