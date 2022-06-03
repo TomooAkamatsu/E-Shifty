@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { dummyEmployeeList } from "../dummy/dummyEmployeeList";
-import { Employee } from "../type/employee";
+import { typeEmployee } from "../type/typeEmployee";
 
 type Props = {
   employeeId: number;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const useSelectEmployee = () => {
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+  const [selectedEmployee, setSelectedEmployee] = useState<typeEmployee | null>(
     null
   );
 
@@ -17,7 +17,7 @@ export const useSelectEmployee = () => {
     const targetEmployee = dummyEmployeeList.find(
       (employee) => employee.employeeId === employeeId
     );
-    setSelectedEmployee(targetEmployee ?? null);
+    // setSelectedEmployee(targetEmployee ?? null);
     onOpen();
   }, []);
 

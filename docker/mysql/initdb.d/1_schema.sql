@@ -10,7 +10,7 @@ CREATE TABLE employee(
     first_name VARCHAR(10) NOT NULL,
     roman_last_name VARCHAR(15) NOT NULL,
     roman_first_name VARCHAR(15) NOT NULL,
-    birthday VARCHAR(20) NOT NULL,
+    birthday DATE NOT NULL,
     age INT NOT NULL,
     gender VARCHAR(10) NOT NULL,
     phone_number VARCHAR(20) NOT NULL,

@@ -1,4 +1,4 @@
-export type Employee = {
+export type typeEmployee = {
   employeeId: number;
   lastName: string;
   firstName: string;
@@ -10,5 +10,6 @@ export type Employee = {
   phoneNumber: string;
   email: string;
   employmentDate: string;
-  workingForm: string;
+  retirementDate: string;
+  workingFormId: number;
 };

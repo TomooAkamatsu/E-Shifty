@@ -9,7 +9,7 @@ type Props = {
   romanFirstName: string;
   phoneNumber: string;
   email: string;
-  workingForm: string;
+  workingForm: number;
   onClick: (employeeId: number) => void;
 };
 
@@ -25,6 +25,7 @@ export const EmployeeCard: VFC<Props> = memo((props) => {
     workingForm,
     onClick,
   } = props;
+  console.log(workingForm);
 
   return (
     <Box

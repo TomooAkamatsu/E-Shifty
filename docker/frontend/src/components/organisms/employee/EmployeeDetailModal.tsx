@@ -13,14 +13,14 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { memo, VFC } from "react";
-import { Employee } from "../../../type/employee";
+import { typeEmployee } from "../../../type/typeEmployee";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 import { DeleteButton } from "../../atoms/button/DeleteButton";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  selectedEmployee: Employee | null;
+  selectedEmployee: typeEmployee | null;
 };
 
 export const EmployeeDetailModal: VFC<Props> = memo((props) => {
@@ -80,7 +80,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
               <HStack>
                 <FormControl>
                   <FormLabel>雇用形態</FormLabel>
-                  <Input defaultValue={selectedEmployee?.workingForm} />
+                  <Input defaultValue={selectedEmployee?.workingFormId} />
                 </FormControl>
                 <FormControl>
                   <FormLabel>雇用開始日</FormLabel>
