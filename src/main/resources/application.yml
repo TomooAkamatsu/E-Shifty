@@ -6,7 +6,7 @@ spring:
   profiles: develop
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db:3306/shift_management_app
+    url: jdbc:mysql://db:3306/sma
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
   jpa:
