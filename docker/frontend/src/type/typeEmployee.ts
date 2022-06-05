@@ -10,6 +10,5 @@ export type typeEmployee = {
   phoneNumber: string;
   email: string;
   employmentDate: string;
-  retirementDate: string;
-  workingFormId: number;
+  workingFormName: string;
 };

@@ -7,9 +7,9 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { ChangeEvent, memo, useCallback, useState, VFC } from "react";
 import { useHistory } from "react-router-dom";
+import { instance } from "../../api/axios";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 
 export const EmployeeRegistry: VFC = memo(() => {
@@ -65,55 +65,23 @@ export const EmployeeRegistry: VFC = memo(() => {
     setNewEmploymentDate(e.target.value);
   };
 
-  // const postNewEmployeeDate = {
-  //   lastName: { newLastName },
-  //   firstName: { newFirstName },
-  //   romanLastName: { newRomanLastName },
-  //   romanFirstName: { newRomanFirstName },
-  //   birthday: { newBirthday },
-  //   age: { newAge },
-  //   gender: { newGender },
-  //   phoneNumber: { newPhoneNumber },
-  //   email: { newEmail },
-  //   employmentDate: { newEmploymentDate },
-  //   workingForm: { newWorkingForm },
-  // };
-  // console.log(postNewEmployeeDate);
-
   const onClickRegistry = () => {
-    alert("後ほど実装");
-    const postNewEmployeeDate = {
-      lastName: { newLastName },
-      firstName: { newFirstName },
-      romanLastName: { newRomanLastName },
-      romanFirstName: { newRomanFirstName },
-      birthday: { newBirthday },
-      age: { newAge },
-      gender: { newGender },
-      phoneNumber: { newPhoneNumber },
-      email: { newEmail },
-      employmentDate: { newEmploymentDate },
-      workingForm: { newWorkingForm },
+    const postNewEmployeeData = {
+      lastName: newLastName,
+      firstName: newFirstName,
+      romanLastName: newRomanLastName,
+      romanFirstName: newRomanFirstName,
+      birthday: newBirthday,
+      age: newAge,
+      gender: newGender,
+      phoneNumber: newPhoneNumber,
+      email: newEmail,
+      employmentDate: newEmploymentDate,
+      workingForm: newWorkingForm,
     };
-    const postNewEmployeeDateArr = [
-      { newLastName },
-      { newFirstName },
-      { newRomanLastName },
-      { newRomanFirstName },
-      { newBirthday },
-      { newAge },
-      { newGender },
-      { newPhoneNumber },
-      { newEmail },
-      { newEmploymentDate },
-      { newWorkingForm },
-    ];
-    console.log(postNewEmployeeDateArr);
-    axios
-      .post("http://localhost:8080/api/employees", postNewEmployeeDate)
-      .then((res) => {
-        console.log(res);
-      });
+    instance
+      .post("/employees", JSON.stringify(postNewEmployeeData))
+      .then((r) => console.log(r.data));
   };
 
   return (

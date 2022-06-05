@@ -80,7 +80,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
               <HStack>
                 <FormControl>
                   <FormLabel>雇用形態</FormLabel>
-                  <Input defaultValue={selectedEmployee?.workingFormId} />
+                  <Input defaultValue={selectedEmployee?.workingFormName} />
                 </FormControl>
                 <FormControl>
                   <FormLabel>雇用開始日</FormLabel>

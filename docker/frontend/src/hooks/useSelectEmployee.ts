@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import { dummyEmployeeList } from "../dummy/dummyEmployeeList";
 import { typeEmployee } from "../type/typeEmployee";
 
 type Props = {
   employeeId: number;
+  employeesData: Array<typeEmployee>;
   onOpen: () => void;
 };
 
@@ -13,11 +13,11 @@ export const useSelectEmployee = () => {
   );
 
   const onSelectEmployee = useCallback((props: Props) => {
-    const { employeeId, onOpen } = props;
-    const targetEmployee = dummyEmployeeList.find(
+    const { employeeId, onOpen, employeesData } = props;
+    const targetEmployee = employeesData.find(
       (employee) => employee.employeeId === employeeId
     );
-    // setSelectedEmployee(targetEmployee ?? null);
+    setSelectedEmployee(targetEmployee ?? null);
     onOpen();
   }, []);
 

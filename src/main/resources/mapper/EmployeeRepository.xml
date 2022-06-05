@@ -5,12 +5,45 @@
 <!-- Mapperとxmlのマッピング -->
 <mapper namespace="com.example.sma.infrastructure.employee.EmployeeRepository">
 
-    <select id="findAllEmployee" resultType="Employee">
+    <select id="findAllEmployee" resultMap="EmployeeMap">
         SELECT
             *
         FROM
             employee
+        JOIN
+            working_form
+        ON
+            employee.working_form_id = working_form.working_form_id
+        WHERE
+            employee.retirement_date IS NULL
+        ORDER BY
+            employee.employee_id ASC;
     </select>
+
+    <resultMap type="Employee" id="EmployeeMap">
+        <id property="employeeId" column="employee_id" />
+        <result property="lastName" column="last_name" />
+        <result property="firstName" column="first_name" />
+        <result property="romanLastName" column="roman_last_name" />
+        <result property="romanFirstName" column="roman_first_name" />
+        <result property="birthday" column="birthday" />
+        <result property="age" column="age" />
+        <result property="gender" column="gender" />
+        <result property="phoneNumber" column="phone_number" />
+        <result property="email" column="email" />
+        <result property="employmentDate" column="employment_date" />
+        <association property="workingForms" resultMap="WorkingFormMap"/>
+    </resultMap>
+
+    <resultMap id="WorkingFormMap" type="WorkingForm">
+        <result property="workingFormId" column="working_form_id" />
+        <result property="workingFormName" column="working_form_name" />
+    </resultMap>
+
+<!--    <collection property="workingForms" ofType="WorkingForm">-->
+<!--        <result property="workingFormId" column="employee_form_id" />-->
+<!--        <result property="workingFormName" column="employee_form_name" />-->
+<!--    </collection>-->
 
     <select id="findAllSecurity" resultType="Security">
         SELECT

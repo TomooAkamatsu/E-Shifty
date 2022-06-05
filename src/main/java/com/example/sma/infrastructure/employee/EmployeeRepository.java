@@ -11,9 +11,6 @@ import java.util.List;
 public interface EmployeeRepository {
 
 //    従業員の全件取得
-//    @Select("SELECT * FROM employee")
     public List<Employee> findAllEmployee();
 
-//    @Select("SELECT * FROM security")
-    public List<Security> findAllSecurity();
 }

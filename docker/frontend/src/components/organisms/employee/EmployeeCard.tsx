@@ -9,7 +9,7 @@ type Props = {
   romanFirstName: string;
   phoneNumber: string;
   email: string;
-  workingForm: number;
+  workingFormName: string;
   onClick: (employeeId: number) => void;
 };
 
@@ -22,10 +22,9 @@ export const EmployeeCard: VFC<Props> = memo((props) => {
     romanFirstName,
     phoneNumber,
     email,
-    workingForm,
+    workingFormName,
     onClick,
   } = props;
-  console.log(workingForm);
 
   return (
     <Box
@@ -51,7 +50,7 @@ export const EmployeeCard: VFC<Props> = memo((props) => {
         </Text>
         <Text>TEL: {phoneNumber}</Text>
         <Text>Email: {email}</Text>
-        <Text>雇用形態: {workingForm}</Text>
+        <Text>雇用形態: {workingFormName}</Text>
       </Stack>
     </Box>
   );

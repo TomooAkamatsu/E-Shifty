@@ -15,12 +15,7 @@ public class EmployeeApplicationService {
     private final EmployeeRepository employeeRepository;
 
     public List<Employee> findAllEmployee(){
-
         return employeeRepository.findAllEmployee();
     }
 
-    public List<Security> findAllSecurity() {
-        System.out.println("test");
-        return employeeRepository.findAllSecurity();
-    }
 }

@@ -2,17 +2,13 @@ package com.example.sma.presentation.employee;
 
 import com.example.sma.application.employee.EmployeeApplicationService;
 import com.example.sma.domain.models.employee.Employee;
-import com.example.sma.domain.models.employee.Security;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/employees")
@@ -21,13 +17,22 @@ public class EmployeeController {
     private final EmployeeApplicationService employeeApplicationService;
 
     @GetMapping
-    public List<Employee> findAllEmployee(){
-        return  employeeApplicationService.findAllEmployee();
+    public List<EmployeeForm> findAllEmployee() {
+        List<Employee> employees = employeeApplicationService.findAllEmployee();
+        List<EmployeeForm> employeeFormList = new ArrayList<>();
+        employees.forEach(employee -> employeeFormList.add(new EmployeeForm(employee)));
+        return employeeFormList;
     }
 
-    @GetMapping("/security")
-    public List<Security> findAllSecurity(){
-        return employeeApplicationService.findAllSecurity();
+    @PostMapping
+    public String postEmployee(@RequestBody EmployeeForm employeeForm){
+
+        System.out.println(employeeForm.getAge());
+
+        String str = "{\"result\":\"ok\"}";
+
+        return str;
     }
 
 }
+
