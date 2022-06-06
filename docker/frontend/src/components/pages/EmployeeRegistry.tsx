@@ -7,63 +7,44 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { ChangeEvent, memo, useCallback, useState, VFC } from "react";
+import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { instance } from "../../api/axios";
+import { useEmployeeRegistry } from "../../hooks/useEmployeeRegistry";
+import { useWorkingFormList } from "../../hooks/useWorkingFormList";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 
 export const EmployeeRegistry: VFC = memo(() => {
   const history = useHistory();
+  const { workingFormNameList, getWorkingFormData } = useWorkingFormList();
+  const {
+    newLastName,
+    newFirstName,
+    newRomanLastName,
+    newRomanFirstName,
+    newBirthday,
+    newGender,
+    newAge,
+    newPhoneNumber,
+    newEmail,
+    newWorkingForm,
+    newEmploymentDate,
+    onChangeLastName,
+    onChangeFirstName,
+    onChangeRomanLastName,
+    onChangeRomanFirstName,
+    onChangeBirthday,
+    onChangeAge,
+    onChangeGender,
+    onChangePhoneNumber,
+    onChangeEmail,
+    onChangeEmploymentDate,
+    onChangeWorkingForm,
+  } = useEmployeeRegistry();
 
   const onClickBack = useCallback(() => {
     history.push("/shiftwork_management/employees");
   }, [history]);
-
-  const [newLastName, setNewLastName] = useState<string>("");
-  const [newFirstName, setNewFirstName] = useState<string>("");
-  const [newRomanLastName, setNewRomanLastName] = useState<string>("");
-  const [newRomanFirstName, setNewRomanFirstName] = useState<string>("");
-  const [newBirthday, setNewBirthday] = useState<string>("");
-  const [newGender, setNewGender] = useState<string>("男");
-  const [newAge, setNewAge] = useState<number>(0);
-  const [newPhoneNumber, setNewPhoneNumber] = useState<string>("");
-  const [newEmail, setNewEmail] = useState<string>("");
-  const [newWorkingForm, setNewWorkingForm] = useState<string>("");
-  const [newEmploymentDate, setNewEmploymentDate] = useState<string>("");
-
-  const onChangeLastName = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewLastName(e.target.value);
-  };
-  const onChangeFirstName = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewFirstName(e.target.value);
-  };
-  const onChangeRomanLastName = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewRomanLastName(e.target.value);
-  };
-  const onChangeRomanFirstName = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewRomanFirstName(e.target.value);
-  };
-  const onChangeBirthday = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewBirthday(e.target.value);
-  };
-  const onChangeGender = (e: ChangeEvent<HTMLSelectElement>) => {
-    setNewGender(e.target.value);
-  };
-  const onChangeAge = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewAge(Number(e.target.value));
-  };
-  const onChangePhoneNumber = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewPhoneNumber(e.target.value);
-  };
-  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewEmail(e.target.value);
-  };
-  const onChangeWorkingForm = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewWorkingForm(e.target.value);
-  };
-  const onChangeEmploymentDate = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewEmploymentDate(e.target.value);
-  };
 
   const onClickRegistry = () => {
     const postNewEmployeeData = {
@@ -79,10 +60,15 @@ export const EmployeeRegistry: VFC = memo(() => {
       employmentDate: newEmploymentDate,
       workingForm: newWorkingForm,
     };
+    console.log(postNewEmployeeData);
     instance
       .post("/employees", JSON.stringify(postNewEmployeeData))
       .then((r) => console.log(r.data));
   };
+
+  useEffect(() => {
+    getWorkingFormData();
+  }, [getWorkingFormData]);
 
   return (
     <>
@@ -128,24 +114,23 @@ export const EmployeeRegistry: VFC = memo(() => {
               />
             </FormControl>
           </HStack>
+          <FormControl>
+            <FormLabel>生年月日</FormLabel>
+            <Input
+              value={newBirthday}
+              onChange={onChangeBirthday}
+              type="date"
+            />
+          </FormControl>
           <HStack>
-            <FormControl w={150}>
-              <FormLabel>生年月日</FormLabel>
-              <Input
-                value={newBirthday}
-                onChange={onChangeBirthday}
-                type="date"
-              />
-            </FormControl>
-            <FormControl w={200}>
+            <FormControl>
               <FormLabel>性別</FormLabel>
-              {/* <Input value={newGender} onChange={onChangeGender} /> */}
               <Select value={newGender} onChange={onChangeGender}>
                 <option>男</option>
                 <option>女</option>
               </Select>
             </FormControl>
-            <FormControl w={150}>
+            <FormControl>
               <FormLabel>年齢</FormLabel>
               <Input value={newAge} onChange={onChangeAge} type="number" />
             </FormControl>
@@ -158,20 +143,22 @@ export const EmployeeRegistry: VFC = memo(() => {
             <FormLabel>Email</FormLabel>
             <Input value={newEmail} onChange={onChangeEmail} />
           </FormControl>
-          <HStack pb="3">
-            <FormControl>
-              <FormLabel>雇用形態</FormLabel>
-              <Input value={newWorkingForm} onChange={onChangeWorkingForm} />
-            </FormControl>
-            <FormControl>
-              <FormLabel>雇用開始日</FormLabel>
-              <Input
-                value={newEmploymentDate}
-                onChange={onChangeEmploymentDate}
-                type="date"
-              />
-            </FormControl>
-          </HStack>
+          <FormControl>
+            <FormLabel>雇用形態</FormLabel>
+            <Select value={newWorkingForm} onChange={onChangeWorkingForm}>
+              {workingFormNameList.map((workingForm) => (
+                <option key={workingForm}>{workingForm}</option>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <FormLabel>雇用開始日</FormLabel>
+            <Input
+              value={newEmploymentDate}
+              onChange={onChangeEmploymentDate}
+              type="date"
+            />
+          </FormControl>
           <PrimaryButton onClick={onClickRegistry}>登録</PrimaryButton>
         </Stack>
       </Box>

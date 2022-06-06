@@ -45,11 +45,11 @@
 <!--        <result property="workingFormName" column="employee_form_name" />-->
 <!--    </collection>-->
 
-    <select id="findAllSecurity" resultType="Security">
+    <select id="findAllWorkingForm" resultType="WorkingForm">
         SELECT
             *
         FROM
-            security
+            working_form
     </select>
 
 

@@ -2,6 +2,7 @@ package com.example.sma.presentation.employee;
 
 import com.example.sma.application.employee.EmployeeApplicationService;
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.WorkingForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class EmployeeController {
     private final EmployeeApplicationService employeeApplicationService;
 
     @GetMapping
-    public List<EmployeeForm> findAllEmployee() {
+    public List<EmployeeForm> getAllEmployee() {
         List<Employee> employees = employeeApplicationService.findAllEmployee();
         List<EmployeeForm> employeeFormList = new ArrayList<>();
         employees.forEach(employee -> employeeFormList.add(new EmployeeForm(employee)));
@@ -32,6 +33,11 @@ public class EmployeeController {
         String str = "{\"result\":\"ok\"}";
 
         return str;
+    }
+
+    @GetMapping("/working-form")
+    public List<WorkingForm> getAllWorkingForm(){
+        return employeeApplicationService.findAllWorkingForm();
     }
 
 }

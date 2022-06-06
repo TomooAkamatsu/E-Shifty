@@ -2,6 +2,7 @@ package com.example.sma.application.employee;
 
 import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.Security;
+import com.example.sma.domain.models.employee.WorkingForm;
 import com.example.sma.infrastructure.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,11 @@ public class EmployeeApplicationService {
 
     public List<Employee> findAllEmployee(){
         return employeeRepository.findAllEmployee();
+    }
+
+    public List<WorkingForm> findAllWorkingForm(){
+        System.out.println(employeeRepository.findAllWorkingForm());
+        return employeeRepository.findAllWorkingForm();
     }
 
 }
