@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import static com.example.sma.presentation.employee.EmployeePresentationLogic.getWorkingFormIdFromName;
 
-//ゲッターセッターを用意しないとJSONをマッピングできない
+//ゲッターを用意しないとJSONをマッピングできない
 @Data
 @NoArgsConstructor
 final class EmployeeForm {

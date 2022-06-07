@@ -5,10 +5,7 @@ import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.WorkingForm;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -44,10 +41,6 @@ public class EmployeeController {
         return str;
     }
 
-    @GetMapping("/working-form")
-    public List<WorkingForm> getAllWorkingForm() {
-        return employeeApplicationService.findAllWorkingForm();
-    }
 
     @PatchMapping("/{employeeId}")
     public String patchEmployee(@RequestBody String patchData, @PathVariable("employeeId") int employeeId) {
@@ -71,6 +64,11 @@ public class EmployeeController {
     public String deleteEmployee(@PathVariable("employeeId") int employeeId) {
         employeeApplicationService.deleteEmployee(employeeId);
         return "{\"result\":\"ok\"}";
+    }
+
+    @GetMapping("/working-form")
+    public List<WorkingForm> getAllWorkingForm() {
+        return employeeApplicationService.findAllWorkingForm();
     }
 }
 

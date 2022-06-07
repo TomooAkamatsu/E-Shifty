@@ -5,6 +5,26 @@
 <!-- Mapperとxmlのマッピング -->
 <mapper namespace="com.example.sma.infrastructure.shift.ShiftRepository">
 
+    <select id="findShift" resultType="Shift">
+        SELECT
+            *
+        FROM
+            shift
+        WHERE
+            shift.employee_id = #{employeeId}
+        AND
+            YEAR(date) = #{year}
+        AND
+            MONTH(date) = #{month}
+        ORDER BY
+            shift.date ASC
+    </select>
 
+    <select id="findAllShiftPattern" resultType="ShiftPattern">
+        SELECT
+        *
+        FROM
+        shift_pattern
+    </select>
 
 </mapper>

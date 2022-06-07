@@ -2,6 +2,7 @@ import { memo, VFC } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Login } from "../components/pages/Login";
 import { Page404 } from "../components/pages/Page404";
+import { DateProvider } from "../components/providers/DateProvider";
 import { HeaderLayout } from "../components/templates/HeaderLayout";
 import { employeesRoutes } from "./employeesRoutes";
 import { shiftRoutes } from "./shiftRoutes";
@@ -17,13 +18,11 @@ export const Router: VFC = memo(() => {
         render={({ match: { url } }) => (
           <Switch>
             {shiftRoutes.map((route) => (
-              <Route
-                key={route.path}
-                exact={route.exact}
-                path={`${url}${route.path}`}
-              >
-                <HeaderLayout>{route.children}</HeaderLayout>
-              </Route>
+              <DateProvider key={route.path}>
+                <Route exact={route.exact} path={`${url}${route.path}`}>
+                  <HeaderLayout>{route.children}</HeaderLayout>
+                </Route>
+              </DateProvider>
             ))}
           </Switch>
         )}
