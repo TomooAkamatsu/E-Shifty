@@ -24,4 +24,26 @@ public class EmployeeApplicationService {
         return employeeRepository.findAllWorkingForm();
     }
 
+    public boolean registerForNewEmployee(Employee employee){
+        try {
+            employeeRepository.registerForNewEmployee(employee);
+        }catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    public Employee findOneEmployee(int employeeId){
+        return employeeRepository.findOneEmployee(employeeId);
+    }
+
+    public boolean  updateEmployee(String key, String value, int employeeId) {
+        employeeRepository.updateEmployee(key, value, employeeId);
+        return true;
+    }
+
+    public boolean deleteEmployee(int employeeId) {
+        employeeRepository.deleteEmployee(employeeId);
+        return true;
+    }
 }

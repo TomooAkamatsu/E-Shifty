@@ -58,7 +58,7 @@ export const EmployeeRegistry: VFC = memo(() => {
       phoneNumber: newPhoneNumber,
       email: newEmail,
       employmentDate: newEmploymentDate,
-      workingForm: newWorkingForm,
+      workingFormName: newWorkingForm,
     };
     console.log(postNewEmployeeData);
     instance

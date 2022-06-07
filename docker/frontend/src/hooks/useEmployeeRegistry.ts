@@ -10,7 +10,7 @@ export const useEmployeeRegistry = () => {
   const [newAge, setNewAge] = useState<number>(0);
   const [newPhoneNumber, setNewPhoneNumber] = useState<string>("");
   const [newEmail, setNewEmail] = useState<string>("");
-  const [newWorkingForm, setNewWorkingForm] = useState<string>("");
+  const [newWorkingForm, setNewWorkingForm] = useState<string>("正社員");
   const [newEmploymentDate, setNewEmploymentDate] = useState<string>("");
 
   const onChangeLastName = useCallback((e: ChangeEvent<HTMLInputElement>) => {

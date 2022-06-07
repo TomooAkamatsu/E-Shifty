@@ -52,5 +52,64 @@
             working_form
     </select>
 
+    <insert id="registerForNewEmployee">
+        INSERT INTO employee(
+            last_name,
+            first_name,
+            roman_last_name,
+            roman_first_name,
+            birthday,
+            age,
+            gender,
+            phone_number,
+            email,
+            employment_date,
+            retirement_date,
+            working_form_id
+        )
+        VALUES(
+            #{lastName},
+            #{firstName},
+            #{romanLastName},
+            #{romanFirstName},
+            #{birthday},
+            #{age},
+            #{gender},
+            #{phoneNumber},
+            #{email},
+            #{employmentDate},
+            null,
+            #{workingForms.workingFormId}
+        )
+    </insert>
+
+    <select id="findOneEmployee" resultMap="EmployeeMap">
+        SELECT
+            *
+        FROM
+            employee
+        JOIN
+            working_form
+        ON
+            employee.working_form_id = working_form.working_form_id
+        WHERE
+            employee_id = #{employeeId}
+    </select>
+
+    <update id="updateEmployee">
+        UPDATE
+            employee
+        SET
+            ${key} = #{value}
+        WHERE
+            employee_id = #{employeeId}
+    </update>
+
+    <delete id="deleteEmployee">
+        DELETE FROM
+            employee
+        WHERE
+            employee_id = #{employeeId}
+    </delete>
 
 </mapper>

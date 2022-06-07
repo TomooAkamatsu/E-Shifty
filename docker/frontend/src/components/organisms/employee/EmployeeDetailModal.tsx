@@ -10,12 +10,16 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Stack,
 } from "@chakra-ui/react";
-import { memo, VFC } from "react";
+import { memo, useEffect, VFC } from "react";
 import { typeEmployee } from "../../../type/typeEmployee";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 import { DeleteButton } from "../../atoms/button/DeleteButton";
+import { useEmployeeRegistry } from "../../../hooks/useEmployeeRegistry";
+import { useWorkingFormList } from "../../../hooks/useWorkingFormList";
+import { instance } from "../../../api/axios";
 
 type Props = {
   isOpen: boolean;
@@ -25,8 +29,67 @@ type Props = {
 
 export const EmployeeDetailModal: VFC<Props> = memo((props) => {
   const { isOpen, onClose, selectedEmployee } = props;
+  const {
+    newLastName,
+    newFirstName,
+    newRomanLastName,
+    newRomanFirstName,
+    newBirthday,
+    newGender,
+    newAge,
+    newPhoneNumber,
+    newEmail,
+    newWorkingForm,
+    newEmploymentDate,
+    onChangeLastName,
+    onChangeFirstName,
+    onChangeRomanLastName,
+    onChangeRomanFirstName,
+    onChangeBirthday,
+    onChangeAge,
+    onChangeGender,
+    onChangePhoneNumber,
+    onChangeEmail,
+    onChangeEmploymentDate,
+    onChangeWorkingForm,
+  } = useEmployeeRegistry();
+  const { workingFormNameList, getWorkingFormData } = useWorkingFormList();
 
-  const onClickUpdate = () => alert("更新は後ほど実装します");
+  useEffect(() => {
+    getWorkingFormData();
+  }, [getWorkingFormData]);
+
+  const onClickUpdate = () => {
+    let changedEmployeeData: { [key: string]: string | number } = {};
+    if (newLastName !== "") changedEmployeeData.lastName = newLastName;
+    if (newFirstName !== "") changedEmployeeData.firstName = newFirstName;
+    if (newRomanLastName !== "")
+      changedEmployeeData.romanLastName = newRomanLastName;
+    if (newRomanFirstName !== "")
+      changedEmployeeData.romanFirstName = newRomanFirstName;
+    if (newBirthday !== "") changedEmployeeData.birthday = newBirthday;
+    if (newAge !== 0) changedEmployeeData.age = newAge;
+    if (newGender !== "男") changedEmployeeData.gender = newGender;
+    if (newPhoneNumber !== "") changedEmployeeData.phoneNumber = newPhoneNumber;
+    if (newEmail !== "") changedEmployeeData.email = newEmail;
+    if (newEmploymentDate !== "")
+      changedEmployeeData.employmentDate = newEmploymentDate;
+    if (newWorkingForm !== "正社員")
+      changedEmployeeData.workingFormName = newWorkingForm;
+    instance
+      .patch(
+        `/employees/${selectedEmployee?.employeeId}`,
+        JSON.stringify(changedEmployeeData)
+      )
+      .then((r) => console.log(r.data));
+  };
+
+  const onClickDelete = () => {
+    instance
+      .delete(`/employees/${selectedEmployee?.employeeId}`)
+      .then((r) => console.log(r.data));
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -43,55 +106,104 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
               <h4>従業員No:&nbsp;{selectedEmployee?.employeeId}</h4>
               <HStack>
                 <FormControl>
-                  <FormLabel>名前</FormLabel>
+                  <FormLabel>姓</FormLabel>
                   <Input
-                    defaultValue={`${selectedEmployee?.lastName} ${selectedEmployee?.firstName}`}
+                    defaultValue={selectedEmployee?.lastName}
+                    onChange={onChangeLastName}
                   />
                 </FormControl>
                 <FormControl>
-                  <FormLabel>ローマ字</FormLabel>
+                  <FormLabel>名</FormLabel>
                   <Input
-                    defaultValue={`${selectedEmployee?.romanLastName} ${selectedEmployee?.romanFirstName}`}
+                    defaultValue={selectedEmployee?.firstName}
+                    onChange={onChangeFirstName}
                   />
                 </FormControl>
               </HStack>
               <HStack>
                 <FormControl>
-                  <FormLabel>生年月日</FormLabel>
-                  <Input defaultValue={selectedEmployee?.birthday} />
+                  <FormLabel>姓(ローマ字)</FormLabel>
+                  <Input
+                    defaultValue={selectedEmployee?.romanLastName}
+                    onChange={onChangeRomanLastName}
+                  />
                 </FormControl>
                 <FormControl>
+                  <FormLabel>名(ローマ字)</FormLabel>
+                  <Input
+                    defaultValue={selectedEmployee?.romanFirstName}
+                    onChange={onChangeRomanFirstName}
+                  />
+                </FormControl>
+              </HStack>
+              <FormControl>
+                <FormLabel>生年月日</FormLabel>
+                <Input
+                  defaultValue={selectedEmployee?.birthday}
+                  onChange={onChangeBirthday}
+                  type="date"
+                />
+              </FormControl>
+              <HStack>
+                <FormControl>
                   <FormLabel>性別</FormLabel>
-                  <Input defaultValue={selectedEmployee?.gender} />
+                  <Select
+                    defaultValue={selectedEmployee?.gender}
+                    onChange={onChangeGender}
+                  >
+                    <option>男</option>
+                    <option>女</option>
+                  </Select>
                 </FormControl>
                 <FormControl>
                   <FormLabel>年齢</FormLabel>
-                  <Input defaultValue={selectedEmployee?.age} />
+                  <Input
+                    defaultValue={selectedEmployee?.age}
+                    onChange={onChangeAge}
+                    type="number"
+                  />
                 </FormControl>
               </HStack>
               <FormControl>
                 <FormLabel>TEL</FormLabel>
-                <Input defaultValue={selectedEmployee?.phoneNumber} />
+                <Input
+                  defaultValue={selectedEmployee?.phoneNumber}
+                  onChange={onChangePhoneNumber}
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>Email</FormLabel>
-                <Input defaultValue={selectedEmployee?.email} />
+                <Input
+                  defaultValue={selectedEmployee?.email}
+                  onChange={onChangeEmail}
+                />
               </FormControl>
               <HStack>
                 <FormControl>
                   <FormLabel>雇用形態</FormLabel>
-                  <Input defaultValue={selectedEmployee?.workingFormName} />
+                  <Select
+                    defaultValue={selectedEmployee?.workingFormName}
+                    onChange={onChangeWorkingForm}
+                  >
+                    {workingFormNameList.map((workingForm) => (
+                      <option key={workingForm}>{workingForm}</option>
+                    ))}
+                  </Select>
                 </FormControl>
                 <FormControl>
                   <FormLabel>雇用開始日</FormLabel>
-                  <Input defaultValue={selectedEmployee?.employmentDate} />
+                  <Input
+                    defaultValue={selectedEmployee?.employmentDate}
+                    onChange={onChangeEmploymentDate}
+                    type="date"
+                  />
                 </FormControl>
               </HStack>
             </Stack>
           </ModalBody>
           <ModalFooter py={1}>
             <PrimaryButton onClick={onClickUpdate}>更新</PrimaryButton>
-            <DeleteButton onClick={onClickUpdate}>削除</DeleteButton>
+            <DeleteButton onClick={onClickDelete}>削除</DeleteButton>
           </ModalFooter>
         </ModalContent>
       </ModalOverlay>

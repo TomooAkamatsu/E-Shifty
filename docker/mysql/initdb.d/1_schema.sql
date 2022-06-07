@@ -18,8 +18,7 @@ CREATE TABLE employee(
     employment_date DATE NOT NULL,
     retirement_date DATE,
     working_form_id INT NOT NULL,
-    PRIMARY KEY (employee_id),
-    FOREIGN KEY(working_form_id) REFERENCES working_form(working_form_id) ON DELETE CASCADE
+    PRIMARY KEY (employee_id)
 );
 
 CREATE TABLE security(
