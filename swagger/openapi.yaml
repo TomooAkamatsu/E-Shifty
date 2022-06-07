@@ -10,7 +10,7 @@ info:
     - 仮シフトのGET/PUT
     - 従業員一覧のGET
     - 従業員詳細情報のPOST/PUT/DELETE
-  version: "1.0.0"
+  version: "1.0.1"
 
 servers:
   - url: "http://localhost:8080"
@@ -240,23 +240,22 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  employees:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        employeeId: { type: number }
-                        name: { type: string }
-                        romanName: {type: string}
-                        birthday: { type: string }
-                        age: { type: number }
-                        gender: { type: string }
-                        phoneNumber: { type: string }
-                        email: { type: string }
-                        employmentDate: { type: string }
-                        workingForm: { type: string }
+                type: array
+                items:
+                  type: object
+                  properties:
+                    employeeId: { type: number }
+                    lastName: { type: string }
+                    firstName: { type: string }
+                    romanLastName: { type: string }
+                    romanFirstName: { type: string }
+                    birthday: { type: string }
+                    age: { type: number }
+                    gender: { type: string }
+                    phoneNumber: { type: string }
+                    email: { type: string }
+                    employmentDate: { type: string }
+                    workingFormName: { type: string }
     post:
       summary: "従業員の新規登録(管理者用)"
       description: "従業員の新規登録情報の送信"
@@ -269,25 +268,24 @@ paths:
             schema:
               type: object
               properties:
-                employeeId: { type: number }
-                name: { type: string }
-                romanName: {type: string}
+                lastName: { type: string }
+                firstName: { type: string }
+                romanLastName: { type: string }
+                romanFirstName: { type: string }
                 birthday: { type: string }
                 age: { type: number }
                 gender: { type: string }
                 phoneNumber: { type: string }
                 email: { type: string }
                 employmentDate: { type: string }
-                workingForm: { type: string }
+                workingFormName: { type: string }
       responses:
         "201":
           description: "登録の成功"
   "/api/employees/{id}":
     patch:
       summary: "従業員詳細情報の更新(管理者用)"
-      description: |
-        - 従業員詳細情報画面にて情報を更新
-        - putの場合どう書けば...
+      description: "従業員詳細情報画面にて情報を更新"
       tags: ["employees"]
       deprecated: false
       parameters:
@@ -304,11 +302,7 @@ paths:
             schema:
               type: object
               properties:
-                employeeId: { type: number }
-                changedItem:
-                  type: object
-                  properties:
-                    "対象項目": { type: string }
+                "対象項目": { type: string }
       responses:
         "201":
           description: "更新の成功"
@@ -326,14 +320,24 @@ paths:
           required: true
           schema: { type:number }
           example: "1"
-      requestBody:
-        description: "仮シフトの修正情報を送信"
-        content:
-          application/json:
-            schema:
-              type: string
-              example: "1"
-              # 削除対象のidを送信
       responses:
         "200":
           description: "削除の成功"
+  "/api/employees/working-form":
+    get:
+      summary: "勤務形態リストの取得"
+      description: "従業員情報更新ページのプルダウンのための勤務形態リストの取得"
+      tags: ["employees"]
+      deprecated: false
+      responses:
+        "200":
+          description: "取得の成功"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    workingFormId: { type: number }
+                    workingFormName: { type: string }
