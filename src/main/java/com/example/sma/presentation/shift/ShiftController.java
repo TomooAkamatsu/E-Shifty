@@ -7,7 +7,7 @@ import com.example.sma.domain.models.shift.ShiftPattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin("http://localhost:3000")
@@ -20,17 +20,33 @@ public class ShiftController {
     private final EmployeeApplicationService employeeApplicationService;
 
     @GetMapping("/{year}/{month}")
-    public List<ShiftForm> getShift(@PathVariable("year") int year, @PathVariable("month") int month){
+    public List<ShiftForm> getShift(@PathVariable("year") int year, @PathVariable("month") int month) {
 
-        List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
         List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
 
-        List<List<Shift>> shiftList =shiftApplicationService.findShift(year, month, employeeIdList);
+        List<List<Shift>> allEmployeeShiftList
+                = shiftApplicationService.findShift(year, month, employeeApplicationService.getEmployeeIdList());
         List<ShiftPattern> shiftPatterns = shiftApplicationService.findAllShiftPattern();
 
-        List<ShiftForm> shiftFormList = new ArrayList<>();
-        shiftList.stream().forEach(individualShiftList -> shiftFormList.add(new ShiftForm(individualShiftList,shiftPatterns,employeeNameList)));
-        return shiftFormList;
+        return allEmployeeShiftList
+                .stream()
+                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns, employeeNameList))
+                .toList();
+    }
+
+    @GetMapping("/draft")
+    public DraftForm getDraft() {
+        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+        List<ShiftPattern> shiftPatterns = shiftApplicationService.findAllShiftPattern();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        List<List<Shift>> shiftList = shiftApplicationService.findShift(
+                now.getYear(),
+                now.getMonthValue(),
+                employeeApplicationService.getEmployeeIdList());
+
+        return new DraftForm(shiftList, employeeNameList, shiftPatterns);
     }
 
 }

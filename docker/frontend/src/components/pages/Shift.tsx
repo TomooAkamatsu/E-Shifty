@@ -1,15 +1,12 @@
 import { Box, HStack } from "@chakra-ui/react";
-import { memo, useCallback, useContext, useEffect, useState, VFC } from "react";
+import { memo, useCallback, useEffect, useState, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
-import { dummyShiftData } from "../../dummy/dummyShiftData";
 import { useShiftList } from "../../hooks/useShiftList";
-import { DateContext } from "../providers/DateProvider";
 
 export const Shift: VFC = memo(() => {
   const history = useHistory();
-  // const { year, setYear, month, setMonth } = useContext(DateContext);
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
 

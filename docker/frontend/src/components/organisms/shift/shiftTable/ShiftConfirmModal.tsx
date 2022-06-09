@@ -26,7 +26,7 @@ export const ShiftConfirmModal: VFC<Props> = (props) => {
       motionPreset="slideInBottom"
     >
       <ModalOverlay>
-        <ModalContent p={3}>
+        <ModalContent p={3} justifyContent="center">
           <ModalHeader align="center" pb={0}>
             本当にこれで確定しますか？
           </ModalHeader>
