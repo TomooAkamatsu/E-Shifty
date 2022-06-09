@@ -1,18 +1,22 @@
 import { Box, Wrap } from "@chakra-ui/react";
-import { memo, useCallback, VFC } from "react";
+import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
-import { dummyVacationRequestList } from "../../dummy/dummyVacationRequestList";
 import { RequestListWrapItem } from "../organisms/shift/request/RequestListWrapItem";
+import { useVacationRequestList } from "../../hooks/useVacationRequestList";
 
 export const VacationRequestList: VFC = memo(() => {
   const history = useHistory();
+  const { vacationRequestList, getVacationRequestList } =
+    useVacationRequestList();
 
   const onClickBack = useCallback(() => {
     history.push("/shiftwork_management/shift/new");
   }, [history]);
 
-  const { requestList } = dummyVacationRequestList;
+  useEffect(() => {
+    getVacationRequestList();
+  }, [getVacationRequestList]);
 
   return (
     <Box py={5} px={20}>
@@ -26,7 +30,7 @@ export const VacationRequestList: VFC = memo(() => {
       </Box>
       <Box>
         <Wrap spacing="20px" p={{ base: 4, md: 10 }}>
-          {requestList.map((request) => {
+          {vacationRequestList.map((request) => {
             return (
               <RequestListWrapItem
                 employeeId={request.employeeId}

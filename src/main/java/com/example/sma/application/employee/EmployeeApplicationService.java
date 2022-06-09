@@ -57,4 +57,5 @@ public class EmployeeApplicationService {
         employeeRepository.findAllEmployee().stream().forEach(employee -> employeeNameList.add(employee.getLastName()));
         return employeeNameList;
     }
+
 }

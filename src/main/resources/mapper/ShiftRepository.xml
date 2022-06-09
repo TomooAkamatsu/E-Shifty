@@ -22,9 +22,22 @@
 
     <select id="findAllShiftPattern" resultType="ShiftPattern">
         SELECT
-        *
+            *
         FROM
-        shift_pattern
+            shift_pattern
+    </select>
+
+    <select id="findAllVacationRequest" resultType="VacationRequest">
+        SELECT
+            *
+        FROM
+            vacation_request
+        WHERE
+            employee_id = #{employeeId}
+        AND
+            YEAR(request_date) = #{year}
+        AND
+            MONTH(request_date) = #{month}
     </select>
 
 </mapper>

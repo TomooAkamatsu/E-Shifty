@@ -1,11 +1,9 @@
 package com.example.sma.infrastructure.employee;
 
 import com.example.sma.domain.models.employee.Employee;
-import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -25,4 +23,5 @@ public interface EmployeeRepository {
     public void updateEmployee(@Param("key") String key, @Param("value") String value, @Param("employeeId") int employeeId);
 
     public void deleteEmployee(int employeeId);
+
 }

@@ -4,7 +4,9 @@ import com.example.sma.application.employee.EmployeeApplicationService;
 import com.example.sma.application.shift.ShiftApplicationService;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
+import com.example.sma.domain.models.shift.VacationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -47,6 +49,19 @@ public class ShiftController {
                 employeeApplicationService.getEmployeeIdList());
 
         return new DraftForm(shiftList, employeeNameList, shiftPatterns);
+    }
+
+    @GetMapping("/vacation-requests")
+    public List<VacationRequestListForm> getVacationRequestList(){
+        List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
+        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+        List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
+
+        List<VacationRequestListForm> hoge =
+        vacationRequestList.stream().filter(individualRequestList -> !CollectionUtils.isEmpty(individualRequestList))
+                .map(individualRequestList -> new VacationRequestListForm(individualRequestList,employeeNameList)).toList();
+
+        return hoge;
     }
 
 }
