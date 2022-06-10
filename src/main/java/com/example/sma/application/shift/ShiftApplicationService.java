@@ -69,4 +69,9 @@ public class ShiftApplicationService {
         shiftRepository.deleteVacationRequest(nextMonth.getYear(),nextMonth.getMonthValue(),vacationRequestListForm.getEmployeeId());
 
     }
+
+    public  List<VacationRequest> findVacationRequest(int employeeId) {
+        LocalDateTime nextMonth =LocalDateTime.now().plusMonths(1);
+        return shiftRepository.findVacationRequest(nextMonth.getYear(), nextMonth.getMonthValue(), employeeId);
+    }
 }

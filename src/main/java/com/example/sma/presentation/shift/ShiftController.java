@@ -52,28 +52,33 @@ public class ShiftController {
     }
 
     @GetMapping("/vacation-requests")
-    public List<VacationRequestListForm> getVacationRequestList(){
+    public List<VacationRequestListForm> getVacationRequestList() {
         List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
         List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
         List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
 
         List<VacationRequestListForm> hoge =
-        vacationRequestList.stream().filter(individualRequestList -> !CollectionUtils.isEmpty(individualRequestList))
-                .map(individualRequestList -> new VacationRequestListForm(individualRequestList,employeeNameList)).toList();
+                vacationRequestList.stream().filter(individualRequestList -> !CollectionUtils.isEmpty(individualRequestList))
+                        .map(individualRequestList -> new VacationRequestListForm(individualRequestList, employeeNameList)).toList();
 
         return hoge;
     }
 
     @PostMapping("/vacation-requests/{employeeId}")
-    public String postVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm){
-        if(!shiftApplicationService.registerVacationRequest(vacationRequestListForm)) return "{\"result\":\"false\"}";
+    public String postVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm) {
+        if (!shiftApplicationService.registerVacationRequest(vacationRequestListForm)) return "{\"result\":\"false\"}";
         return "{\"result\":\"ok\"}";
     }
 
     @PutMapping("/vacation-requests/{employeeId}")
-    public String patchVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm){
+    public String patchVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm) {
         shiftApplicationService.updateVacationRequest(vacationRequestListForm);
         return "{\"result\":\"ok\"}";
+    }
+
+    @GetMapping("/vacation-requests/{employeeId}")
+    public VacationRequestListForm getVacationRequest(@PathVariable("employeeId") int employeeId) {
+        return new VacationRequestListForm(shiftApplicationService.findVacationRequest(employeeId), employeeId);
     }
 
 }

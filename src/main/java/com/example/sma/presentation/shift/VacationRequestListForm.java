@@ -3,6 +3,7 @@ package com.example.sma.presentation.shift;
 import com.example.sma.domain.models.shift.VacationRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -21,7 +22,21 @@ public class VacationRequestListForm {
 
         this.requestDate = vacationRequestList
                 .stream()
-                .map(request->request.getRequestDate())
+                .map(VacationRequest::getRequestDate)
+                .toList().toArray(new String[vacationRequestList.size()]);
+    }
+
+    public VacationRequestListForm(List<VacationRequest> vacationRequestList, int employeeId) {
+        if(CollectionUtils.isEmpty(vacationRequestList)){
+            this.employeeId=employeeId;
+            this.requestDate= new String[]{};
+            return;
+        }
+
+        this.employeeId = vacationRequestList.get(0).getEmployeeId();
+        this.requestDate = vacationRequestList
+                .stream()
+                .map(VacationRequest::getRequestDate)
                 .toList().toArray(new String[vacationRequestList.size()]);
     }
 }

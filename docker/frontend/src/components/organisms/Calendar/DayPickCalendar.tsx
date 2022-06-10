@@ -1,14 +1,15 @@
-import { memo, VFC } from "react";
+import { memo, useEffect, VFC } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
 type Props = {
   days: Date[] | undefined;
   setDays: (days: Date[] | undefined) => void;
+  getSelectedVacationRequest: () => void;
 };
 
 export const DayPickCalendar: VFC<Props> = memo((props) => {
-  const { days, setDays } = props;
+  const { days, setDays, getSelectedVacationRequest } = props;
 
   const footer =
     days && days.length > 0 ? (
@@ -41,6 +42,10 @@ export const DayPickCalendar: VFC<Props> = memo((props) => {
     dateList.push(e);
   }
   const weekends = dateList.filter((x) => x.getDay() === 0 || x.getDay() === 6);
+
+  useEffect(() => {
+    getSelectedVacationRequest();
+  }, [getSelectedVacationRequest]);
 
   return (
     <>
