@@ -64,4 +64,16 @@ public class ShiftController {
         return hoge;
     }
 
+    @PostMapping("/vacation-requests/{employeeId}")
+    public String postVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm){
+        if(!shiftApplicationService.registerVacationRequest(vacationRequestListForm)) return "{\"result\":\"false\"}";
+        return "{\"result\":\"ok\"}";
+    }
+
+    @PutMapping("/vacation-requests/{employeeId}")
+    public String patchVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm){
+        shiftApplicationService.updateVacationRequest(vacationRequestListForm);
+        return "{\"result\":\"ok\"}";
+    }
+
 }

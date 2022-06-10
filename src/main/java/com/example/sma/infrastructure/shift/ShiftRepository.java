@@ -15,5 +15,9 @@ public interface ShiftRepository {
 
     List<ShiftPattern> findAllShiftPattern();
 
-    List<VacationRequest> findAllVacationRequest(@Param("year") int year,@Param("month") int month, @Param("employeeId") int employeeId);
+    List<VacationRequest> findVacationRequest(@Param("year") int year, @Param("month") int month, @Param("employeeId") int employeeId);
+
+    void insertVacationRequest(@Param("employeeId") int employeeId, @Param("date") String date);
+
+    void deleteVacationRequest(@Param("year") int year, @Param("month") int month, @Param("employeeId") int employeeId);
 }

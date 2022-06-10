@@ -27,7 +27,7 @@
             shift_pattern
     </select>
 
-    <select id="findAllVacationRequest" resultType="VacationRequest">
+    <select id="findVacationRequest" resultType="VacationRequest">
         SELECT
             *
         FROM
@@ -40,4 +40,27 @@
             MONTH(request_date) = #{month}
     </select>
 
+    <insert id="insertVacationRequest">
+        INSERT INTO vacation_request(
+            employee_id,
+            request_date
+        )
+        VALUES(
+            #{employeeId},
+            #{date}
+        )
+    </insert>
+
+    <update id=""></update>
+
+    <delete id="deleteVacationRequest">
+        DELETE FROM
+            vacation_request
+        WHERE
+            employee_id = #{employeeId}
+        AND
+            YEAR(request_date) = #{year}
+        AND
+            MONTH(request_date) = #{month}
+    </delete>
 </mapper>

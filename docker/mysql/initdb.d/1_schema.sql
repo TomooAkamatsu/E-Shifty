@@ -30,7 +30,7 @@ CREATE TABLE security(
 );
 
 CREATE TABLE vacation_request(
-    request_id INT NOT NULL,
+    request_id INT NOT NULL AUTO_INCREMENT,
     employee_id INT NOT NULL,
     request_date DATE NOT NULL,
     PRIMARY KEY(request_id),
