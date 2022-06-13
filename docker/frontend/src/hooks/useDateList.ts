@@ -18,7 +18,6 @@ export const useDateList = () => {
   const endOfNextMonth = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 
   const firstHalfDateList = [];
-
   for (
     var x = biginningOfNextMonth;
     x <= mid15thOfNextMonth;

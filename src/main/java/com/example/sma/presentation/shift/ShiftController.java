@@ -81,4 +81,9 @@ public class ShiftController {
         return new VacationRequestListForm(shiftApplicationService.findVacationRequest(employeeId), employeeId);
     }
 
+    @GetMapping("/patterns")
+    public List<ShiftPattern> getShiftPatterns(){
+        return shiftApplicationService.findAllShiftPattern();
+    }
+
 }

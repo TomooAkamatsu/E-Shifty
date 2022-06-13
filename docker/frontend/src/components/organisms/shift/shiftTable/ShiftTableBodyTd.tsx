@@ -1,15 +1,17 @@
 import { Select, Td } from "@chakra-ui/react";
 import axios from "axios";
 import { ChangeEvent, memo, VFC } from "react";
+import { typeShiftPatterns } from "../../../../type/typeShiftPatterns";
 
 type Props = {
   employeeName: string;
   date: string;
   shift: { [key: string]: string };
+  shiftPatterns: Array<typeShiftPatterns>;
 };
 
 export const ShiftTableBodyTd: VFC<Props> = memo((props) => {
-  const { shift, date, employeeName } = props;
+  const { shift, date, employeeName, shiftPatterns } = props;
 
   const onChangeShiftPattern = (e: ChangeEvent<HTMLSelectElement>) => {
     const postChangedShiftData = {
@@ -28,9 +30,9 @@ export const ShiftTableBodyTd: VFC<Props> = memo((props) => {
         size="1px"
         textAlign="center"
       >
-        <option>A</option>
-        <option>B</option>
-        <option>休み</option>
+        {shiftPatterns.map((pattern, index) => (
+          <option key={index}>{pattern.shiftPatternName}</option>
+        ))}
       </Select>
     </Td>
   );

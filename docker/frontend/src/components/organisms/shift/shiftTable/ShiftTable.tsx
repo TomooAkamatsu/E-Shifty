@@ -1,13 +1,24 @@
 import { Table, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import { memo, VFC } from "react";
-import { dummyNextMonthShiftData } from "../../../../dummy/dummyNextMonthShiftData";
+import { memo, useEffect, VFC } from "react";
 import { useDateList } from "../../../../hooks/useDateList";
+import { useDraft } from "../../../../hooks/useDraft";
+import { useShiftPatterns } from "../../../../hooks/useShiftPatterns";
 import { ShiftTableBodyTr } from "./ShitTableBodyTr";
 
 export const ShiftTable: VFC = memo(() => {
   const { firstHalfDateList, latterHalfDateList } = useDateList();
-  const { shiftOfFirstHalfThisMonth, shiftOfLatterHalfThisMonth } =
-    dummyNextMonthShiftData;
+  const { shiftPatterns, getShiftPatterns } = useShiftPatterns();
+  const { draft, getDraft } = useDraft();
+
+  useEffect(() => {
+    getShiftPatterns();
+  }, [getShiftPatterns]);
+
+  useEffect(() => {
+    getDraft();
+  }, [getDraft]);
+
+  const { firstHalf, latterHalf } = draft;
 
   return (
     <Table size="sm" variant="striped" colorScheme="blackAlpha">
@@ -16,19 +27,20 @@ export const ShiftTable: VFC = memo(() => {
           <Th p={1} textAlign="center">
             名前
           </Th>
-          {firstHalfDateList.map((date) => (
-            <Th p={1} textAlign="center">{`${
+          {firstHalfDateList.map((date, index) => (
+            <Th p={1} textAlign="center" key={index}>{`${
               date.getMonth() + 1
             }/${date.getDate()}`}</Th>
           ))}
         </Tr>
       </Thead>
       <Tbody>
-        {shiftOfFirstHalfThisMonth.map((personalShift) => (
+        {firstHalf.map((personalShift, index) => (
           <ShiftTableBodyTr
             employeeName={personalShift.employeeName}
             shift={personalShift.shift}
-            key={personalShift.employeeName}
+            key={index}
+            shiftPatterns={shiftPatterns}
           />
         ))}
       </Tbody>
@@ -37,19 +49,20 @@ export const ShiftTable: VFC = memo(() => {
           <Th pt={5} textAlign="center">
             名前
           </Th>
-          {latterHalfDateList.map((date) => (
-            <Th pt={5} textAlign="center">{`${
+          {latterHalfDateList.map((date, index) => (
+            <Th pt={5} textAlign="center" key={index}>{`${
               date.getMonth() + 1
             }/${date.getDate()}`}</Th>
           ))}
         </Tr>
       </Thead>
       <Tbody>
-        {shiftOfLatterHalfThisMonth.map((personalShift) => (
+        {latterHalf.map((personalShift, index) => (
           <ShiftTableBodyTr
             employeeName={personalShift.employeeName}
             shift={personalShift.shift}
-            key={personalShift.employeeName}
+            key={index}
+            shiftPatterns={shiftPatterns}
           />
         ))}
       </Tbody>

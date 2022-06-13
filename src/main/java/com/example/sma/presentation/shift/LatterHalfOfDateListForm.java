@@ -9,9 +9,9 @@ import java.util.List;
 @NoArgsConstructor
 public class LatterHalfOfDateListForm {
 
-    private String date16st;
-    private String date17nd;
-    private String date18rd;
+    private String date16th;
+    private String date17th;
+    private String date18th;
     private String date19th;
     private String date20th;
     private String date21th;
@@ -27,9 +27,9 @@ public class LatterHalfOfDateListForm {
     private String date31th;
 
     public LatterHalfOfDateListForm(List<String> shiftPatternNameList, int flag) {
-        this.date16st = shiftPatternNameList.get(0);
-        this.date17nd = shiftPatternNameList.get(1);
-        this.date18rd = shiftPatternNameList.get(2);
+        this.date16th = shiftPatternNameList.get(0);
+        this.date17th = shiftPatternNameList.get(1);
+        this.date18th = shiftPatternNameList.get(2);
         this.date19th = shiftPatternNameList.get(3);
         this.date20th = shiftPatternNameList.get(4);
         this.date21th = shiftPatternNameList.get(5);

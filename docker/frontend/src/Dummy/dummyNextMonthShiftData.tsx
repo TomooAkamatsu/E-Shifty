@@ -1,5 +1,5 @@
 export const dummyNextMonthShiftData = {
-  shiftOfFirstHalfThisMonth: [
+  firstHalf: [
     {
       employeeName: "岸田",
       shift: {
@@ -201,7 +201,7 @@ export const dummyNextMonthShiftData = {
       },
     },
   ],
-  shiftOfLatterHalfThisMonth: [
+  latterHalf: [
     {
       employeeName: "岸田",
       shift: {
