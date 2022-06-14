@@ -88,7 +88,7 @@ class EmployeeApplicationServiceTest {
     }
 
     @Test
-    void 全従業員のIDリストをint型で取得できること() {
+    void 全従業員のIDリストをint型で返すことができること() {
         when(employeeRepository.findAllEmployee()).thenReturn(Arrays.asList(
                 new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")),
                 new Employee(2, "菅", "義偉", "Suga", "Yoshihide", "1948/12/06", 73, "男", "090-2222-2222", "suga@hoge.com", "2020/01/01", null, new WorkingForm(2, "正社員(時短)")),
