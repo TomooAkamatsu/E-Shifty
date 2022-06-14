@@ -83,19 +83,6 @@
         )
     </insert>
 
-    <select id="findOneEmployee" resultMap="EmployeeMap">
-        SELECT
-            *
-        FROM
-            employee
-        JOIN
-            working_form
-        ON
-            employee.working_form_id = working_form.working_form_id
-        WHERE
-            employee_id = #{employeeId}
-    </select>
-
     <update id="updateEmployee">
         UPDATE
             employee

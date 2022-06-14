@@ -16,9 +16,7 @@ public interface EmployeeRepository {
 //    勤務形態リストの取得
     public List<WorkingForm> findAllWorkingForm();
 
-    public void registerForNewEmployee(Employee employee);
-
-    public Employee findOneEmployee(int employeeId);
+    public void insertEmployee(Employee employee);
 
     public void updateEmployee(@Param("key") String key, @Param("value") String value, @Param("employeeId") int employeeId);
 

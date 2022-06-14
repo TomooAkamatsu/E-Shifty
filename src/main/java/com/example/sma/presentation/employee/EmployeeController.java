@@ -32,13 +32,8 @@ public class EmployeeController {
 
     @PostMapping
     public String postEmployee(@RequestBody EmployeeForm employeeForm) {
-
-        String str;
-        if (!employeeApplicationService.registerForNewEmployee(employeeForm.convertToEntity()))
-            str = "{\"result\":\"failed\"}";
-        str = "{\"result\":\"ok\"}";
-
-        return str;
+        employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
+        return "{\"result\":\"ok\"}";
     }
 
 
