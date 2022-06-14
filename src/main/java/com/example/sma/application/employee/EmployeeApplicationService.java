@@ -18,23 +18,38 @@ public class EmployeeApplicationService {
         return employeeRepository.findAllEmployee();
     }
 
-    public void insertEmployee(Employee employee) {
+    public boolean insertEmployee(Employee employee) {
+        try {
             employeeRepository.insertEmployee(employee);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
-    public void updateEmployee(String key, String value, int employeeId) {
-        employeeRepository.updateEmployee(key, value, employeeId);
+    public boolean updateEmployee(String key, String value, int employeeId) {
+        try {
+            employeeRepository.updateEmployee(key, value, employeeId);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
-    public void deleteEmployee(int employeeId) {
-        employeeRepository.deleteEmployee(employeeId);
+    public boolean deleteEmployee(int employeeId) {
+        try {
+            employeeRepository.deleteEmployee(employeeId);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
-    public List<Integer> getEmployeeIdList(){
+    public List<Integer> getEmployeeIdList() {
         return employeeRepository.findAllEmployee().stream().map(Employee::getEmployeeId).toList();
     }
 
-    public List<String> getEmployeeNameList(){
+    public List<String> getEmployeeNameList() {
         return employeeRepository.findAllEmployee().stream().map(Employee::getLastName).toList();
     }
 
