@@ -1,7 +1,7 @@
 
-INSERT INTO working_form(working_form_id,working_form_name) VALUES (1,'正社員');
-INSERT INTO working_form(working_form_id,working_form_name) VALUES (2,'正社員(時短)');
-INSERT INTO working_form(working_form_id,working_form_name) VALUES (3,'パート');
+INSERT INTO working_form(working_form_id,working_form_name) VALUES (0,'正社員');
+INSERT INTO working_form(working_form_id,working_form_name) VALUES (5,'正社員(時短)');
+INSERT INTO working_form(working_form_id,working_form_name) VALUES (4,'パート');
 
 INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (1,'岸田','文雄','Kishida','Fumio','1957-07-29',64,'男','090-1111-1111','kishida@hoge.com','2020-01-01',1);
 INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (2,'菅','義偉','Suga','Yoshihide','1948-12-06',73,'男','090-2222-2222','suga@hoge.com','2020-02-01',2);
