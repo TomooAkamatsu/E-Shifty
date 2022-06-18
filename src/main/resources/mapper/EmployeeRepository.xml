@@ -52,7 +52,7 @@
             working_form
     </select>
 
-    <insert id="registerForNewEmployee">
+    <insert id="insertEmployee">
         INSERT INTO employee(
             last_name,
             first_name,
