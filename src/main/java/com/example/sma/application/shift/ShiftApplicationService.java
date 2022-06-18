@@ -10,11 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Service
@@ -78,20 +77,57 @@ public class ShiftApplicationService {
         return shiftRepository.findVacationRequest(nextMonth.getYear(), nextMonth.getMonthValue(), employeeId);
     }
 
-    public List<List<String>> createDraft(List<Employee> employeeList, List<ShiftPattern> shiftPatternList) {
-        int daysOfNextMonth = LocalDateTime.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth() - 1;
+    public List<Shift> createDraft(List<Employee> employeeList, List<ShiftPattern> shiftPatternList) {
 
-        List<List<String>> draft = new ArrayList<>();
-        IntStream.range(0, employeeList.size()).forEach(i -> {
-            List<String> individualDraft = new ArrayList<>();
-            IntStream.range(0, daysOfNextMonth).forEach(j -> individualDraft.add(""));
-            draft.add(individualDraft);
-        });
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        int daysOfNextMonth = nextMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
 
         //来月の土日に対応する数字の取得
-        //休みをセット
+        List<Integer> weekendIndex = getWeekendIndex();
+
+        //ほんとは従業員の現職チェックが必要
+
+        List<Shift> draft = new ArrayList<>();
+//      draft.size()は従業員数×翌月の日数
+//      土日は休み、それ以外には0、ほんとはシフトパターンによって動的に処理したい。
+        employeeList.forEach(employee -> {
+            IntStream.rangeClosed(1, daysOfNextMonth).forEach(i -> {
+
+                if (weekendIndex.contains(i % 31))
+                    draft.add(new Shift(employee.getEmployeeId(),
+                            nextMonth.getYear() + "-" + String.format("%02d" ,nextMonth.getMonthValue()) + "-" + String.format("%02d",i),
+                            5,
+                            "N"
+                    ));
+
+                if (!weekendIndex.contains(i % 31))
+                    draft.add(new Shift(employee.getEmployeeId(),
+                            nextMonth.getYear() + "-" + String.format("%02d" ,nextMonth.getMonthValue()) + "-" + String.format("%02d",i),
+                            0,
+                            "N"
+                    ));
+
+            });
+        });
+
+        //vacationListを平くして入れる
+        List<VacationRequest> vacationRequestList = new ArrayList<>();
+        findAllVacationRequest(employeeList.stream().map(Employee::getEmployeeId).toList())
+                .forEach(vacationRequestList::addAll);
+
+//        休み希望に休みに入れる。
+        vacationRequestList.forEach(request -> {
+            draft.forEach(shift -> {
+                if(shift.getEmployeeId() == request.getEmployeeId() &&
+                    shift.getDate().equals(request.getRequestDate()))
+                    shift.setShiftPatternId(5);
+            });
+        });
 
         //早番遅番のセット
+        //土日じゃない数字を取得
+        //そのうち正社員から1日2人ずつ朝晩と遅番を入れていく。
+
 
         //残りはランダムで
 
@@ -99,11 +135,17 @@ public class ShiftApplicationService {
 
     }
 
-    private int getVacationIndex(){
+    List<Integer> getWeekendIndex() {
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        int daysOfNextMonth = LocalDateTime.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
 
+        List<Integer> weekEndDateList = new ArrayList<>();
 
+        IntStream.rangeClosed(1, daysOfNextMonth).forEach(i -> {
+            if (List.of(6, 7).contains(LocalDate.of(nextMonth.getYear(), nextMonth.getMonthValue(), i).getDayOfWeek().getValue()))
+                weekEndDateList.add(i);
+        });
 
-        return 1;
+        return weekEndDateList;
     }
 }
