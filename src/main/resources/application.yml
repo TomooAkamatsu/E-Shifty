@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: develop
+    active: local
 ---
 spring:
   profiles: develop
@@ -30,8 +30,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sma
-    username:
-    password:
+    username: akmt_spring
+    password: tomoosql
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true

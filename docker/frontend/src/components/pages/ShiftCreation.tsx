@@ -1,5 +1,6 @@
 import { Box, Stack, useDisclosure } from "@chakra-ui/react";
-import { memo, useCallback, VFC } from "react";
+import axios from "axios";
+import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { ShiftConfirmModal } from "../organisms/shift/shiftTable/ShiftConfirmModal";
@@ -21,11 +22,18 @@ export const ShiftCreation: VFC = memo(() => {
     alert("後ほど実装");
   };
 
+  const onClickCreate = useCallback(() => {}, []);
+
   return (
     <Box align="center" p={5}>
       <Stack spacing={5}>
-        <Box align="right" w="100vw" px={10}>
-          <Box textAlign="left" float="left">
+        <Box align="right" w="100vw" px={10} alignItems="center">
+          <Box float="left">
+            <PrimaryButton onClick={onClickCreate}>
+              シフトを作成する
+            </PrimaryButton>
+          </Box>
+          <Box textAlign="left" float="left" px={10} py={2}>
             <h1>自動的に休み希望を反映したシフトが作成されています</h1>
             <h1>手動で変更して確定ボタンを押してください。</h1>
           </Box>

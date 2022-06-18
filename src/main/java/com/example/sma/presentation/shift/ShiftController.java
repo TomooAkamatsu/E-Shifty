@@ -39,7 +39,10 @@ public class ShiftController {
     @GetMapping("/draft")
     public DraftForm getDraft() {
         List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
-        List<ShiftPattern> shiftPatterns = shiftApplicationService.findAllShiftPattern();
+        List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
+
+        //この処理の前に月に一回作成されたかの処理が必要 フロントからcreateボタン？？
+        shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee(), shiftPatternList);
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -48,7 +51,7 @@ public class ShiftController {
                 now.getMonthValue(),
                 employeeApplicationService.getEmployeeIdList());
 
-        return new DraftForm(shiftList, employeeNameList, shiftPatterns);
+        return new DraftForm(shiftList, employeeNameList, shiftPatternList);
     }
 
     @GetMapping("/vacation-requests")
