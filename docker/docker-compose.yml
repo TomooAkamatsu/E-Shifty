@@ -5,6 +5,7 @@ volumes:
 services:
   db:
     build: ./mysql
+    # image: 878702808415.dkr.ecr.ap-northeast-1.amazonaws.com/shift-management:db
     image: demo-db:0.0.1
     restart: always
     platform: linux/x86_64
@@ -23,6 +24,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
   server:
     build: ./java
+    # image: 878702808415.dkr.ecr.ap-northeast-1.amazonaws.com/shift-management:server
     image: demo-app:0.0.1
     volumes:
       - ../:/app
@@ -36,6 +38,7 @@ services:
       - .env
   front:
     build: ./frontend
+    # image: 878702808415.dkr.ecr.ap-northeast-1.amazonaws.com/shift-management:front
     image: node:16-alpine
     volumes:
       - ./frontend:/app
