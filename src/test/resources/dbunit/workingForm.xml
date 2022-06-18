@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<dataset>
-    <working_form working_form_id="1" working_form_name="従業員" />
-    <working_form working_form_id="2" working_form_name="従業員(時短)" />
-    <working_form working_form_id="3" working_form_name="パート" />
-</dataset>
