@@ -3,11 +3,11 @@ INSERT INTO working_form(working_form_id,working_form_name) VALUES (1,'正社員
 INSERT INTO working_form(working_form_id,working_form_name) VALUES (2,'正社員(時短)');
 INSERT INTO working_form(working_form_id,working_form_name) VALUES (3,'パート');
 
-INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (1,'岸田','文雄','Kishida','Fumio','1957-07-29',64,'男','090-1111-1111','kishida@hoge.com','2020-01-01',1);
-INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (2,'菅','義偉','Suga','Yoshihide','1948-12-06',73,'男','090-2222-2222','suga@hoge.com','2020-02-01',2);
-INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (3,'安倍','晋三','Abe','Shinzo','1954-09-21',67,'男','090-3333-3333','abe@hoge.com','2020-03-01',1);
-INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (4,'野田','佳彦','Noda','Yoshihiko','1957-05-20',65,'男','090-4444-4444','noda@hoge.com','2020-04-01',1);
-INSERT INTO employee(employee_id,last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES (5,'菅','直人','Kan','Naoto','1946-10-10',75,'男','090-5555-5555','kan@hoge.com','2020-05-01',3);
+INSERT INTO employee(last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES ('岸田','文雄','Kishida','Fumio','1957-07-29',64,'男','090-1111-1111','kishida@hoge.com','2020-01-01',1);
+INSERT INTO employee(last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES ('菅','義偉','Suga','Yoshihide','1948-12-06',73,'男','090-2222-2222','suga@hoge.com','2020-02-01',2);
+INSERT INTO employee(last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES ('安倍','晋三','Abe','Shinzo','1954-09-21',67,'男','090-3333-3333','abe@hoge.com','2020-03-01',1);
+INSERT INTO employee(last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES ('野田','佳彦','Noda','Yoshihiko','1957-05-20',65,'男','090-4444-4444','noda@hoge.com','2020-04-01',1);
+INSERT INTO employee(last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id) VALUES ('菅','直人','Kan','Naoto','1946-10-10',75,'男','090-5555-5555','kan@hoge.com','2020-05-01',3);
 
 INSERT INTO security(employee_id,password,authority) VALUES (1,'password','admin');
 INSERT INTO security(employee_id,password,authority) VALUES (2,'password','employee');

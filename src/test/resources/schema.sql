@@ -1,48 +1,57 @@
 DROP TABLE IF EXISTS working_form, employee, security, vacation_request, shift_pattern, shift;
 
 CREATE TABLE working_form(
-    working_form_id INT,
-    working_form_name VARCHAR(10)
+    working_form_id INT NOT NULL,
+    working_form_name VARCHAR(10) NOT NULL,
+    PRIMARY KEY(working_form_id)
 );
 
 CREATE TABLE employee(
-    employee_id INT,
-    last_name VARCHAR(10),
-    first_name VARCHAR(10),
-    roman_last_name VARCHAR(15),
-    roman_first_name VARCHAR(15),
-    birthday DATE,
-    age INT,
-    gender VARCHAR(10),
-    phone_number VARCHAR(20),
-    email VARCHAR(30),
-    employment_date DATE,
+    employee_id INT NOT NULL AUTO_INCREMENT,
+    last_name VARCHAR(10) NOT NULL,
+    first_name VARCHAR(10) NOT NULL,
+    roman_last_name VARCHAR(15) NOT NULL,
+    roman_first_name VARCHAR(15) NOT NULL,
+    birthday DATE NOT NULL,
+    age INT NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    email VARCHAR(30) NOT NULL,
+    employment_date DATE NOT NULL,
     retirement_date DATE,
-    working_form_id INT
+    working_form_id INT NOT NULL,
+    PRIMARY KEY (employee_id)
 );
 
 CREATE TABLE security(
-    employee_id INT,
-    password VARCHAR(100),
-    authority VARCHAR(10)
+    employee_id INT NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    authority VARCHAR(10) NOT NULL,
+    PRIMARY KEY (employee_id),
+    FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE
 );
 
 CREATE TABLE vacation_request(
-    request_id INT,
-    employee_id INT,
-    request_date DATE
+    request_id INT NOT NULL,
+    employee_id INT NOT NULL,
+    request_date DATE NOT NULL,
+    PRIMARY KEY(request_id),
+    FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE
 );
 
 CREATE TABLE shift_pattern(
-    shift_pattern_id INT,
-    shift_pattern_name VARCHAR(5),
+    shift_pattern_id INT NOT NULL,
+    shift_pattern_name VARCHAR(5) NOT NULL,
     start_time VARCHAR(10),
-    end_time VARCHAR(10)
+    end_time VARCHAR(10),
+    PRIMARY KEY(shift_pattern_id)
 );
 
 CREATE TABLE shift(
-    employee_id INT,
-    date DATE,
+    employee_id INT NOT NULL,
+    date DATE NOT NULL,
     shift_pattern_id INT,
-    confirmation VARCHAR(5)
+    confirmation VARCHAR(5) NOT NULL,
+    PRIMARY KEY(employee_id, date),
+    FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE
 );
