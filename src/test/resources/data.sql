@@ -1,4 +1,3 @@
-
 INSERT INTO working_form(working_form_id,working_form_name) VALUES (1,'正社員');
 INSERT INTO working_form(working_form_id,working_form_name) VALUES (2,'正社員(時短)');
 INSERT INTO working_form(working_form_id,working_form_name) VALUES (3,'パート');
