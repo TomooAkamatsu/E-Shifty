@@ -2,7 +2,10 @@ package com.example.sma.infrastructure.employee;
 
 import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.WorkingForm;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,12 +18,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @MybatisTest
 @TestPropertySource(locations = "classpath:test.yml")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class EmployeeRepositoryTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Test
+    @Order(1)
     public void 勤務形態を全件取得できること() {
         List<WorkingForm> actualWorkingForms = employeeRepository.findAllWorkingForm();
         assertThat(actualWorkingForms)
@@ -33,6 +38,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
+    @Order(2)
     public void 従業員を全件取得できること() {
         List<Employee> actualEmployeeList = employeeRepository.findAllEmployee();
         assertThat(actualEmployeeList)
@@ -48,6 +54,7 @@ class EmployeeRepositoryTest {
 
     //    なぜかH2でAUTO_INCREMENTであるemployee_idをINSERTしているとAUTO_INCREMENTが機能しない... (MySQLでは問題なく動く)
     @Test
+    @Order(3)
     public void 従業員IDを採番処理して従業員の新規登録ができること() throws Exception {
         Employee newEmployee = new Employee("鳩山", "由紀夫", "Hatoyama", "Yukio", "1947-02-11", 75, "男", "090-6666-6666", "hatoyama@hoge.com", "2020-06-01", null, new WorkingForm(1, "正社員"));
         employeeRepository.insertEmployee(newEmployee);
@@ -57,16 +64,9 @@ class EmployeeRepositoryTest {
                 .contains(new Employee(6, "鳩山", "由紀夫", "Hatoyama", "Yukio", "1947-02-11", 75, "男", "090-6666-6666", "hatoyama@hoge.com", "2020-06-01", null, new WorkingForm(1, "正社員")));
     }
 
-    //    項目がNULLになることはあってもNULLのインスタンスが渡されることはないと思うが...
-    @Test
-    public void NULLで新規登録するとDataIntegrityViolationExceptionとなること() throws Exception {
-        assertThatThrownBy(() -> {
-            employeeRepository.insertEmployee(null);
-        }).isInstanceOf(DataIntegrityViolationException.class);
-    }
-
     //    このあたりはフォームクラスのバリデーションにて制御予定
     @Test
+    @Order(4)
     public void NOTNULL制約がある項目にNULLを渡して新規登録するとDataIntegrityViolationExceptionとなること() throws Exception {
         Employee newEmployee = new Employee(null, null, "Hatoyama", "Yukio", "1947-02-11", 75, "男", "090-6666-6666", "hatoyama@hoge.com", "2020-06-01", null, new WorkingForm(1, "正社員"));
         assertThatThrownBy(() -> {
@@ -75,6 +75,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
+    @Order(5)
     public void 従業員idに紐づく1件の更新ができること() {
         employeeRepository.updateEmployee("last_name", "赤松", 1);
 
@@ -88,6 +89,7 @@ class EmployeeRepositoryTest {
 
     //   このケースはフォームクラスを介さないのでここから例外を投げて処理するかフロントで制御したい
     @Test
+    @Order(6)
     public void NOTNULL制約の項目にNULLを渡して従業員idに紐づく1件の更新を行うとDataIntegrityViolationExceptionとなること() {
         assertThatThrownBy(() -> {
             employeeRepository.updateEmployee("age", null, 1);
@@ -95,6 +97,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
+    @Order(7)
     public void 従業員IDに紐づく1件の削除ができること() {
         employeeRepository.deleteEmployee(1);
         List<Employee> actualEmployeeList = employeeRepository.findAllEmployee();
@@ -113,10 +116,15 @@ class EmployeeRepositoryTest {
     }
 
     @Test
+    @Order(8)
     public void 存在しない従業員IDに紐づく1件を削除しようとしても何も起こらないこと() {
-        employeeRepository.deleteEmployee(6);
         List<Employee> actualEmployeeList = employeeRepository.findAllEmployee();
         assertThat(actualEmployeeList).hasSize(5);
+
+        employeeRepository.deleteEmployee(6);
+
+        List<Employee> actualEmployeeListAfterDelete = employeeRepository.findAllEmployee();
+        assertThat(actualEmployeeListAfterDelete).hasSize(5);
     }
 
 }

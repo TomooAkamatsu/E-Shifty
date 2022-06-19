@@ -6,11 +6,11 @@ export const useEmployeeRegistry = () => {
   const [newRomanLastName, setNewRomanLastName] = useState<string>("");
   const [newRomanFirstName, setNewRomanFirstName] = useState<string>("");
   const [newBirthday, setNewBirthday] = useState<string>("");
-  const [newGender, setNewGender] = useState<string>("男");
+  const [newGender, setNewGender] = useState<string>("");
   const [newAge, setNewAge] = useState<number>(0);
   const [newPhoneNumber, setNewPhoneNumber] = useState<string>("");
   const [newEmail, setNewEmail] = useState<string>("");
-  const [newWorkingForm, setNewWorkingForm] = useState<string>("正社員");
+  const [newWorkingForm, setNewWorkingForm] = useState<string>("");
   const [newEmploymentDate, setNewEmploymentDate] = useState<string>("");
 
   const onChangeLastName = useCallback((e: ChangeEvent<HTMLInputElement>) => {

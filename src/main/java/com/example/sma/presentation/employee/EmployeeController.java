@@ -36,7 +36,6 @@ public class EmployeeController {
         return "{\"result\":\"ok\"}";
     }
 
-
     @PatchMapping("/{employeeId}")
     public String patchEmployee(@RequestBody String patchData, @PathVariable("employeeId") int employeeId) {
 

@@ -69,12 +69,12 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
       changedEmployeeData.romanFirstName = newRomanFirstName;
     if (newBirthday !== "") changedEmployeeData.birthday = newBirthday;
     if (newAge !== 0) changedEmployeeData.age = newAge;
-    if (newGender !== "男") changedEmployeeData.gender = newGender;
+    if (newGender !== "") changedEmployeeData.gender = newGender;
     if (newPhoneNumber !== "") changedEmployeeData.phoneNumber = newPhoneNumber;
     if (newEmail !== "") changedEmployeeData.email = newEmail;
     if (newEmploymentDate !== "")
       changedEmployeeData.employmentDate = newEmploymentDate;
-    if (newWorkingForm !== "正社員")
+    if (newWorkingForm !== "")
       changedEmployeeData.workingFormName = newWorkingForm;
     instance
       .patch(
@@ -82,6 +82,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
         JSON.stringify(changedEmployeeData)
       )
       .then((r) => console.log(r.data));
+    console.log(changedEmployeeData);
   };
 
   const onClickDelete = () => {
