@@ -24,4 +24,18 @@ public class Employee {
     private String retirementDate;
     private WorkingForm workingForms;
 
+    public Employee(String lastName, String firstName, String romanLastName, String romanFirstName, String birthday, int age, String gender, String phoneNumber, String email, String employmentDate, String retirementDate, WorkingForm workingForms) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.romanLastName = romanLastName;
+        this.romanFirstName = romanFirstName;
+        this.birthday = birthday;
+        this.age = age;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.employmentDate = employmentDate;
+        this.retirementDate = retirementDate;
+        this.workingForms = workingForms;
+    }
 }

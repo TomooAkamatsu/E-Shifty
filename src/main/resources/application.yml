@@ -30,8 +30,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sma
-    username: akmt_spring
-    password: tomoosql
+    username:
+    password:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
@@ -46,7 +46,4 @@ spring:
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
       encoding: utf-8
----
-
-
 
