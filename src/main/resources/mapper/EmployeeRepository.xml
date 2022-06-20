@@ -40,10 +40,18 @@
         <result property="workingFormName" column="working_form_name" />
     </resultMap>
 
-<!--    <collection property="workingForms" ofType="WorkingForm">-->
-<!--        <result property="workingFormId" column="employee_form_id" />-->
-<!--        <result property="workingFormName" column="employee_form_name" />-->
-<!--    </collection>-->
+    <select id="findOneEmployee" resultMap="EmployeeMap">
+        SELECT
+            *
+        FROM
+            employee
+        JOIN
+            working_form
+        ON
+            employee.working_form_id = working_form.working_form_id
+        WHERE
+            employee_id = #{employeeId}
+    </select>
 
     <select id="findAllWorkingForm" resultType="WorkingForm">
         SELECT
@@ -64,7 +72,6 @@
             phone_number,
             email,
             employment_date,
-            retirement_date,
             working_form_id
         )
         VALUES(
@@ -78,7 +85,6 @@
             #{phoneNumber},
             #{email},
             #{employmentDate},
-            null,
             #{workingForms.workingFormId}
         )
     </insert>
@@ -87,7 +93,17 @@
         UPDATE
             employee
         SET
-            ${key} = #{value}
+            last_name = #{lastName},
+            first_name = #{firstName},
+            roman_last_name = #{romanLastName},
+            roman_first_name = #{romanFirstName},
+            birthday = #{birthday},
+            age = #{age},
+            gender = #{gender},
+            phone_number = #{phoneNumber},
+            email = #{email},
+            employment_date = #{employmentDate},
+            working_form_id = #{workingForms.workingFormId}
         WHERE
             employee_id = #{employeeId}
     </update>

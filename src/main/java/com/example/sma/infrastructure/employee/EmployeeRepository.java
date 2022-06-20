@@ -3,9 +3,9 @@ package com.example.sma.infrastructure.employee;
 import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.WorkingForm;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface EmployeeRepository {
@@ -17,7 +17,7 @@ public interface EmployeeRepository {
     public void insertEmployee(Employee employee);
 
     //    従業員情報を更新
-    public void updateEmployee(@Param("key") String key, @Param("value") String value, @Param("employeeId") int employeeId);
+    public void updateEmployee(Employee employee);
 
     //    従業員を削除
     public void deleteEmployee(int employeeId);
@@ -25,4 +25,7 @@ public interface EmployeeRepository {
     //    勤務形態の全件取得
     public List<WorkingForm> findAllWorkingForm();
 
+    //    従業員の一件検索
+    //    そもそも存在しない従業員IDが渡されることがないため、Optionalにする必要があるのか
+    Optional<Employee> findOneEmployee(int employeeId);
 }

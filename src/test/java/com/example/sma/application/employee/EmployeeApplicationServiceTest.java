@@ -10,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,16 +62,31 @@ class EmployeeApplicationServiceTest {
 
     @Test
     void 従業員情報の更新に成功したらtrueが返ること() {
-        boolean actual = employeeApplicationService.updateEmployee("lastName", "Akamatsu", 1);
+        when(employeeRepository.findOneEmployee(1)).thenReturn(
+                Optional.of(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")))
+        );
+        Map<String, String> patchDataMap = new HashMap<>() {{
+            put("lastName", "赤松");
+            put("FirstName", "知音");
+        }};
+        boolean actual = employeeApplicationService.updateEmployee(patchDataMap, 1);
         assertThat(actual).isEqualTo(true);
     }
 
     @Test
     void 従業員情報の更新時にエラーをcatchしたらfalseが返ること() {
-        doThrow(new BindingException()).when(employeeRepository).updateEmployee("lastName", "Akamatsu", 1);
-        boolean actual = employeeApplicationService.updateEmployee("lastname", "Akamatsu", 1);
+        when(employeeRepository.findOneEmployee(1)).thenReturn(
+                Optional.of(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")))
+        );
+        doThrow(new BindingException()).when(employeeRepository).updateEmployee(
+                new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"))
+        );
+        Map<String, String> patchDataMap = new HashMap<>() {{
+            put("lastName", "赤松");
+            put("FirstName", "知音");
+        }};
+        boolean actual = employeeApplicationService.updateEmployee(patchDataMap, 1);
         assertThat(actual).isEqualTo(false);
-
     }
 
     @Test

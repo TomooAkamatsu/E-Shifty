@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +28,40 @@ public class EmployeeApplicationService {
         return true;
     }
 
-    public boolean updateEmployee(String key, String value, int employeeId) {
+    public boolean updateEmployee(Map<String, String> patchDataMap, int employeeId) {
+
         try {
-            employeeRepository.updateEmployee(key, value, employeeId);
+//            NoSuchExceptionを投げるのであればぬるぽと変わらないのでは...
+            Employee targetEmployee = employeeRepository.findOneEmployee(employeeId).orElseThrow();
+
+            if (patchDataMap.containsKey("lastName"))
+                targetEmployee.setLastName(patchDataMap.get("lastName"));
+            if (patchDataMap.containsKey("firstName"))
+                targetEmployee.setFirstName(patchDataMap.get("firstName"));
+            if (patchDataMap.containsKey("romanLastName"))
+                targetEmployee.setRomanLastName(patchDataMap.get("romanLastName"));
+            if (patchDataMap.containsKey("romanFirstName"))
+                targetEmployee.setRomanFirstName(patchDataMap.get("romanFirstName"));
+            if (patchDataMap.containsKey("birthday"))
+                targetEmployee.setBirthday(patchDataMap.get("birthday"));
+            if (patchDataMap.containsKey("age"))
+                targetEmployee.setAge(Integer.parseInt(patchDataMap.get("age")));
+            if (patchDataMap.containsKey("gender"))
+                targetEmployee.setGender(patchDataMap.get("gender"));
+            if (patchDataMap.containsKey("phoneNumber"))
+                targetEmployee.setPhoneNumber(patchDataMap.get("phoneNumber"));
+            if (patchDataMap.containsKey("email"))
+                targetEmployee.setEmail(patchDataMap.get("email"));
+            if (patchDataMap.containsKey("employmentDate"))
+                targetEmployee.setEmploymentDate(patchDataMap.get("employmentDate"));
+            if (patchDataMap.containsKey("workingFormName")) {
+                List<WorkingForm> workingFormList = employeeRepository.findAllWorkingForm();
+                workingFormList.forEach(workingForm -> {
+                    if (patchDataMap.get("workingFormName").equals(workingForm.getWorkingFormName()))
+                        targetEmployee.setWorkingForms(workingForm);
+                });
+            }
+            employeeRepository.updateEmployee(targetEmployee);
         } catch (Exception e) {
             return false;
         }
