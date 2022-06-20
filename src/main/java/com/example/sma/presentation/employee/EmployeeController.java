@@ -9,10 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.example.sma.presentation.employee.EmployeePresentationLogic.*;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -36,22 +35,19 @@ public class EmployeeController {
         return "{\"result\":\"ok\"}";
     }
 
-
     @PatchMapping("/{employeeId}")
     public String patchEmployee(@RequestBody String patchData, @PathVariable("employeeId") int employeeId) {
 
-        Map<String, String> map = null;
+        Map<String, String> patchDataMap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         try {
-            map = mapper.readValue(patchData, new TypeReference<Map<String, String>>() {
+            patchDataMap = mapper.readValue(patchData, new TypeReference<Map<String, String>>() {
             });
+            employeeApplicationService.updateEmployee(patchDataMap, employeeId);
         } catch (Exception e) {
             e.printStackTrace();
+            return "{\"result\":\"false\"}";
         }
-        map.entrySet().stream().forEach(e -> employeeApplicationService.updateEmployee(
-                camelToSnake(checkWorkingForm(e.getKey())),
-                ifWorkingFormGetId(e.getKey(), e.getValue()),
-                employeeId));
         return "{\"result\":\"ok\"}";
     }
 

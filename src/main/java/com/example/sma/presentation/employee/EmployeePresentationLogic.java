@@ -2,6 +2,8 @@ package com.example.sma.presentation.employee;
 
 final class EmployeePresentationLogic {
 
+//    todo: 使用しないメソッドがいくつかあるので使用しなければ削除
+
     static final String ifWorkingFormGetId(final String key, final String value) {
         if (!key.equals("workingFormName")) return value;
         return getWorkingFormIdFromName(value);
@@ -9,7 +11,7 @@ final class EmployeePresentationLogic {
 
     static final String getWorkingFormIdFromName(final String workingFormName) {
 
-//        もっといいやり方があるとは思うが...
+//        もっといいやり方があるとは思うが...。workingform
         String workingFormId = "0";
         if (workingFormName.equals("正社員")) workingFormId = "1";
         if (workingFormName.equals("正社員(時短)")) workingFormId = "2";
