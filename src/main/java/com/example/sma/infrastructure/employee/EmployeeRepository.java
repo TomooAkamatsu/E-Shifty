@@ -26,6 +26,5 @@ public interface EmployeeRepository {
     public List<WorkingForm> findAllWorkingForm();
 
     //    従業員の一件検索
-    //    そもそも存在しない従業員IDが渡されることがないため、Optionalにする必要があるのか
     Optional<Employee> findOneEmployee(int employeeId);
 }

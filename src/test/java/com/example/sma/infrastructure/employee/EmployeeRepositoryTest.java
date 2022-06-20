@@ -12,7 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -91,7 +91,7 @@ class EmployeeRepositoryTest {
                 ).isNotEqualTo(new Employee());
     }
 
-    //       このケースはフォームクラスを介さないのでここから例外を投げて処理するかフロントで制御したい
+    //       更新内容がNULLでもなく空文字場合はフロントで制御予定
     @Test
     @Order(6)
     public void NOTNULL制約の項目にNULLを渡して従業員idに紐づく1件の更新を行うとDataIntegrityViolationExceptionとなること() {
@@ -152,16 +152,11 @@ class EmployeeRepositoryTest {
         );
     }
 
-    //    そもそも存在しない従業員IDが渡されることがないため、Optionalにする必要があるのか
-    //    Optionalを使用する場合、空だった場合のテストはどれが適切なのか
     @Test
     @Order(10)
-    public void 存在しない従業員IDに紐づく一件を検索するとNULLが返り処理されること() {
-        Employee actualEmployee = employeeRepository.findOneEmployee(10).orElse(new Employee());
-        assertThat(actualEmployee).isEqualTo(new Employee());
-        assertThatThrownBy(() -> {
-            employeeRepository.findOneEmployee(10).orElseThrow();
-        }).isInstanceOf(NoSuchElementException.class);
+    public void 存在しない従業員IDに紐づく一件を検索するとOptinalEmptyが返ること() {
+        Optional<Employee> actualEmployee = employeeRepository.findOneEmployee(10);
+        assertThat(actualEmployee).isEqualTo(Optional.empty());
     }
 
 }

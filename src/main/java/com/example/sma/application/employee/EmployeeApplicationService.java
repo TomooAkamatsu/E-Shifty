@@ -2,6 +2,7 @@ package com.example.sma.application.employee;
 
 import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.WorkingForm;
+import com.example.sma.exception.NotFoundEmployeeException;
 import com.example.sma.infrastructure.employee.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,8 @@ public class EmployeeApplicationService {
     public boolean updateEmployee(Map<String, String> patchDataMap, int employeeId) {
 
         try {
-//            NoSuchExceptionを投げるのであればぬるぽと変わらないのでは...
-            Employee targetEmployee = employeeRepository.findOneEmployee(employeeId).orElseThrow();
+            Employee targetEmployee = employeeRepository.findOneEmployee(employeeId)
+                    .orElseThrow(() -> new NotFoundEmployeeException("対象の従業員が見つかりませんでした"));
 
             if (patchDataMap.containsKey("lastName"))
                 targetEmployee.setLastName(patchDataMap.get("lastName"));
