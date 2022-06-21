@@ -6,6 +6,7 @@ import "react-day-picker/dist/style.css";
 import { DayPickCalendar } from "../organisms/Calendar/DayPickCalendar";
 import axios from "axios";
 import { useSelectedVacationRequest } from "../../hooks/useSelectedVacationRequest";
+import { instance } from "../../api/axios";
 
 type typeRequestDate = {
   employeeId: number;
@@ -24,7 +25,7 @@ export const VacationRequest: VFC = memo(() => {
 
   const onClickPostRequest = () => {
     const requestDateJSON: typeRequestDate = {
-      employeeId: 3,
+      employeeId: 1,
       requestDate: [],
     };
     days?.map((day) =>
@@ -32,17 +33,17 @@ export const VacationRequest: VFC = memo(() => {
         `${day.getFullYear()}/${day.getMonth() + 1}/${day.getDate()}`
       )
     );
-    axios
+    instance
       .post(
-        `http://localhost:8080/api/shift/vacation-requests/${requestDateJSON.employeeId}`,
+        `/shift/vacation-requests/${requestDateJSON.employeeId}`,
         requestDateJSON
       )
       .then((res) => {
         console.log(res.data);
         if (res.data.result === "false") {
-          axios
+          instance
             .put(
-              `http://localhost:8080/api/shift/vacation-requests/${requestDateJSON.employeeId}`,
+              `/shift/vacation-requests/${requestDateJSON.employeeId}`,
               requestDateJSON
             )
             .then((res) => {

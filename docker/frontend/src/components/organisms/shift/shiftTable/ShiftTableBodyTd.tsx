@@ -1,6 +1,6 @@
 import { Select, Td } from "@chakra-ui/react";
-import axios from "axios";
 import { ChangeEvent, memo, VFC } from "react";
+import { instance } from "../../../../api/axios";
 import { typeShiftPatterns } from "../../../../type/typeShiftPatterns";
 
 type Props = {
@@ -15,11 +15,14 @@ export const ShiftTableBodyTd: VFC<Props> = memo((props) => {
 
   const onChangeShiftPattern = (e: ChangeEvent<HTMLSelectElement>) => {
     const postChangedShiftData = {
-      employeeName: employeeName,
-      changeDate: date,
+      targetEmployeeName: employeeName,
+      targetDate: date,
       changedPattern: e.target.value,
     };
-    axios.post("", postChangedShiftData).then((res) => {});
+    console.log(postChangedShiftData);
+    instance
+      .patch("/shift/draft", JSON.stringify(postChangedShiftData))
+      .then((r) => console.log(r.data));
   };
 
   return (

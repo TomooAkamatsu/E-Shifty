@@ -1,7 +1,7 @@
 import { Box, Stack, useDisclosure } from "@chakra-ui/react";
-import axios from "axios";
-import { memo, useCallback, useEffect, VFC } from "react";
+import { memo, useCallback, VFC } from "react";
 import { useHistory } from "react-router-dom";
+import { instance } from "../../api/axios";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { ShiftConfirmModal } from "../organisms/shift/shiftTable/ShiftConfirmModal";
 import { ShiftTable } from "../organisms/shift/shiftTable/ShiftTable";
@@ -22,15 +22,23 @@ export const ShiftCreation: VFC = memo(() => {
     alert("後ほど実装");
   };
 
-  const onClickCreate = useCallback(() => {}, []);
+  const onClickRecreate = useCallback(() => {
+    instance
+      .get("/shift/draft/recreation")
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch(() => {});
+    window.location.reload();
+  }, []);
 
   return (
     <Box align="center" p={5}>
       <Stack spacing={5}>
         <Box align="right" w="100vw" px={10} alignItems="center">
           <Box float="left">
-            <PrimaryButton onClick={onClickCreate}>
-              シフトを作成する
+            <PrimaryButton onClick={onClickRecreate}>
+              シフトを作り直す
             </PrimaryButton>
           </Box>
           <Box textAlign="left" float="left" px={10} py={2}>

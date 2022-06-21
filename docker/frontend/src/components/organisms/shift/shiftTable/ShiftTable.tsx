@@ -18,7 +18,6 @@ export const ShiftTable: VFC = memo(() => {
     getDraft();
   }, [getDraft]);
 
-  console.log(draft);
   const { firstHalf, latterHalf } = draft;
 
   return (

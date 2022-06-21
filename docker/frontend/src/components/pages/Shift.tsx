@@ -97,21 +97,21 @@ export const Shift: VFC = memo(() => {
             <Th p={1} textAlign="center">
               名前
             </Th>
-            {dateList.map((date) => (
-              <Th key={date.getDate()} p={1} textAlign="center">{`${
+            {dateList.map((date, index) => (
+              <Th key={index} p={1} textAlign="center">{`${
                 date.getMonth() + 1
               }/${date.getDate()}`}</Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
-          {shiftData.map((shift) => (
-            <Tr key={shift.employeeName}>
+          {shiftData.map((shift, index) => (
+            <Tr key={index}>
               <Td textAlign="center" p={1}>
                 {shift.employeeName}
               </Td>
-              {shift.patternArr.map((shiftPattern) => (
-                <Td textAlign="center" p={1}>
+              {shift.patternArr.map((shiftPattern, index) => (
+                <Td textAlign="center" p={1} key={index}>
                   {shiftPattern}
                 </Td>
               ))}

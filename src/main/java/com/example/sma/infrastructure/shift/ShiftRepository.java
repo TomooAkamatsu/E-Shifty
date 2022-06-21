@@ -24,4 +24,8 @@ public interface ShiftRepository {
     void insertShift(Shift shift);
 
     List<Shift> findMonthlyShift(@Param("year") int year, @Param("month") int month);
+
+    void updateShift(Shift shift);
+
+    void deleteShift(@Param("year") int year, @Param("month") int month);
 }

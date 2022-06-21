@@ -251,4 +251,30 @@ public class ShiftApplicationService {
         if (shiftRepository.findMonthlyShift(year, month).equals(Collections.EMPTY_LIST)) return true;
         return false;
     }
+
+    public void updateDraft(Map<String, String> patchDataMap, List<Employee> employeesList) {
+        List<ShiftPattern> shiftPatternList = shiftRepository.findAllShiftPattern();
+
+        ShiftPattern changedShiftPattern = shiftPatternList.stream()
+                .filter(shiftPattern -> shiftPattern.getShiftPatternName().equals(patchDataMap.get("changedPattern")))
+                .findFirst().orElseThrow();
+        Employee targetEmployee = employeesList.stream()
+                .filter(employee -> employee.getLastName().equals(patchDataMap.get("targetEmployeeName")))
+                .findFirst().orElseThrow();
+
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        int targetDate = Integer.parseInt(patchDataMap.get("targetDate").replace("date","").replace("th", ""));
+        Shift patchShift = new Shift(
+                targetEmployee.getEmployeeId(),
+                String.valueOf(nextMonth.getYear()) + "-" + String.format("%02d", nextMonth.getMonthValue()) + "-" + String.format("%02d", targetDate),
+                changedShiftPattern.getShiftPatternId(),
+                "N"
+        );
+        shiftRepository.updateShift(patchShift);
+    }
+
+    public void deleteDraft() {
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        shiftRepository.deleteShift(nextMonth.getYear(),nextMonth.getMonthValue());
+    }
 }

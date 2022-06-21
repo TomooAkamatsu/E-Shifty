@@ -41,6 +41,26 @@
         )
     </insert>
 
+    <update id="updateShift">
+        UPDATE
+            shift
+        SET
+            shift_pattern_id = #{shiftPatternId}
+        WHERE
+            employee_id = #{employeeId}
+        AND
+            date = #{date}
+    </update>
+
+    <delete id="deleteShift">
+        DELETE FROM
+            shift
+        WHERE
+            YEAR(date) = #{year}
+        AND
+            MONTH(date) = #{month}
+    </delete>
+
     <select id="findAllShiftPattern" resultType="ShiftPattern">
         SELECT
             *

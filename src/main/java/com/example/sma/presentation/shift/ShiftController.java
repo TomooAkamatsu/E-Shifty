@@ -5,13 +5,17 @@ import com.example.sma.application.shift.ShiftApplicationService;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import com.example.sma.domain.models.shift.VacationRequest;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -61,6 +65,28 @@ public class ShiftController {
         List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
 
         return new DraftForm(shiftList, employeeNameList, shiftPatternList);
+    }
+
+    @PatchMapping("/draft")
+    public String patchDraft(@RequestBody String patchData){
+        Map<String, String> patchDataMap = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            patchDataMap = mapper.readValue(patchData, new TypeReference<Map<String, String>>() {
+            });
+            shiftApplicationService.updateDraft(patchDataMap,
+                    employeeApplicationService.findAllEmployee());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "{\"result\":\"ok\"}";
+    }
+
+    @GetMapping("/draft/recreation")
+    public String draftRecreate(){
+        shiftApplicationService.deleteDraft();
+        return "hoge";
     }
 
     @GetMapping("/vacation-requests")
