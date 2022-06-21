@@ -41,9 +41,14 @@ public class ShiftController {
         List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
         List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
 
-        //この処理の前に月に一回作成されたかの処理が必要 フロントからcreateボタン？？
-        shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee(), shiftPatternList);
+        //todo: 例外処理
+        try {
+            //この処理の前に月に一回作成されたかの処理が必要 フロントからcreateボタン？？
+            shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee(), shiftPatternList);
+        }catch (Exception e){
+            System.out.println(e);
 
+        }
         LocalDateTime now = LocalDateTime.now();
 
         List<List<Shift>> shiftList = shiftApplicationService.findShift(
