@@ -4,6 +4,7 @@ import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import com.example.sma.domain.models.shift.VacationRequest;
+import com.example.sma.exception.DraftCreationException;
 import com.example.sma.infrastructure.shift.ShiftRepository;
 import com.example.sma.presentation.shift.VacationRequestListForm;
 import lombok.RequiredArgsConstructor;
@@ -77,65 +78,146 @@ public class ShiftApplicationService {
         return shiftRepository.findVacationRequest(nextMonth.getYear(), nextMonth.getMonthValue(), employeeId);
     }
 
-    public List<Shift> createDraft(List<Employee> employeeList, List<ShiftPattern> shiftPatternList) {
+    public List<Shift> createDraft(List<Employee> employeeList, List<ShiftPattern> shiftPatternList) throws DraftCreationException {
+
+        /*
+         *【大まかな流れ】
+         * ・従業員数×翌月の日数サイズのList<Shift>を作成
+         * ・土日に休みを入れる
+         * ・休み希望日に休みを入れる
+         * ・朝晩と遅番を営業日に一人ずつ入れる
+         * ・残りを半々になるようシフトを入れる
+         *
+         * todo: シフトパターンに絡む処理は本来は動的に変更できるようにするべき
+         * todo: 登録されている従業員が全員現職の前提で進めているが本来はチェックを入れるべき
+         */
 
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
         int daysOfNextMonth = nextMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
 
-        //来月の土日に対応する数字の取得
-        List<Integer> weekendIndex = getWeekendIndex();
-
-        //ほんとは従業員の現職チェックが必要
-
         List<Shift> draft = new ArrayList<>();
-//      draft.size()は従業員数×翌月の日数
-//      土日は休み、それ以外には0、ほんとはシフトパターンによって動的に処理したい。
+
+        //来月の土日に対応する数字の取得
+        List<Integer> weekendDateList = getWeekend();
+
+        //draftの型を作成,draft.size()は従業員数×翌月の日数
         employeeList.forEach(employee -> {
             IntStream.rangeClosed(1, daysOfNextMonth).forEach(i -> {
-
-                if (weekendIndex.contains(i % 31))
+                //土日は休み、それ以外には0
+                if (weekendDateList.contains(i % daysOfNextMonth))
                     draft.add(new Shift(employee.getEmployeeId(),
-                            nextMonth.getYear() + "-" + String.format("%02d" ,nextMonth.getMonthValue()) + "-" + String.format("%02d",i),
+                            nextMonth.getYear() + "-" + String.format("%02d", nextMonth.getMonthValue()) + "-" + String.format("%02d", i),
                             5,
                             "N"
                     ));
-
-                if (!weekendIndex.contains(i % 31))
+                if (!weekendDateList.contains(i % daysOfNextMonth))
                     draft.add(new Shift(employee.getEmployeeId(),
-                            nextMonth.getYear() + "-" + String.format("%02d" ,nextMonth.getMonthValue()) + "-" + String.format("%02d",i),
+                            nextMonth.getYear() + "-" + String.format("%02d", nextMonth.getMonthValue()) + "-" + String.format("%02d", i),
                             0,
                             "N"
                     ));
-
             });
         });
 
-        //vacationListを平くして入れる
+        //休み希望リストを取得して、ネスト構造のListを一段解消する
         List<VacationRequest> vacationRequestList = new ArrayList<>();
         findAllVacationRequest(employeeList.stream().map(Employee::getEmployeeId).toList())
                 .forEach(vacationRequestList::addAll);
 
-//        休み希望に休みに入れる。
+        //休み希望に休みに入れる
         vacationRequestList.forEach(request -> {
             draft.forEach(shift -> {
-                if(shift.getEmployeeId() == request.getEmployeeId() &&
-                    shift.getDate().equals(request.getRequestDate()))
+                if (shift.getEmployeeId() == request.getEmployeeId() &&
+                        shift.getDate().equals(request.getRequestDate()))
                     shift.setShiftPatternId(5);
             });
         });
 
-        //早番遅番のセット
-        //土日じゃない数字を取得
-        //そのうち正社員から1日2人ずつ朝晩と遅番を入れていく。
+        //正社員リスト
+        List<Integer> fullTimeEmployeeIdList = employeeList.stream()
+                .filter(employee -> employee.getWorkingForms().getWorkingFormId() == 1)
+                .map(Employee::getEmployeeId).toList();
+
+        // ここまでシフトが入っていない(ShiftPatternが0の)Shiftのリスト
+        List<Integer> emptyShiftPatternIndexList = new ArrayList<>();
+        int count = 1;
+        for (Shift shift : draft) {
+            if (shift.getShiftPatternId() == 0) emptyShiftPatternIndexList.add(count);
+            count++;
+        }
+
+        //来月の営業日を取得
+        List<Integer> businessDateList = getBusinessDay();
+
+        //1日から月末までfor文で繰り返し
+        for (int date = 1; date <= daysOfNextMonth; date++) {
+
+            //日毎のシフトが入っていない従業員の抽出
+            List<Integer> dailyEmptyShiftList = new ArrayList<>();
+            for (int i : emptyShiftPatternIndexList) {
+                if (i % daysOfNextMonth == date)
+                    dailyEmptyShiftList.add(i);
+            }
+
+            //その日のシフトが入っていない従業員のうち、早番と遅番に入れる正社員の抽出
+            List<Integer> employeeWhoCanWorkEarlyAndLate = new ArrayList<>(dailyEmptyShiftList.stream().filter(index -> fullTimeEmployeeIdList.contains(index / daysOfNextMonth + 1)).toList());
+
+            //人が少なく早番と遅番を割り当てられない場合はここで例外をスロー
+            if (employeeWhoCanWorkEarlyAndLate.size() == 1) throw new DraftCreationException("組み合わせがないためシフトを作成できません");
+
+            //dateが営業日の場合
+            if (businessDateList.contains(date)) {
+                Collections.shuffle(employeeWhoCanWorkEarlyAndLate);
+                draft.get(employeeWhoCanWorkEarlyAndLate.get(0) - 1).setShiftPatternId(1);
+                draft.get(employeeWhoCanWorkEarlyAndLate.get(1) - 1).setShiftPatternId(4);
+
+                dailyEmptyShiftList.removeAll(List.of(
+                        employeeWhoCanWorkEarlyAndLate.get(0),
+                        employeeWhoCanWorkEarlyAndLate.get(1)
+                ));
+
+                int k = dailyEmptyShiftList.size() / 2;
+                List<Integer> intList = new ArrayList<>(Arrays.asList(k, dailyEmptyShiftList.size() - k));
+                Collections.shuffle(intList);
+                Collections.shuffle(dailyEmptyShiftList);
+
+
+                IntStream.range(0, intList.get(0)).forEach(j -> draft.get(dailyEmptyShiftList.get(j) - 1).setShiftPatternId(2));
+                IntStream.range(intList.get(0), dailyEmptyShiftList.size()).forEach(j -> draft.get(dailyEmptyShiftList.get(j) - 1).setShiftPatternId(3));
+
+            }
+
+
+        }
+
+        IntStream.rangeClosed(1, 31).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(32, 62).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(63, 93).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(94, 124).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(125, 155).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(156, 186).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(187, 217).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(218, 248).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(249, 279).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        IntStream.rangeClosed(280, 310).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+        System.out.println("");
+        System.out.println("");
 
 
         //残りはランダムで
-
         return draft;
-
     }
 
-    List<Integer> getWeekendIndex() {
+    List<Integer> getWeekend() {
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
         int daysOfNextMonth = LocalDateTime.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
 
@@ -143,6 +225,24 @@ public class ShiftApplicationService {
 
         IntStream.rangeClosed(1, daysOfNextMonth).forEach(i -> {
             if (List.of(6, 7).contains(LocalDate.of(nextMonth.getYear(), nextMonth.getMonthValue(), i).getDayOfWeek().getValue()))
+                weekEndDateList.add(i);
+        });
+
+        if (weekEndDateList.contains(daysOfNextMonth)) {
+            weekEndDateList.remove(Integer.valueOf(daysOfNextMonth));
+            weekEndDateList.add(0);
+        }
+        return weekEndDateList;
+    }
+
+    List<Integer> getBusinessDay() {
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+        int daysOfNextMonth = LocalDateTime.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
+
+        List<Integer> weekEndDateList = new ArrayList<>();
+
+        IntStream.rangeClosed(1, daysOfNextMonth).forEach(i -> {
+            if (List.of(1,2,3,4,5).contains(LocalDate.of(nextMonth.getYear(), nextMonth.getMonthValue(), i).getDayOfWeek().getValue()))
                 weekEndDateList.add(i);
         });
 

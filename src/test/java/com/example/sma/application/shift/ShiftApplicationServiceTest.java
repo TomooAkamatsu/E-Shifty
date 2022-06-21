@@ -2,7 +2,6 @@ package com.example.sma.application.shift;
 
 import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.WorkingForm;
-import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import com.example.sma.domain.models.shift.VacationRequest;
 import com.example.sma.infrastructure.shift.ShiftRepository;
@@ -74,28 +73,28 @@ class ShiftApplicationServiceTest {
 //        assertThat(actual).isEqualTo(30);
 //    }
 
-    @Test
-    void 箱の確認() {
-        List<Shift> actualDraft = shiftApplicationService.createDraft(Arrays.asList(employeeArr), Arrays.asList(shiftPatternArr));
-        List<Integer> resultList = List.of(2, 3, 9, 10, 16, 17, 23, 24, 30, 31);
-
-        assertThat(actualDraft).hasSize(5 * 31);
-        assertThat(actualDraft.get(7).getShiftPatternId()).isEqualTo(5);
-        IntStream.rangeClosed(1, 155).forEach(i -> {
-            assertThat(actualDraft.get(i - 1).getEmployeeId()).isEqualTo((i - 1) / 31 + 1);
-
-//            if (resultList.contains(i % 31))
-//                assertThat(actualDraft.get(i - 1).getShiftPatternId()).isEqualTo(5);
+//    @Test
+//    void 箱の確認() {
+//        List<Shift> actualDraft = shiftApplicationService.createDraft(Arrays.asList(employeeArr), Arrays.asList(shiftPatternArr));
+//        List<Integer> resultList = List.of(2, 3, 9, 10, 16, 17, 23, 24, 30, 31);
 //
-//            if (!resultList.contains(i % 31))
-//                assertThat(actualDraft.get(i - 1).getShiftPatternId()).isEqualTo(0);
-
-        });
-    }
+//        assertThat(actualDraft).hasSize(5 * 31);
+//        assertThat(actualDraft.get(7).getShiftPatternId()).isEqualTo(5);
+//        IntStream.rangeClosed(1, 155).forEach(i -> {
+//            assertThat(actualDraft.get(i - 1).getEmployeeId()).isEqualTo((i - 1) / 31 + 1);
+//
+////            if (resultList.contains(i % 31))
+////                assertThat(actualDraft.get(i - 1).getShiftPatternId()).isEqualTo(5);
+////
+////            if (!resultList.contains(i % 31))
+////                assertThat(actualDraft.get(i - 1).getShiftPatternId()).isEqualTo(0);
+//
+//        });
+//    }
 
     @Test
     void 土日の取得() {
-        List<Integer> actualList = shiftApplicationService.getWeekendIndex();
+        List<Integer> actualList = shiftApplicationService.getWeekend();
         assertThat(actualList).hasSize(10);
 
         List<Integer> resultList = List.of(2, 3, 9, 10, 16, 17, 23, 24, 30, 31);
