@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface ShiftRepository {
 
-    List<Shift> findShift(@Param("year") int year, @Param("month") int month, @Param("employeeId") int employeeId);
+    List<Shift> findIndividualMonthlyShift(@Param("year") int year, @Param("month") int month, @Param("employeeId") int employeeId);
 
     List<ShiftPattern> findAllShiftPattern();
 
@@ -20,4 +20,8 @@ public interface ShiftRepository {
     void insertVacationRequest(@Param("employeeId") int employeeId, @Param("date") String date);
 
     void deleteVacationRequest(@Param("year") int year, @Param("month") int month, @Param("employeeId") int employeeId);
+
+    void insertShift(Shift shift);
+
+    List<Shift> findMonthlyShift(@Param("year") int year, @Param("month") int month);
 }

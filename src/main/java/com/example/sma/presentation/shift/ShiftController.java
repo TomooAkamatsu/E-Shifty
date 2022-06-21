@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:3000")
@@ -38,23 +39,26 @@ public class ShiftController {
 
     @GetMapping("/draft")
     public DraftForm getDraft() {
+
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
+
+        if (shiftApplicationService.shiftDontExist(nextMonth.getYear(),nextMonth.getMonthValue())) {
+            //todo: 例外処理
+            try {
+                shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        List<List<Shift>> shiftList = new ArrayList<>();
+        shiftList = shiftApplicationService.findShift(
+                nextMonth.getYear(),
+                nextMonth.getMonthValue(),
+                employeeApplicationService.getEmployeeIdList());
+
         List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
         List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
-
-        //todo: 例外処理
-        try {
-            //この処理の前に月に一回作成されたかの処理が必要 フロントからcreateボタン？？
-            shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee(), shiftPatternList);
-        }catch (Exception e){
-            System.out.println(e);
-
-        }
-        LocalDateTime now = LocalDateTime.now();
-
-        List<List<Shift>> shiftList = shiftApplicationService.findShift(
-                now.getYear(),
-                now.getMonthValue(),
-                employeeApplicationService.getEmployeeIdList());
 
         return new DraftForm(shiftList, employeeNameList, shiftPatternList);
     }
@@ -90,7 +94,7 @@ public class ShiftController {
     }
 
     @GetMapping("/patterns")
-    public List<ShiftPattern> getShiftPatterns(){
+    public List<ShiftPattern> getShiftPatterns() {
         return shiftApplicationService.findAllShiftPattern();
     }
 

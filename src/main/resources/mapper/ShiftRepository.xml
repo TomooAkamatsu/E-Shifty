@@ -5,7 +5,7 @@
 <!-- Mapperとxmlのマッピング -->
 <mapper namespace="com.example.sma.infrastructure.shift.ShiftRepository">
 
-    <select id="findShift" resultType="Shift">
+    <select id="findIndividualMonthlyShift" resultType="Shift">
         SELECT
             *
         FROM
@@ -20,12 +20,34 @@
             shift.date ASC
     </select>
 
+    <select id="findMonthlyShift" resultType="Shift">
+        SELECT
+            *
+        FROM
+            shift
+        WHERE
+            YEAR(date) = #{year}
+        AND
+            MONTH(date) = #{month}
+    </select>
+
+    <insert id="insertShift">
+        INSERT INTO shift
+        VALUES(
+            #{employeeId},
+            #{date},
+            #{shiftPatternId},
+            #{confirmation}
+        )
+    </insert>
+
     <select id="findAllShiftPattern" resultType="ShiftPattern">
         SELECT
             *
         FROM
             shift_pattern
     </select>
+
 
     <select id="findVacationRequest" resultType="VacationRequest">
         SELECT

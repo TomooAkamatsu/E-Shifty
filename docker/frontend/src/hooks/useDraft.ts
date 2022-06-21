@@ -6,13 +6,13 @@ export const useDraft = () => {
   const [draft, setDraft] = useState<typeDraft>({
     firstHalf: [
       {
-        employeeName: "hoge",
+        employeeName: "",
         shift: {},
       },
     ],
     latterHalf: [
       {
-        employeeName: "hoge",
+        employeeName: "",
         shift: {},
       },
     ],

@@ -25,7 +25,7 @@ public class ShiftApplicationService {
 
     public List<List<Shift>> findShift(int year, int month, List<Integer> employeeIdList) {
         List<List<Shift>> shiftList = new ArrayList<>();
-        employeeIdList.stream().forEach(employeeId -> shiftList.add(shiftRepository.findShift(year, month, employeeId)));
+        employeeIdList.stream().forEach(employeeId -> shiftList.add(shiftRepository.findIndividualMonthlyShift(year, month, employeeId)));
         return shiftList;
     }
 
@@ -78,7 +78,7 @@ public class ShiftApplicationService {
         return shiftRepository.findVacationRequest(nextMonth.getYear(), nextMonth.getMonthValue(), employeeId);
     }
 
-    public List<Shift> createDraft(List<Employee> employeeList, List<ShiftPattern> shiftPatternList) throws DraftCreationException {
+    public void createDraft(List<Employee> employeeList) throws DraftCreationException {
 
         /*
          *【大まかな流れ】
@@ -167,6 +167,8 @@ public class ShiftApplicationService {
 
             //dateが営業日の場合
             if (businessDateList.contains(date)) {
+
+                //ランダムに早番と遅番を入れる
                 Collections.shuffle(employeeWhoCanWorkEarlyAndLate);
                 draft.get(employeeWhoCanWorkEarlyAndLate.get(0) - 1).setShiftPatternId(1);
                 draft.get(employeeWhoCanWorkEarlyAndLate.get(1) - 1).setShiftPatternId(4);
@@ -176,20 +178,18 @@ public class ShiftApplicationService {
                         employeeWhoCanWorkEarlyAndLate.get(1)
                 ));
 
+                //ランダムに残りのシフトを入れる
                 int k = dailyEmptyShiftList.size() / 2;
                 List<Integer> intList = new ArrayList<>(Arrays.asList(k, dailyEmptyShiftList.size() - k));
                 Collections.shuffle(intList);
                 Collections.shuffle(dailyEmptyShiftList);
 
-
                 IntStream.range(0, intList.get(0)).forEach(j -> draft.get(dailyEmptyShiftList.get(j) - 1).setShiftPatternId(2));
                 IntStream.range(intList.get(0), dailyEmptyShiftList.size()).forEach(j -> draft.get(dailyEmptyShiftList.get(j) - 1).setShiftPatternId(3));
-
             }
-
-
         }
 
+        //確認用
         IntStream.rangeClosed(1, 31).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
         System.out.println("");
         IntStream.rangeClosed(32, 62).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
@@ -212,9 +212,7 @@ public class ShiftApplicationService {
         System.out.println("");
         System.out.println("");
 
-
-        //残りはランダムで
-        return draft;
+        draft.forEach(shiftRepository::insertShift);
     }
 
     List<Integer> getWeekend() {
@@ -242,10 +240,15 @@ public class ShiftApplicationService {
         List<Integer> weekEndDateList = new ArrayList<>();
 
         IntStream.rangeClosed(1, daysOfNextMonth).forEach(i -> {
-            if (List.of(1,2,3,4,5).contains(LocalDate.of(nextMonth.getYear(), nextMonth.getMonthValue(), i).getDayOfWeek().getValue()))
+            if (List.of(1, 2, 3, 4, 5).contains(LocalDate.of(nextMonth.getYear(), nextMonth.getMonthValue(), i).getDayOfWeek().getValue()))
                 weekEndDateList.add(i);
         });
 
         return weekEndDateList;
+    }
+
+    public boolean shiftDontExist(int year, int month) {
+        if (shiftRepository.findMonthlyShift(year, month).equals(Collections.EMPTY_LIST)) return true;
+        return false;
     }
 }

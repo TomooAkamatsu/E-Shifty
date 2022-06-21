@@ -21,8 +21,7 @@ public class LatterHalfOfDraftForm {
     public LatterHalfOfDraftForm(List<Shift> individualShiftList, List<String> employeeNameList, List<ShiftPattern> shiftPatterns) {
         this.employeeName = employeeNameList.get(individualShiftList.get(0).getEmployeeId() - 1);
 
-//        plusmonth(1)をつける
-        LocalDateTime nextMonth = LocalDateTime.now();
+        LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
 
         List<Shift> latterHalfOfIndividualShiftList = IntStream
                 .rangeClosed(15, nextMonth.with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth() - 1)
