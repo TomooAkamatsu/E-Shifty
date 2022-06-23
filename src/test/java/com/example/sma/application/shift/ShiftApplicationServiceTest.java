@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -91,13 +90,13 @@ class ShiftApplicationServiceTest {
         assertThat(actualRequestList.get(0).getRequestDate()).isEqualTo("2022-07-08");
     }
 
-    @Test
-    void シフトがあればtrue() {
-        when(shiftRepository.findMonthlyShift(2022, 7)).thenReturn(Collections.EMPTY_LIST);
-        boolean actual = shiftApplicationService.shiftDontExist(2022,7);
-
-        assertThat(actual).isTrue();
-
-    }
+//    @Test
+//    void シフトがあればtrue() {
+//        when(shiftRepository.findMonthlyShift(2022, 7)).thenReturn(Collections.EMPTY_LIST);
+//        boolean actual = shiftApplicationService.shiftDontExist(2022,7);
+//
+//        assertThat(actual).isTrue();
+//
+//    }
 
 }

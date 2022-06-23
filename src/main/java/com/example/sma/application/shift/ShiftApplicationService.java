@@ -163,7 +163,7 @@ public class ShiftApplicationService {
             List<Integer> employeeWhoCanWorkEarlyAndLate = new ArrayList<>(dailyEmptyShiftList.stream().filter(index -> fullTimeEmployeeIdList.contains(index / daysOfNextMonth + 1)).toList());
 
             //人が少なく早番と遅番を割り当てられない場合はここで例外をスロー
-            if (employeeWhoCanWorkEarlyAndLate.size() == 1) throw new DraftCreationException("組み合わせがないためシフトを作成できません");
+            if (employeeWhoCanWorkEarlyAndLate.size() == 1) throw new DraftCreationException(date + "の組み合わせがないためシフトを作成できません");
 
             //dateが営業日の場合
             if (businessDateList.contains(date)) {
@@ -253,7 +253,7 @@ public class ShiftApplicationService {
     }
 
     public void updateDraft(Map<String, String> patchDataMap, List<Employee> employeesList) {
-        List<ShiftPattern> shiftPatternList = shiftRepository.findAllShiftPattern();
+        List<ShiftPattern> shiftPatternList = findAllShiftPattern();
 
         ShiftPattern changedShiftPattern = shiftPatternList.stream()
                 .filter(shiftPattern -> shiftPattern.getShiftPatternName().equals(patchDataMap.get("changedPattern")))

@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import "react-day-picker/dist/style.css";
 import { DayPickCalendar } from "../organisms/Calendar/DayPickCalendar";
-import axios from "axios";
 import { useSelectedVacationRequest } from "../../hooks/useSelectedVacationRequest";
 import { instance } from "../../api/axios";
 
