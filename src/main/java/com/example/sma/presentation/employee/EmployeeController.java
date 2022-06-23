@@ -6,7 +6,10 @@ import com.example.sma.domain.models.employee.WorkingForm;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,37 +32,37 @@ public class EmployeeController {
         return employeeFormList;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String postEmployee(@RequestBody EmployeeForm employeeForm) {
-        employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
-        return "{\"result\":\"ok\"}";
+    public String postEmployee(@RequestBody @Validated EmployeeForm employeeForm) {
+        return employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
     }
 
     @PatchMapping("/{employeeId}")
     public String patchEmployee(@RequestBody String patchData, @PathVariable("employeeId") int employeeId) {
 
         Map<String, String> patchDataMap = new HashMap<>();
-        ObjectMapper mapper = new ObjectMapper();
         try {
+            ObjectMapper mapper = new ObjectMapper();
             patchDataMap = mapper.readValue(patchData, new TypeReference<Map<String, String>>() {
             });
-            employeeApplicationService.updateEmployee(patchDataMap, employeeId);
         } catch (Exception e) {
-            e.printStackTrace();
-            return "{\"result\":\"false\"}";
+            System.out.println(e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return "{\"result\":\"ok\"}";
+
+        return employeeApplicationService.updateEmployee(patchDataMap, employeeId);
     }
 
     @DeleteMapping("/{employeeId}")
     public String deleteEmployee(@PathVariable("employeeId") int employeeId) {
-        employeeApplicationService.deleteEmployee(employeeId);
-        return "{\"result\":\"ok\"}";
+        return employeeApplicationService.deleteEmployee(employeeId);
     }
 
     @GetMapping("/working-form")
     public List<WorkingForm> getAllWorkingForm() {
         return employeeApplicationService.findAllWorkingForm();
     }
+
 }
 
