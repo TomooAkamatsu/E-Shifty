@@ -53,25 +53,6 @@
             employee_id = #{employeeId}
     </select>
 
-    <select id="findOneEmployeeByInsertionInformation" resultMap="EmployeeMap">
-        SELECT
-            *
-        FROM
-            employee
-        JOIN
-            working_form
-        ON
-            employee.working_form_id = working_form.working_form_id
-        WHERE
-            last_name = #{lastName}
-        AND
-            first_name = #{firstName}
-        AND
-            birthday = #{birthday}
-        AND
-            phone_number = #{phoneNumber}
-    </select>
-
     <select id="findAllWorkingForm" resultType="WorkingForm">
         SELECT
             *
@@ -79,7 +60,7 @@
             working_form
     </select>
 
-    <insert id="insertEmployee">
+    <insert id="insertEmployee" useGeneratedKeys="true" keyProperty="employeeId">
         INSERT INTO employee(
             last_name,
             first_name,

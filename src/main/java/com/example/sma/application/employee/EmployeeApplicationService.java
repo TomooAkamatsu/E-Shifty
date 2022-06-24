@@ -25,13 +25,10 @@ public class EmployeeApplicationService {
     }
 
     public EmployeeCreationResult insertEmployee(Employee employee) {
-//        todo: 登録時になんらかの重複チェックが必要
-        employeeRepository.insertEmployee(employee);
-        int insertionEmployeeId = employeeRepository.findOneEmployeeByInsertionInformation(employee)
-                .orElseThrow(() -> new NotFoundEmployeeException("登録された従業員が見つかりませんでした"))
-                .getEmployeeId();
 
-        return new EmployeeCreationResult(true, insertionEmployeeId);
+        employeeRepository.insertEmployee(employee);
+
+        return new EmployeeCreationResult(true, employee.getEmployeeId());
     }
 
     public String updateEmployee(Map<String, String> patchDataMap, int employeeId) throws NotFoundEmployeeException {
