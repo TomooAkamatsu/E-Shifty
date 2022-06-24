@@ -6,6 +6,7 @@ import com.example.sma.exception.EmptyValueException;
 import com.example.sma.exception.InvalidNumberException;
 import com.example.sma.exception.NotFoundEmployeeException;
 import com.example.sma.infrastructure.employee.EmployeeRepository;
+import com.example.sma.presentation.employee.EmployeeCreationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmployeeApplicationService {
-//    todo: 成功した場合は変更情報、失敗した場合は例外を投げてcontrollerでExceptionHandler
 
     private final EmployeeRepository employeeRepository;
 
@@ -24,9 +24,14 @@ public class EmployeeApplicationService {
         return employeeRepository.findAllEmployee();
     }
 
-    public String insertEmployee(Employee employee) {
+    public EmployeeCreationResult insertEmployee(Employee employee) {
+//        todo: 登録時になんらかの重複チェックが必要
         employeeRepository.insertEmployee(employee);
-        return "{\"insertionCompleted\":\"1\"}";
+        int insertionEmployeeId = employeeRepository.findOneEmployeeByInsertionInformation(employee)
+                .orElseThrow(() -> new NotFoundEmployeeException("登録された従業員が見つかりませんでした"))
+                .getEmployeeId();
+
+        return new EmployeeCreationResult(true, insertionEmployeeId);
     }
 
     public String updateEmployee(Map<String, String> patchDataMap, int employeeId) throws NotFoundEmployeeException {

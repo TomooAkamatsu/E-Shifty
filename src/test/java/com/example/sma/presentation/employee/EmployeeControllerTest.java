@@ -6,7 +6,7 @@ import com.example.sma.domain.models.employee.WorkingForm;
 import com.example.sma.exception.EmptyValueException;
 import com.example.sma.exception.InvalidNumberException;
 import com.example.sma.exception.NotFoundEmployeeException;
-import com.example.sma.presentation.exceptionHandler.EmployeeExceptionHandler;
+import com.example.sma.presentation.exceptionHandler.GlobalExceptionHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +43,7 @@ class EmployeeControllerTest {
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
-                .setControllerAdvice(new EmployeeExceptionHandler()).build();
+                .setControllerAdvice(new GlobalExceptionHandler()).build();
     }
 
     Map<String, String> convertToJson(String data) throws JsonProcessingException {

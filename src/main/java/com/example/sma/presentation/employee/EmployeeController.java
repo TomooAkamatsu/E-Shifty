@@ -7,10 +7,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,8 +36,12 @@ public class EmployeeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public String postEmployee(@RequestBody @Validated EmployeeForm employeeForm) {
-        return employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
+    public ResponseEntity<EmployeeCreationResult> postEmployee(@RequestBody @Validated EmployeeForm employeeForm) {
+        EmployeeCreationResult result = employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
+
+        URI location = URI.create("http://localhost:8080/api/employees/" + result.getInsertionEmployeeId() );
+
+        return ResponseEntity.created(location).body(result);
     }
 
     @PatchMapping("/{employeeId}")
