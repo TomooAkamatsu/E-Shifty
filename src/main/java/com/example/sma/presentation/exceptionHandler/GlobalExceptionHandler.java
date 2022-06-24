@@ -15,14 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class EmployeeExceptionHandler {
+public class GlobalExceptionHandler {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = {NotFoundEmployeeException.class})
     @ResponseBody
     public Map<String, Object> notFountEmployeeExceptionHandler(NotFoundEmployeeException e) {
         Map<String, Object> errorMap = new HashMap<String, Object>();
-        errorMap.put("status", HttpStatus.BAD_REQUEST);
+        errorMap.put("status", HttpStatus.NOT_FOUND);
         errorMap.put("exception", e.getClass());
         errorMap.put("message", e.getMessage());
         return errorMap;
@@ -72,13 +72,13 @@ public class EmployeeExceptionHandler {
         return errorMap;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     @ResponseBody
     public Map<String, Object> exceptionHandler() {
         Map<String, Object> errorMap = new HashMap<String, Object>();
         errorMap.put("message", "予期せぬエラーが発生しました");
-        errorMap.put("status", HttpStatus.BAD_REQUEST);
+        errorMap.put("status", HttpStatus.INTERNAL_SERVER_ERROR);
         return errorMap;
     }
 
