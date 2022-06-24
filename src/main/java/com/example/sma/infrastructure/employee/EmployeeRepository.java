@@ -14,7 +14,7 @@ public interface EmployeeRepository {
     public List<Employee> findAllEmployee();
 
     //    従業員を新規登録
-    public void insertEmployee(Employee employee);
+    public int insertEmployee(Employee employee);
 
     //    従業員情報を更新
     public void updateEmployee(Employee employee);
@@ -27,4 +27,5 @@ public interface EmployeeRepository {
 
     //    従業員の一件検索
     Optional<Employee> findOneEmployee(int employeeId);
+
 }

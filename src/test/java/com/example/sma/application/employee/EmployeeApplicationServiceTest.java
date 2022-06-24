@@ -2,19 +2,21 @@ package com.example.sma.application.employee;
 
 import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.WorkingForm;
+import com.example.sma.exception.EmptyValueException;
+import com.example.sma.exception.NotFoundEmployeeException;
 import com.example.sma.infrastructure.employee.EmployeeRepository;
-import org.apache.ibatis.binding.BindingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.validation.ValidationException;
 import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doThrow;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,22 +48,23 @@ class EmployeeApplicationServiceTest {
     }
 
     @Test
-    void 従業員を新規登録に成功したらtrueが返ること() {
+    void 従業員の新規登録に成功したら完了メッセージが返ること() {
         Employee newEmployee = new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"));
-        boolean actual = employeeApplicationService.insertEmployee(newEmployee);
-        assertThat(actual).isEqualTo(true);
+        String actual = employeeApplicationService.insertEmployee(newEmployee);
+        assertThat(actual).isEqualTo("{\"insertionCompleted\":\"1\"}");
     }
 
-    @Test
-    void 従業員の新規登録時にエラーをcatchしたらfalseが返ること() {
-        Employee newEmployee = new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"));
-        doThrow(new BindingException()).when(employeeRepository).insertEmployee(newEmployee);
-        boolean actual = employeeApplicationService.insertEmployee(newEmployee);
-        assertThat(actual).isEqualTo(false);
-    }
+//    DTOにバリデーションを追加、その上ExceptionHandlerにて処理するため新規登録失敗時のエラーは必要ない？
+//    @Test
+//    void 従業員の新規登録時にエラーをcatchしたらfalseが返ること() {
+//        Employee newEmployee = new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"));
+//        doThrow(new BindingException()).when(employeeRepository).insertEmployee(newEmployee);
+//        String actual = employeeApplicationService.insertEmployee(newEmployee);
+//        assertThat(actual).isEqualTo(false);
+//    }
 
     @Test
-    void 従業員情報の更新に成功したらtrueが返ること() {
+    void 従業員情報の更新に成功したら完了メッセージが返ること() {
         when(employeeRepository.findOneEmployee(1)).thenReturn(
                 Optional.of(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")))
         );
@@ -69,39 +72,62 @@ class EmployeeApplicationServiceTest {
             put("lastName", "赤松");
             put("FirstName", "知音");
         }};
-        boolean actual = employeeApplicationService.updateEmployee(patchDataMap, 1);
-        assertThat(actual).isEqualTo(true);
+        String actual = employeeApplicationService.updateEmployee(patchDataMap, 1);
+        assertThat(actual).isEqualTo("{\"updatingCompleted\":\"1\"}");
     }
 
     @Test
-    void 従業員情報の更新時にエラーをcatchしたらfalseが返ること() {
-        when(employeeRepository.findOneEmployee(1)).thenReturn(
-                Optional.of(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")))
-        );
-        doThrow(new BindingException()).when(employeeRepository).updateEmployee(
-                new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"))
-        );
+    void 従業員情報の更新時に対象従業員の情報が見つからなかった場合NotFoundEmployeeExceptionになること() {
+        when(employeeRepository.findOneEmployee(1)).thenReturn(Optional.empty());
         Map<String, String> patchDataMap = new HashMap<>() {{
             put("lastName", "赤松");
             put("FirstName", "知音");
         }};
-        boolean actual = employeeApplicationService.updateEmployee(patchDataMap, 1);
-        assertThat(actual).isEqualTo(false);
+        assertThatThrownBy(() -> {
+            employeeApplicationService.updateEmployee(patchDataMap, 1);
+        }).isInstanceOf(NotFoundEmployeeException.class);
     }
 
     @Test
-    void 従業員情報を削除に成功したらtrueが返ること() {
-        boolean actual = employeeApplicationService.deleteEmployee(1);
-        assertThat(actual).isEqualTo(true);
+    void 従業員情報の更新時に空文字が送信されたらEmptyValueExceptionになること() {
+        when(employeeRepository.findOneEmployee(1)).thenReturn(
+                Optional.of(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")))
+        );
+        Map<String, String> patchDataMap = new HashMap<>() {{
+            put("lastName", "");
+            put("FirstName", "");
+        }};
+        assertThatThrownBy(() -> {
+            employeeApplicationService.updateEmployee(patchDataMap, 1);
+        }).isInstanceOf(EmptyValueException.class);
     }
 
     @Test
-    void 従業員情報を削除時にエラーをcatchしたらfalseが返ること() {
-        doThrow(new BindingException()).when(employeeRepository).deleteEmployee(1);
-        boolean actual = employeeApplicationService.deleteEmployee(1);
-        assertThat(actual).isEqualTo(false);
-
+    void 従業員情報の更新時に不正な内容が送信されたらValidationExceptionとなること() {
+        when(employeeRepository.findOneEmployee(1)).thenReturn(
+                Optional.of(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員")))
+        );
+        Map<String, String> patchDataMap = new HashMap<>() {{
+            put("lastName", "hoge");
+        }};
+        assertThatThrownBy(() -> {
+            employeeApplicationService.updateEmployee(patchDataMap, 1);
+        }).isInstanceOf(ValidationException.class);
     }
+
+    @Test
+    void 従業員情報を削除に成功したら完了メッセージが返ること() {
+        String actual = employeeApplicationService.deleteEmployee(1);
+        assertThat(actual).isEqualTo("{\"deletingCompleted\":\"1\"}");
+    }
+
+//    ExceptionHandlerにて対応するので削除失敗時のテストケースは必要ない？
+//    @Test
+//    void 従業員情報を削除時にエラーをcatchしたらfalseが返ること() {
+//        doThrow(new BindingException()).when(employeeRepository).deleteEmployee(1);
+//        String actual = employeeApplicationService.deleteEmployee(1);
+//        assertThat(actual).isEqualTo(false);
+//    }
 
     @Test
     void 全従業員のIDリストをint型で返すことができること() {

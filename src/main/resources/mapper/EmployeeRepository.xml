@@ -60,7 +60,7 @@
             working_form
     </select>
 
-    <insert id="insertEmployee">
+    <insert id="insertEmployee" useGeneratedKeys="true" keyProperty="employeeId">
         INSERT INTO employee(
             last_name,
             first_name,
