@@ -1,18 +1,26 @@
 import { memo, VFC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import { Login } from "../components/pages/Login";
-import { Page404 } from "../components/pages/Page404";
+import { Logout } from "../components/pages/Logout";
+
 import { HeaderLayout } from "../components/templates/HeaderLayout";
 import { employeesRoutes } from "./employeesRoutes";
+import { PrivateRoute } from "./login/PrivateRoute";
+import { UnAuthRoute } from "./login/UnAuthRoute";
 import { shiftRoutes } from "./shiftRoutes";
 
 export const Router: VFC = memo(() => {
   return (
     <Switch>
-      <Route exact path="/shiftwork_management/login">
-        <Login />
+      <UnAuthRoute exact path="/shiftwork_management/login" component={Login} />
+      <Route exact path="/shiftwork_management/logout" component={Logout} />
+      <Route path="/shiftwork_management/shift/new/redirect">
+        <Redirect to="/shiftwork_management/shift/new" />
       </Route>
-      <Route
+      <Route path="/shiftwork_management/employees/redirect">
+        <Redirect to="/shiftwork_management/employees" />
+      </Route>
+      <PrivateRoute
         path="/shiftwork_management/shift"
         render={({ match: { url } }) => (
           <Switch>
@@ -28,7 +36,7 @@ export const Router: VFC = memo(() => {
           </Switch>
         )}
       />
-      <Route
+      <PrivateRoute
         path="/shiftwork_management/employees"
         render={({ match: { url } }) => (
           <Switch>
@@ -45,7 +53,7 @@ export const Router: VFC = memo(() => {
         )}
       />
       <Route path="*">
-        <Page404 />
+        <Redirect to="/shiftwork_management/shift" />
       </Route>
     </Switch>
   );

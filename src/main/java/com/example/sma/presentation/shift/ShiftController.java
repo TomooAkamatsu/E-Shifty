@@ -2,6 +2,7 @@ package com.example.sma.presentation.shift;
 
 import com.example.sma.application.employee.EmployeeApplicationService;
 import com.example.sma.application.shift.ShiftApplicationService;
+import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import com.example.sma.domain.models.shift.VacationRequest;
@@ -12,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class ShiftController {
 
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
 
-        if (shiftApplicationService.shiftDontExist(nextMonth.getYear(),nextMonth.getMonthValue())) {
+        if (shiftApplicationService.shiftDontExist(nextMonth.getYear(), nextMonth.getMonthValue())) {
             //todo: 例外処理
             try {
                 shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee());
@@ -55,20 +55,20 @@ public class ShiftController {
             }
         }
 
-        List<List<Shift>> shiftList = new ArrayList<>();
-        shiftList = shiftApplicationService.findShift(
+        List<List<Shift>> shiftList = shiftApplicationService.findShift(
                 nextMonth.getYear(),
                 nextMonth.getMonthValue(),
                 employeeApplicationService.getEmployeeIdList());
 
-        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+//        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+        List<Employee> employeeList = employeeApplicationService.findAllEmployee();
         List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
 
-        return new DraftForm(shiftList, employeeNameList, shiftPatternList);
+        return new DraftForm(shiftList, employeeList, shiftPatternList);
     }
 
     @PatchMapping("/draft")
-    public String patchDraft(@RequestBody String patchData){
+    public String patchDraft(@RequestBody String patchData) {
         Map<String, String> patchDataMap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -84,7 +84,7 @@ public class ShiftController {
     }
 
     @GetMapping("/draft/recreation")
-    public String draftRecreate(){
+    public String draftRecreate() {
         shiftApplicationService.deleteDraft();
         return "hoge";
     }

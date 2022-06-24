@@ -6,6 +6,8 @@ import "react-day-picker/dist/style.css";
 import { DayPickCalendar } from "../organisms/Calendar/DayPickCalendar";
 import { useSelectedVacationRequest } from "../../hooks/useSelectedVacationRequest";
 import { instance } from "../../api/axios";
+import { useAuthUser } from "../../provider/login/AuthUserContext";
+import { useMessage } from "../../hooks/useMessage";
 
 type typeRequestDate = {
   employeeId: number;
@@ -14,6 +16,8 @@ type typeRequestDate = {
 
 export const VacationRequest: VFC = memo(() => {
   const history = useHistory();
+  const authUser = useAuthUser();
+  const { showMessage } = useMessage();
   const onClickShift = useCallback(
     () => history.push("/shiftwork_management/shift"),
     [history]
@@ -24,7 +28,7 @@ export const VacationRequest: VFC = memo(() => {
 
   const onClickPostRequest = () => {
     const requestDateJSON: typeRequestDate = {
-      employeeId: 1,
+      employeeId: Number(authUser?.userId),
       requestDate: [],
     };
     days?.map((day) =>
@@ -47,6 +51,11 @@ export const VacationRequest: VFC = memo(() => {
             )
             .then((res) => {
               console.log(res.data);
+              showMessage({
+                title: "休み希望日を更新しました",
+                status: "success",
+              });
+              history.push("/shiftwork_management/shift");
             });
         }
       })
@@ -57,6 +66,7 @@ export const VacationRequest: VFC = memo(() => {
 
   return (
     <Box align="center" p="5">
+      <h1>休み希望日を選択してください</h1>
       <Box w="350px" textAlign="center">
         <DayPickCalendar
           days={days}

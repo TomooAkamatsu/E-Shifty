@@ -20,6 +20,8 @@ import { DeleteButton } from "../../atoms/button/DeleteButton";
 import { useEmployeeRegistry } from "../../../hooks/useEmployeeRegistry";
 import { useWorkingFormList } from "../../../hooks/useWorkingFormList";
 import { instance } from "../../../api/axios";
+import { useMessage } from "../../../hooks/useMessage";
+import { useHistory } from "react-router-dom";
 
 type Props = {
   isOpen: boolean;
@@ -29,6 +31,8 @@ type Props = {
 
 export const EmployeeDetailModal: VFC<Props> = memo((props) => {
   const { isOpen, onClose, selectedEmployee } = props;
+  const { showMessage } = useMessage();
+  const history = useHistory();
   const {
     newLastName,
     newFirstName,
@@ -81,14 +85,40 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
         `/employees/${selectedEmployee?.employeeId}`,
         JSON.stringify(changedEmployeeData)
       )
-      .then((r) => console.log(r.data));
+      .then((r) => {
+        console.log(r.data);
+        showMessage({
+          title: "更新が完了しました",
+          status: "success",
+        });
+        history.push("/shiftwork_management/employees/redirect");
+      })
+      .catch(() => {
+        showMessage({
+          title: "更新に失敗しました",
+          status: "error",
+        });
+      });
     console.log(changedEmployeeData);
   };
 
   const onClickDelete = () => {
     instance
       .delete(`/employees/${selectedEmployee?.employeeId}`)
-      .then((r) => console.log(r.data));
+      .then((r) => {
+        console.log(r.data);
+        showMessage({
+          title: "削除が完了しました",
+          status: "success",
+        });
+        history.push("/shiftwork_management/employees/redirect");
+      })
+      .catch(() => {
+        showMessage({
+          title: "削除に失敗しました",
+          status: "error",
+        });
+      });
   };
 
   return (

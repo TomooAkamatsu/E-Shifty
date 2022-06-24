@@ -1,7 +1,8 @@
 import { Box, Stack, useDisclosure } from "@chakra-ui/react";
-import { memo, useCallback, VFC } from "react";
+import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { instance } from "../../api/axios";
+import { useDraft } from "../../hooks/useDraft";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { ShiftConfirmModal } from "../organisms/shift/shiftTable/ShiftConfirmModal";
 import { ShiftTable } from "../organisms/shift/shiftTable/ShiftTable";
@@ -9,6 +10,7 @@ import { ShiftTable } from "../organisms/shift/shiftTable/ShiftTable";
 export const ShiftCreation: VFC = memo(() => {
   const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { draft, getDraft, loading } = useDraft();
 
   const onClickBack = useCallback(() => {
     history.push("/shiftwork_management/shift");
@@ -29,8 +31,13 @@ export const ShiftCreation: VFC = memo(() => {
         console.log(res.data);
       })
       .catch(() => {});
-    window.location.reload();
-  }, []);
+    getDraft();
+    history.push("/shiftwork_management/shift/new/redirect");
+  }, [history, getDraft]);
+
+  useEffect(() => {
+    getDraft();
+  }, [getDraft]);
 
   return (
     <Box align="center" p={5}>
@@ -50,7 +57,7 @@ export const ShiftCreation: VFC = memo(() => {
           </PrimaryButton>
           <PrimaryButton onClick={onOpen}>シフトを確定</PrimaryButton>
         </Box>
-        <ShiftTable />
+        <ShiftTable draft={draft} loading={loading} />
       </Stack>
       <PrimaryButton onClick={onClickBack}>シフト一覧へ戻る</PrimaryButton>
       <ShiftConfirmModal

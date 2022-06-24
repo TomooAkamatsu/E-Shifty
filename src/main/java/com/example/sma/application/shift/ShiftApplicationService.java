@@ -190,27 +190,27 @@ public class ShiftApplicationService {
         }
 
         //確認用
-        IntStream.rangeClosed(1, 31).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(32, 62).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(63, 93).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(94, 124).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(125, 155).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(156, 186).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(187, 217).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(218, 248).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(249, 279).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        IntStream.rangeClosed(280, 310).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
-        System.out.println("");
-        System.out.println("");
+//        IntStream.rangeClosed(1, 31).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(32, 62).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(63, 93).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(94, 124).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(125, 155).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(156, 186).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(187, 217).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(218, 248).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(249, 279).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        IntStream.rangeClosed(280, 310).forEach(i -> System.out.print(draft.get(i - 1).getShiftPatternId()));
+//        System.out.println("");
+//        System.out.println("");
 
         draft.forEach(shiftRepository::insertShift);
     }

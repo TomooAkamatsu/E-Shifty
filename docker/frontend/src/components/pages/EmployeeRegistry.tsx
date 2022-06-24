@@ -7,15 +7,18 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
+import { hoursToMinutes } from "date-fns";
 import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { instance } from "../../api/axios";
 import { useEmployeeRegistry } from "../../hooks/useEmployeeRegistry";
+import { useMessage } from "../../hooks/useMessage";
 import { useWorkingFormList } from "../../hooks/useWorkingFormList";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 
 export const EmployeeRegistry: VFC = memo(() => {
   const history = useHistory();
+  const { showMessage } = useMessage();
   const { workingFormNameList, getWorkingFormData } = useWorkingFormList();
   const {
     newLastName,
@@ -40,6 +43,8 @@ export const EmployeeRegistry: VFC = memo(() => {
     onChangeEmail,
     onChangeEmploymentDate,
     onChangeWorkingForm,
+    setNewGender,
+    setNewWorkingForm,
   } = useEmployeeRegistry();
 
   const onClickBack = useCallback(() => {
@@ -63,12 +68,30 @@ export const EmployeeRegistry: VFC = memo(() => {
     console.log(postNewEmployeeData);
     instance
       .post("/employees", JSON.stringify(postNewEmployeeData))
-      .then((r) => console.log(r.data));
+      .then((r) => {
+        console.log(r.data);
+        showMessage({
+          title: "従業員の新規登録に成功しました",
+          status: "success",
+        });
+        history.push("/shiftwork_management/employees");
+      })
+      .catch(() => {
+        showMessage({
+          title: "従業員の新規登録に失敗しました",
+          status: "error",
+        });
+      });
   };
 
   useEffect(() => {
     getWorkingFormData();
   }, [getWorkingFormData]);
+
+  useEffect(() => {
+    setNewGender("男");
+    setNewWorkingForm("正社員");
+  }, [setNewGender, setNewWorkingForm]);
 
   return (
     <>
@@ -91,61 +114,51 @@ export const EmployeeRegistry: VFC = memo(() => {
           <HStack>
             <FormControl>
               <FormLabel>姓</FormLabel>
-              <Input value={newLastName} onChange={onChangeLastName} />
+              <Input placeholder="伊藤" onChange={onChangeLastName} />
             </FormControl>
             <FormControl>
               <FormLabel>名</FormLabel>
-              <Input value={newFirstName} onChange={onChangeFirstName} />
+              <Input placeholder="博文" onChange={onChangeFirstName} />
             </FormControl>
           </HStack>
           <HStack>
             <FormControl>
               <FormLabel>姓(ローマ字)</FormLabel>
-              <Input
-                value={newRomanLastName}
-                onChange={onChangeRomanLastName}
-              />
+              <Input placeholder="Ito" onChange={onChangeRomanLastName} />
             </FormControl>
             <FormControl>
               <FormLabel>名(ローマ字)</FormLabel>
-              <Input
-                value={newRomanFirstName}
-                onChange={onChangeRomanFirstName}
-              />
+              <Input placeholder="Hirofumi" onChange={onChangeRomanFirstName} />
             </FormControl>
           </HStack>
           <FormControl>
             <FormLabel>生年月日</FormLabel>
-            <Input
-              value={newBirthday}
-              onChange={onChangeBirthday}
-              type="date"
-            />
+            <Input onChange={onChangeBirthday} type="date" />
           </FormControl>
           <HStack>
             <FormControl>
               <FormLabel>性別</FormLabel>
-              <Select value={newGender} onChange={onChangeGender}>
+              <Select onChange={onChangeGender}>
                 <option>男</option>
                 <option>女</option>
               </Select>
             </FormControl>
             <FormControl>
               <FormLabel>年齢</FormLabel>
-              <Input value={newAge} onChange={onChangeAge} type="number" />
+              <Input placeholder="0" onChange={onChangeAge} type="number" />
             </FormControl>
           </HStack>
           <FormControl>
             <FormLabel>TEL</FormLabel>
-            <Input value={newPhoneNumber} onChange={onChangePhoneNumber} />
+            <Input placeholder="000-0000-0000" onChange={onChangePhoneNumber} />
           </FormControl>
           <FormControl>
             <FormLabel>Email</FormLabel>
-            <Input value={newEmail} onChange={onChangeEmail} />
+            <Input placeholder="hogehoge@hugaa.com" onChange={onChangeEmail} />
           </FormControl>
           <FormControl>
             <FormLabel>雇用形態</FormLabel>
-            <Select value={newWorkingForm} onChange={onChangeWorkingForm}>
+            <Select onChange={onChangeWorkingForm}>
               {workingFormNameList.map((workingForm) => (
                 <option key={workingForm}>{workingForm}</option>
               ))}
@@ -153,11 +166,7 @@ export const EmployeeRegistry: VFC = memo(() => {
           </FormControl>
           <FormControl>
             <FormLabel>雇用開始日</FormLabel>
-            <Input
-              value={newEmploymentDate}
-              onChange={onChangeEmploymentDate}
-              type="date"
-            />
+            <Input onChange={onChangeEmploymentDate} type="date" />
           </FormControl>
           <PrimaryButton onClick={onClickRegistry}>登録</PrimaryButton>
         </Stack>
