@@ -1,21 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import { instance } from "../api/axios";
+import { useAuthUser } from "../provider/login/AuthUserContext";
 import { typeVacationRequestList } from "../type/typeVacationRequestList";
 
 export const useSelectedVacationRequest = () => {
   const [selectedVacationRequest, setSelectedVacationRequest] =
     useState<typeVacationRequestList>();
   const [days, setDays] = useState<Date[] | undefined>([]);
+  const authUser = useAuthUser();
 
   const getSelectedVacationRequest = useCallback(() => {
-    const employeeId = 1;
+    const employeeId = authUser?.userId;
+    console.log(employeeId);
     instance
       .get<typeVacationRequestList>(`shift/vacation-requests/${employeeId}`)
       .then((res) => {
         setSelectedVacationRequest(res.data);
       })
       .catch(() => {});
-  }, []);
+  }, [authUser?.userId]);
 
   useEffect(() => {
     const selectedVacationDate: Array<Date> = [];

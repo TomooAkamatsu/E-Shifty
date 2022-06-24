@@ -1,12 +1,21 @@
-import { Box, Flex, Heading, Link, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Link,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { memo, useCallback, VFC } from "react";
 import { useHistory } from "react-router-dom";
+import { useAuthUser } from "../../../provider/login/AuthUserContext";
 import { MenuIconButton } from "../../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../../molecules/MenuDrawer";
 
 export const Header: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
+  const authUser = useAuthUser();
 
   const onClickShift = useCallback(
     () => history.push("/shiftwork_management/shift"),
@@ -14,6 +23,10 @@ export const Header: VFC = memo(() => {
   );
   const onClickEmployees = useCallback(
     () => history.push("/shiftwork_management/employees"),
+    [history]
+  );
+  const onClickLogout = useCallback(
+    () => history.push("/shiftwork_management/logout"),
     [history]
   );
 
@@ -45,9 +58,28 @@ export const Header: VFC = memo(() => {
           display={{ base: "none", md: "flex" }}
         >
           <Box pr={4}>
-            <Link onClick={onClickShift}>シフト</Link>
+            <Link onClick={onClickShift} fontSize={{ base: "xl", md: "md" }}>
+              シフト
+            </Link>
           </Box>
-          <Link onClick={onClickEmployees}>従業員</Link>
+          <Box>
+            <Link
+              onClick={onClickEmployees}
+              fontSize={{ base: "xl", md: "md" }}
+            >
+              従業員
+            </Link>
+          </Box>
+          <HStack ml="auto">
+            <Box pr="3">
+              <p>{`従業員ID: ${authUser?.userId}`}</p>
+            </Box>
+            <Box>
+              <Link onClick={onClickLogout} fontSize={{ base: "xl", md: "md" }}>
+                ログアウト
+              </Link>
+            </Box>
+          </HStack>
         </Flex>
         <MenuIconButton onOpen={onOpen} />
       </Flex>
@@ -56,6 +88,7 @@ export const Header: VFC = memo(() => {
         isOpen={isOpen}
         onClickShift={onClickShift}
         onClickEmployees={onClickEmployees}
+        onClickLogout={onClickLogout}
       />
     </>
   );

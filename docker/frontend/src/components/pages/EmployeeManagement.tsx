@@ -1,4 +1,11 @@
-import { Box, useDisclosure, Wrap, WrapItem } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Spinner,
+  useDisclosure,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import { memo, useCallback, useEffect, VFC } from "react";
 import { EmployeeCard } from "../organisms/employee/EmployeeCard";
 import { EmployeeDetailModal } from "../organisms/employee/EmployeeDetailModal";
@@ -10,7 +17,7 @@ import { useAllEmployees } from "../../hooks/useAllEmployees";
 export const Employee: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSelectEmployee, selectedEmployee } = useSelectEmployee();
-  const { employeesData, getEmployees } = useAllEmployees();
+  const { employeesData, getEmployees, loading } = useAllEmployees();
   const history = useHistory();
 
   const onClickEmployee = useCallback(
@@ -35,26 +42,31 @@ export const Employee: VFC = memo(() => {
           従業員の新規登録
         </PrimaryButton>
       </Box>
-      <Box>
-        <Wrap spacing="30px" p={{ base: 4, md: 10 }}>
-          {employeesData.map((employee) => (
-            <WrapItem key={employee.employeeId}>
-              <EmployeeCard
-                employeeId={employee.employeeId}
-                lastName={employee.lastName}
-                firstName={employee.firstName}
-                romanLastName={employee.romanLastName}
-                romanFirstName={employee.romanFirstName}
-                phoneNumber={employee.phoneNumber}
-                email={employee.email}
-                workingFormName={employee.workingFormName}
-                onClick={onClickEmployee}
-              />
-            </WrapItem>
-          ))}
-        </Wrap>
-      </Box>
-
+      {loading ? (
+        <Center h="60vh">
+          <Spinner size="xl" />
+        </Center>
+      ) : (
+        <Box>
+          <Wrap spacing="30px" p={{ base: 4, md: 10 }}>
+            {employeesData.map((employee) => (
+              <WrapItem key={employee.employeeId}>
+                <EmployeeCard
+                  employeeId={employee.employeeId}
+                  lastName={employee.lastName}
+                  firstName={employee.firstName}
+                  romanLastName={employee.romanLastName}
+                  romanFirstName={employee.romanFirstName}
+                  phoneNumber={employee.phoneNumber}
+                  email={employee.email}
+                  workingFormName={employee.workingFormName}
+                  onClick={onClickEmployee}
+                />
+              </WrapItem>
+            ))}
+          </Wrap>
+        </Box>
+      )}
       <EmployeeDetailModal
         isOpen={isOpen}
         onClose={onClose}

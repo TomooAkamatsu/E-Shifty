@@ -1,5 +1,6 @@
 package com.example.sma.presentation.shift;
 
+import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import lombok.Data;
@@ -16,8 +17,10 @@ public class FirstHalfOfDraftForm {
     private String employeeName;
     private FirstHalfOfDateListForm shift;
 
-    public FirstHalfOfDraftForm(List<Shift> individualShiftList, List<String> employeeNameList, List<ShiftPattern> shiftPatterns) {
-        this.employeeName = employeeNameList.get(individualShiftList.get(0).getEmployeeId() - 1);
+    public FirstHalfOfDraftForm(List<Shift> individualShiftList, List<Employee> employeeList, List<ShiftPattern> shiftPatterns) {
+        this.employeeName = employeeList.stream()
+                .filter(employee -> individualShiftList.get(0).getEmployeeId()==employee.getEmployeeId())
+                .findFirst().orElseThrow().getLastName();
 
         List<Shift> firstHalfOfIndividualShiftList = IntStream
                 .rangeClosed(0, 14)

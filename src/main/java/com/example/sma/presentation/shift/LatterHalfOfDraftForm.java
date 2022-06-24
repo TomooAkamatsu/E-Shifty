@@ -1,5 +1,6 @@
 package com.example.sma.presentation.shift;
 
+import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import lombok.Data;
@@ -18,8 +19,10 @@ public class LatterHalfOfDraftForm {
     private String employeeName;
     private LatterHalfOfDateListForm shift;
 
-    public LatterHalfOfDraftForm(List<Shift> individualShiftList, List<String> employeeNameList, List<ShiftPattern> shiftPatterns) {
-        this.employeeName = employeeNameList.get(individualShiftList.get(0).getEmployeeId() - 1);
+    public LatterHalfOfDraftForm(List<Shift> individualShiftList, List<Employee> employeeList, List<ShiftPattern> shiftPatterns) {
+        this.employeeName = employeeList.stream()
+                .filter(employee -> employee.getEmployeeId()==individualShiftList.get(0).getEmployeeId())
+                .findFirst().orElseThrow().getLastName();
 
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
 
@@ -28,9 +31,7 @@ public class LatterHalfOfDraftForm {
                 .mapToObj(individualShiftList::get)
                 .toList();
 
-
         List<String> shiftPatternNameList = getShiftPatternNameList(latterHalfOfIndividualShiftList, shiftPatterns);
-
 
 //        31日の月
         if (List.of(1, 3, 5, 7, 8, 10, 12).contains(nextMonth.getMonthValue()))

@@ -6,14 +6,17 @@ export const useVacationRequestList = () => {
   const [vacationRequestList, setVacationRequestList] = useState<
     Array<typeVacationRequestList>
   >([]);
+  const [loading, setLoading] = useState(false);
 
   const getVacationRequestList = useCallback(() => {
+    setLoading(true);
     instance
       .get<Array<typeVacationRequestList>>("shift/vacation-requests")
       .then((res) => {
         setVacationRequestList(res.data);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
-  return { vacationRequestList, getVacationRequestList };
+  return { vacationRequestList, getVacationRequestList, loading };
 };

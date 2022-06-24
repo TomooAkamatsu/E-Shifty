@@ -84,5 +84,7 @@ export const useEmployeeRegistry = () => {
     onChangeEmail,
     onChangeEmploymentDate,
     onChangeWorkingForm,
+    setNewGender,
+    setNewWorkingForm,
   };
 };

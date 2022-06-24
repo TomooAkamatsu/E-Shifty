@@ -3,6 +3,7 @@ import { instance } from "../api/axios";
 import { typeDraft } from "../type/typeDraft";
 
 export const useDraft = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [draft, setDraft] = useState<typeDraft>({
     firstHalf: [
       {
@@ -19,12 +20,14 @@ export const useDraft = () => {
   });
 
   const getDraft = useCallback(() => {
+    setLoading(true);
     instance
       .get("shift/draft")
       .then((res) => {
         setDraft(res.data);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
-  return { draft, getDraft };
+  return { draft, getDraft, loading };
 };
