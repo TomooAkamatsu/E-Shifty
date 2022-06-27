@@ -10,7 +10,7 @@ info:
     - 仮シフトのGET/PUT
     - 従業員一覧のGET
     - 従業員詳細情報のPOST/PUT/DELETE
-  version: "1.0.1"
+  version: "1.0.2"
 
 servers:
   - url: "http://localhost:8080"
@@ -64,11 +64,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
   "/api/shift/requests/{id}":
     get:
       summary: "休み希望の取得"
@@ -100,11 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
     post:
       summary: "休み希望の登録&更新"
       description: "従業員個人が来月の休み希望を登録または更新する"
@@ -134,19 +126,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  completed: { type: boolean }
+                $ref: "#/components/schemas/operationSuccess"
         "400":
           description: "登録の失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/exceptionHandlerRespose"
   "/api/shift/requests":
     get:
       summary: "休み希望一覧取得(管理者用)"
@@ -173,11 +159,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
   "/api/shift/draft":
     get:
       summary: "シフト作成用の仮シフトの取得(管理者用)"
@@ -217,11 +199,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
     patch:
       summary: "シフト作成画面で仮シフト更新(管理者用)"
       description: "シフト作成画面にて仮シフトの修正情報を送信"
@@ -243,19 +221,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  completed: { type: boolean }
+                $ref: "#/components/schemas/operationSuccess"
         "400":
           description: "更新の失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/exceptionHandlerRespose"
   "/api/shift/draft/confirm":
     post:
       summary: "仮シフトの確定(管理者用) ※未実装"
@@ -285,19 +257,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  complecated: { type: boolean }
+                $ref: "#/components/schemas/operationSuccess"
         "500":
           description: "取得の失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
   "/api/shift/pattern":
     get:
       summary: "シフトパターンの取得(管理者用)"
@@ -320,11 +286,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
   "/api/employees":
     get:
       summary: "従業員一覧の取得"
@@ -358,11 +320,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
     post:
       summary: "従業員の新規登録(管理者用)"
       description: "従業員の新規登録情報の送信"
@@ -392,20 +350,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  completed: { type: boolean }
-                  insertionEmployeeId: { type: number }
+                $ref: "#/components/schemas/employeeOperationSuccess"
         "400":
           description: "登録の失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/exceptionHandlerRespose"
   "/api/employees/{id}":
     patch:
       summary: "従業員詳細情報の更新(管理者用)"
@@ -433,26 +384,18 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  completed: { type: boolean }
-                  updatingEmployeeId: { type: number }
+                $ref: "#/components/schemas/employeeOperationSuccess"
         "400":
           description: "更新の失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
-
+                $ref: "#/components/schemas/exceptionHandlerRespose"
     delete:
       summary: "従業員詳細情報の削除(管理者用)"
       description: |
         - 従業員詳細情報画面にて情報を削除
-        - requestBodyをobjectではなくstringにして良いのか....
+        - requestBodyをobjectではなくstringにして良いのか...
       tags: ["employees"]
       deprecated: false
       parameters:
@@ -468,20 +411,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  completed: { type: boolean }
-                  deletingEmployeeId: { type: number }
+                $ref: "#/components/schemas/employeeOperationSuccess"
         "400":
-          description: "更新の失敗"
+          description: "削除の失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/exceptionHandlerRespose"
   "/api/employees/working-form":
     get:
       summary: "勤務形態リストの取得"
@@ -505,11 +441,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
   "/api/employees/reset":
     get:
       summary: "従業員情報のリセット"
@@ -522,16 +454,34 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  complecated: { type: boolean }
+                $ref: "#/components/schemas/operationSuccess"
         "500":
           description: "リセットの失敗"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  exception: { type: string }
-                  message: { type: string }
-                  status: { type: string }
+                $ref: "#/components/schemas/500"
+
+components:
+  schemas:
+    500:
+      type: object
+      properties:
+        exception: { type: string }
+        message: { type: string }
+        status: { type: string }
+    exceptionHandlerRespose:
+      type: object
+      properties:
+        exception: { type: string }
+        message: { type: string }
+        status: { type: string }
+    employeeOperationSuccess:
+      type: object
+      properties:
+        completed: { type: boolean }
+        targetEmployeeId: { type: number }
+    operationSuccess:
+      type: object
+      properties:
+        completed: { type: boolean }
