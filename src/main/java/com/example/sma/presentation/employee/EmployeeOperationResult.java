@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class EmployeeCreationResult {
+public class EmployeeOperationResult {
     private final boolean completed;
     private final int targetEmployeeId;
 }

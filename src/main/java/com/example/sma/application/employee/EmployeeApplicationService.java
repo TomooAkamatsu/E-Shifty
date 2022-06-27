@@ -6,7 +6,7 @@ import com.example.sma.exception.EmptyValueException;
 import com.example.sma.exception.InvalidNumberException;
 import com.example.sma.exception.NotFoundEmployeeException;
 import com.example.sma.infrastructure.employee.EmployeeRepository;
-import com.example.sma.presentation.employee.EmployeeCreationResult;
+import com.example.sma.presentation.employee.EmployeeOperationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +24,14 @@ public class EmployeeApplicationService {
         return employeeRepository.findAllEmployee();
     }
 
-    public EmployeeCreationResult insertEmployee(Employee employee) {
+    public EmployeeOperationResult insertEmployee(Employee employee) {
 
         employeeRepository.insertEmployee(employee);
 
-        return new EmployeeCreationResult(true, employee.getEmployeeId());
+        return new EmployeeOperationResult(true, employee.getEmployeeId());
     }
 
-    public String updateEmployee(Map<String, String> patchDataMap, int employeeId) throws NotFoundEmployeeException {
+    public EmployeeOperationResult updateEmployee(Map<String, String> patchDataMap, int employeeId) throws NotFoundEmployeeException {
 
         Employee targetEmployee = employeeRepository.findOneEmployee(employeeId)
                 .orElseThrow(() -> new NotFoundEmployeeException("対象の従業員が見つかりませんでした"));
@@ -113,20 +113,16 @@ public class EmployeeApplicationService {
 
         employeeRepository.updateEmployee(targetEmployee);
 
-        return "{\"updatingCompleted\":\"1\"}";
+        return new EmployeeOperationResult(true, employeeId);
     }
 
-    public String deleteEmployee(int employeeId) {
+    public EmployeeOperationResult deleteEmployee(int employeeId) {
         employeeRepository.deleteEmployee(employeeId);
-        return "{\"deletingCompleted\":\"1\"}";
+        return new EmployeeOperationResult(true , employeeId);
     }
 
     public List<Integer> getEmployeeIdList() {
         return employeeRepository.findAllEmployee().stream().map(Employee::getEmployeeId).toList();
-    }
-
-    public List<String> getEmployeeNameList() {
-        return employeeRepository.findAllEmployee().stream().map(Employee::getLastName).toList();
     }
 
     public List<WorkingForm> findAllWorkingForm() {
