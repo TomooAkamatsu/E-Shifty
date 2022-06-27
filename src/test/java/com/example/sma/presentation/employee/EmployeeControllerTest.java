@@ -25,8 +25,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeControllerTest {
@@ -82,19 +81,20 @@ class EmployeeControllerTest {
                         "{\"employeeId\":2,\"lastName\":\"菅\",\"firstName\":\"義偉\",\"romanLastName\":\"Suga\",\"romanFirstName\":\"Yoshihide\",\"birthday\":\"1948-12-06\",\"age\":73,\"gender\":\"男\",\"phoneNumber\":\"090-2222-2222\",\"email\":\"suga@hoge.com\",\"employmentDate\":\"2020-02-01\",\"workingFormName\":\"正社員(時短)\"}]"));
     }
 
-//    @Test
-//    void 従業員の新規登録に成功したら201と完了メッセージが返ること() throws Exception {
-//        EmployeeForm employeeForm = new EmployeeForm(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957-07-29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020-01-01", null, new WorkingForm(1, "正社員")));
-//        when(employeeApplicationService.insertEmployee(employeeForm.convertToEntity()))
-//                .thenReturn("{\"insertionCompleted\":\"1\"}");
-//
-//        mockMvc.perform(post("/api/employees")
-//                        .content("{\"lastName\":\"岸田\",\"firstName\":\"文雄\",\"romanLastName\":\"Kishida\",\"romanFirstName\":\"Fumio\",\"birthday\":\"1957-07-29\",\"age\":64,\"gender\":\"男\",\"phoneNumber\":\"090-1111-1111\",\"email\":\"kishida@hoge.com\",\"employmentDate\":\"2020-01-01\",\"workingFormName\":\"正社員\"}")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().is(201))
-//                .andExpect(content().string("{\"insertionCompleted\":\"1\"}"));
-//    }
+    @Test
+    void 従業員の新規登録に成功したら201と完了メッセージが返ること() throws Exception {
+        EmployeeForm employeeForm = new EmployeeForm(new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957-07-29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020-01-01", null, new WorkingForm(1, "正社員")));
+        when(employeeApplicationService.insertEmployee(employeeForm.convertToEntity()))
+                .thenReturn(new EmployeeOperationResult(true, 1));
+
+        mockMvc.perform(post("/api/employees")
+                        .content("{\"lastName\":\"岸田\",\"firstName\":\"文雄\",\"romanLastName\":\"Kishida\",\"romanFirstName\":\"Fumio\",\"birthday\":\"1957-07-29\",\"age\":64,\"gender\":\"男\",\"phoneNumber\":\"090-1111-1111\",\"email\":\"kishida@hoge.com\",\"employmentDate\":\"2020-01-01\",\"workingFormName\":\"正社員\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(201))
+                .andExpect(header().string("Location","http://localhost:8080/api/employees/1"))
+                .andExpect(content().json("{\"completed\":true,\"targetEmployeeId\":1}"));
+    }
 
     @Test
     void 不正な内容で従業員の新規登録をすると失敗して400とMethodArgumentNotValidExceptionが返ること() throws Exception {
@@ -110,14 +110,14 @@ class EmployeeControllerTest {
     void 従業員の情報更新に成功すると200と完了メッセージが返ること() throws Exception {
         String patchData = "{\"lastName\":\"赤松\",\"age\":\"60\"}";
 
-        when(employeeApplicationService.updateEmployee(convertToJson(patchData), 1)).thenReturn("{\"updatingCompleted\":\"1\"}");
+        when(employeeApplicationService.updateEmployee(convertToJson(patchData), 1)).thenReturn(new EmployeeOperationResult(true,1));
 
         mockMvc.perform(patch("/api/employees/1")
                         .content(patchData)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"updatingCompleted\":\"1\"}"));
+                .andExpect(content().string("{\"completed\":true,\"targetEmployeeId\":1}"));
     }
 
     @Test
@@ -135,7 +135,7 @@ class EmployeeControllerTest {
     }
 
     @Test
-    void NotFoundEmployeeExceptionが発生すると400とそのメッセージが返ること() throws Exception {
+    void NotFoundEmployeeExceptionが発生すると404とそのメッセージが返ること() throws Exception {
         String patchData = "{\"lastName\":\"赤松\",\"age\":\"26\"}";
 
         when(employeeApplicationService.updateEmployee(convertToJson(patchData), 10)).thenThrow(new NotFoundEmployeeException("hoge"));
@@ -144,8 +144,8 @@ class EmployeeControllerTest {
                         .content(patchData)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400))
-                .andExpect(content().string("{\"exception\":\"com.example.sma.exception.NotFoundEmployeeException\",\"message\":\"hoge\",\"status\":\"BAD_REQUEST\"}"));
+                .andExpect(status().is(404))
+                .andExpect(content().string("{\"exception\":\"com.example.sma.exception.NotFoundEmployeeException\",\"message\":\"hoge\",\"status\":\"NOT_FOUND\"}"));
     }
 
     @Test
@@ -164,12 +164,12 @@ class EmployeeControllerTest {
 
     @Test
     void 従業員の削除に成功すると200と完了メッセージが返ること() throws Exception {
-        when(employeeApplicationService.deleteEmployee(1)).thenReturn("{\"deletingCompleted\":\"1\"}");
+        when(employeeApplicationService.deleteEmployee(1)).thenReturn(new EmployeeOperationResult(true, 1));
 
         mockMvc.perform(delete("/api/employees/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"deletingCompleted\":\"1\"}"));
+                .andExpect(content().string("{\"completed\":true,\"targetEmployeeId\":1}"));
     }
 
 }

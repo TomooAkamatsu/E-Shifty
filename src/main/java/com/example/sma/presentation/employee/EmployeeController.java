@@ -36,16 +36,16 @@ public class EmployeeController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<EmployeeCreationResult> postEmployee(@RequestBody @Validated EmployeeForm employeeForm) {
-        EmployeeCreationResult result = employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
+    public ResponseEntity<EmployeeOperationResult> postEmployee(@RequestBody @Validated EmployeeForm employeeForm) {
+        EmployeeOperationResult result = employeeApplicationService.insertEmployee(employeeForm.convertToEntity());
 
-        URI location = URI.create("http://localhost:8080/api/employees/" + result.getInsertionEmployeeId() );
+        URI location = URI.create("http://localhost:8080/api/employees/" + result.getTargetEmployeeId() );
 
         return ResponseEntity.created(location).body(result);
     }
 
     @PatchMapping("/{employeeId}")
-    public String patchEmployee(@RequestBody String patchData, @PathVariable("employeeId") int employeeId) {
+    public EmployeeOperationResult patchEmployee(@RequestBody String patchData, @PathVariable("employeeId") int employeeId) {
 
         Map<String, String> patchDataMap = new HashMap<>();
         try {
@@ -61,7 +61,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{employeeId}")
-    public String deleteEmployee(@PathVariable("employeeId") int employeeId) {
+    public EmployeeOperationResult deleteEmployee(@PathVariable("employeeId") int employeeId) {
         return employeeApplicationService.deleteEmployee(employeeId);
     }
 
@@ -74,7 +74,7 @@ public class EmployeeController {
     @GetMapping("/reset")
     public String reset(){
         employeeApplicationService.reset();
-        return  "{\"message\":\"くらぁーーっ!!\"}";
+        return  "くらぁーーっ!!";
     }
 
 }
