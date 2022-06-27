@@ -17,11 +17,11 @@ import { memo, useEffect, VFC } from "react";
 import { typeEmployee } from "../../../type/typeEmployee";
 import { PrimaryButton } from "../../atoms/button/PrimaryButton";
 import { DeleteButton } from "../../atoms/button/DeleteButton";
-import { useEmployeeRegistry } from "../../../hooks/useEmployeeRegistry";
 import { useWorkingFormList } from "../../../hooks/useWorkingFormList";
 import { instance } from "../../../api/axios";
 import { useMessage } from "../../../hooks/useMessage";
 import { useHistory } from "react-router-dom";
+import { useEmployeeUpdate } from "../../../hooks/useEmployeeUpdate";
 
 type Props = {
   isOpen: boolean;
@@ -56,7 +56,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
     onChangeEmail,
     onChangeEmploymentDate,
     onChangeWorkingForm,
-  } = useEmployeeRegistry();
+  } = useEmployeeUpdate();
   const { workingFormNameList, getWorkingFormData } = useWorkingFormList();
 
   useEffect(() => {
@@ -64,22 +64,25 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
   }, [getWorkingFormData]);
 
   const onClickUpdate = () => {
-    let changedEmployeeData: { [key: string]: string | number } = {};
-    if (newLastName !== "") changedEmployeeData.lastName = newLastName;
-    if (newFirstName !== "") changedEmployeeData.firstName = newFirstName;
-    if (newRomanLastName !== "")
+    let changedEmployeeData: { [key: string]: string | number | null } = {};
+
+    if (newLastName !== null) changedEmployeeData.lastName = newLastName;
+    if (newFirstName !== null) changedEmployeeData.firstName = newFirstName;
+    if (newRomanLastName !== null)
       changedEmployeeData.romanLastName = newRomanLastName;
-    if (newRomanFirstName !== "")
+    if (newRomanFirstName !== null)
       changedEmployeeData.romanFirstName = newRomanFirstName;
-    if (newBirthday !== "") changedEmployeeData.birthday = newBirthday;
-    if (newAge !== 0) changedEmployeeData.age = newAge;
-    if (newGender !== "") changedEmployeeData.gender = newGender;
-    if (newPhoneNumber !== "") changedEmployeeData.phoneNumber = newPhoneNumber;
-    if (newEmail !== "") changedEmployeeData.email = newEmail;
-    if (newEmploymentDate !== "")
+    if (newBirthday !== null) changedEmployeeData.birthday = newBirthday;
+    if (newAge !== null) changedEmployeeData.age = newAge;
+    if (newGender !== null) changedEmployeeData.gender = newGender;
+    if (newPhoneNumber !== null)
+      changedEmployeeData.phoneNumber = newPhoneNumber;
+    if (newEmail !== null) changedEmployeeData.email = newEmail;
+    if (newEmploymentDate !== null)
       changedEmployeeData.employmentDate = newEmploymentDate;
-    if (newWorkingForm !== "")
+    if (newWorkingForm !== null)
       changedEmployeeData.workingFormName = newWorkingForm;
+
     instance
       .patch(
         `/employees/${selectedEmployee?.employeeId}`,
@@ -95,7 +98,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
       })
       .catch(() => {
         showMessage({
-          title: "更新に失敗しました",
+          title: "更新内容が正しくないか空です",
           status: "error",
         });
       });

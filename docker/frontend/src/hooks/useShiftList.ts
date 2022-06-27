@@ -5,6 +5,7 @@ import { typeShift } from "../type/typeShift";
 export const useShiftList = (year: number, month: number) => {
   const [shiftData, setShiftData] = useState<Array<typeShift>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [exist, setExist] = useState<boolean>(false);
 
   const getShift = useCallback(() => {
     setLoading(true);
@@ -12,10 +13,11 @@ export const useShiftList = (year: number, month: number) => {
       .get<Array<typeShift>>(`shift/${year}/${month}`)
       .then((res) => {
         setShiftData(res.data);
+        setExist(true);
       })
-      .catch(() => {})
+      .catch(() => setExist(false))
       .finally(() => setLoading(false));
   }, [year, month]);
 
-  return { shiftData, getShift, loading };
+  return { shiftData, getShift, loading, exist };
 };

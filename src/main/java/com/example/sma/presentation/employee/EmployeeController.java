@@ -70,5 +70,12 @@ public class EmployeeController {
         return employeeApplicationService.findAllWorkingForm();
     }
 
+//    魔法のボタン
+    @GetMapping("/reset")
+    public String reset(){
+        employeeApplicationService.reset();
+        return  "{\"message\":\"くらぁーーっ!!\"}";
+    }
+
 }
 

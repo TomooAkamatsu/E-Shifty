@@ -49,13 +49,17 @@ export const ShiftCreation: VFC = memo(() => {
             </PrimaryButton>
           </Box>
           <Box textAlign="left" float="left" px={10} py={2}>
-            <h1>自動的に休み希望を反映したシフトが作成されています</h1>
-            <h1>手動で変更して確定ボタンを押してください。</h1>
+            <h1>
+              自動的に休み希望を反映し、営業日には正社員がAとDに、
+              <br />
+              残りの従業員でBとCが半々になるようにシフトが作成されています
+            </h1>
+            <h1>手動で変更した分は保存されます</h1>
           </Box>
           <PrimaryButton onClick={onClickRequestList}>
-            提出済みのシフト一覧を確認
+            提出済みの休み希望一覧を確認
           </PrimaryButton>
-          <PrimaryButton onClick={onOpen}>シフトを確定</PrimaryButton>
+          {/* <PrimaryButton onClick={onOpen}>シフトを確定</PrimaryButton> */}
         </Box>
         <ShiftTable draft={draft} loading={loading} />
       </Stack>

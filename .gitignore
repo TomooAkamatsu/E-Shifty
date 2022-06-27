@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 /docker/.env
 /log/
+udemysample.pem
 
 ### STS ###
 .apt_generated

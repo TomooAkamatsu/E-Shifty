@@ -74,7 +74,7 @@ public class EmployeeApplicationService {
             if (!patchDataMap.get("age").matches("^\\d*$"))
                 throw new ValidationException("年齢を半角数字で入力してください");
             int age = Integer.parseInt(patchDataMap.get("age"));
-            if (age < 0 || age > 120) throw new InvalidNumberException("適正な範囲の数値を入力してください");
+            if (age < 1 || age > 120) throw new InvalidNumberException("適正な範囲の数値を入力してください");
             targetEmployee.setAge(Integer.parseInt(patchDataMap.get("age")));
         }
 
@@ -133,4 +133,9 @@ public class EmployeeApplicationService {
         return employeeRepository.findAllWorkingForm();
     }
 
+    public void reset() {
+        employeeRepository.deleteAllEmployee();
+        employeeRepository.alterTableEmployee();
+        employeeRepository.insertAllEmployee();
+    }
 }

@@ -25,16 +25,14 @@ CREATE TABLE security(
     employee_id INT NOT NULL,
     password VARCHAR(100) NOT NULL,
     authority VARCHAR(10) NOT NULL,
-    PRIMARY KEY (employee_id),
-    FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE
+    PRIMARY KEY (employee_id)
 );
 
 CREATE TABLE vacation_request(
     request_id INT NOT NULL AUTO_INCREMENT,
     employee_id INT NOT NULL,
     request_date DATE NOT NULL,
-    PRIMARY KEY(request_id),
-    FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE
+    PRIMARY KEY(request_id)
 );
 
 CREATE TABLE shift_pattern(
@@ -50,7 +48,5 @@ CREATE TABLE shift(
     date DATE NOT NULL,
     shift_pattern_id INT,
     confirmation VARCHAR(5) NOT NULL,
-    PRIMARY KEY(employee_id, date),
-    FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE,
-    FOREIGN KEY(shift_pattern_id) REFERENCES shift_pattern(shift_pattern_id) ON DELETE CASCADE
+    PRIMARY KEY(employee_id, date)
 );

@@ -33,10 +33,10 @@ class EmployeeForm {
     @NotBlank
     @Pattern(regexp = "^[ -~｡-ﾟ]*$")
     private String birthday;
-    @Range(min=0,max=120)
+    @Range(min=1,max=120)
     private int age;
     @NotBlank
-    @Pattern(regexp = "^[^ -~｡-ﾟ]*$")
+    @Pattern(regexp = "男|女")
     private String gender;
     @NotBlank
     @Pattern(regexp = "^(\\d{3}-?\\d{4}-?\\d{4})?$")
@@ -48,7 +48,7 @@ class EmployeeForm {
     @Pattern(regexp = "^[ -~｡-ﾟ]*$")
     private String employmentDate;
     @NotBlank
-    @Pattern(regexp = "^[^ -~｡-ﾟ]*$")
+    @Pattern(regexp = "正社員|正社員\\(時短\\)|パート")
     private String workingFormName;
 
     EmployeeForm(final Employee employee) {

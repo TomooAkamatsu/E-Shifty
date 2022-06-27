@@ -28,4 +28,9 @@ public interface EmployeeRepository {
     //    従業員の一件検索
     Optional<Employee> findOneEmployee(int employeeId);
 
+    void deleteAllEmployee();
+
+    void insertAllEmployee();
+
+    void alterTableEmployee();
 }

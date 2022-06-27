@@ -47,12 +47,12 @@ class EmployeeApplicationServiceTest {
         });
     }
 
-    @Test
-    void 従業員の新規登録に成功したら完了メッセージが返ること() {
-        Employee newEmployee = new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"));
-        String actual = employeeApplicationService.insertEmployee(newEmployee);
-        assertThat(actual).isEqualTo("{\"insertionCompleted\":\"1\"}");
-    }
+//    @Test
+//    void 従業員の新規登録に成功したら完了メッセージが返ること() {
+//        Employee newEmployee = new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957/07/29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020/01/01", null, new WorkingForm(1, "正社員"));
+//        String actual = employeeApplicationService.insertEmployee(newEmployee);
+//        assertThat(actual).isEqualTo("{\"insertionCompleted\":\"1\"}");
+//    }
 
 //    DTOにバリデーションを追加、その上ExceptionHandlerにて処理するため新規登録失敗時のエラーは必要ない？
 //    @Test

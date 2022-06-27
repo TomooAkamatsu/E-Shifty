@@ -115,4 +115,27 @@
             employee_id = #{employeeId}
     </delete>
 
+    <delete id="deleteAllEmployee">
+        DELETE FROM
+            employee
+    </delete>
+
+    <insert id="insertAllEmployee">
+        INSERT INTO employee ( last_name,first_name,roman_last_name,roman_first_name,birthday,age,gender,phone_number,email,employment_date,working_form_id )
+        VALUES( '岸田','文雄','Kishida','Fumio','1957-07-29',64,'男','090-1111-1111','kishida@hoge.com','2020-01-01',1 ),
+        ( '菅','義偉','Suga','Yoshihide','1948-12-06',73,'男','090-2222-2222','suga@hoge.com','2020-02-01',2 ),
+        ( '安倍','晋三','Abe','Shinzo','1954-09-21',67,'男','090-3333-3333','abe@hoge.com','2020-03-01',1 ),
+        ( '野田','佳彦','Noda','Yoshihiko','1957-05-20',65,'男','090-4444-4444','noda@hoge.com','2020-04-01',1 ),
+        ( '菅','直人','Kan','Naoto','1946-10-10',75,'男','090-5555-5555','kan@hoge.com','2020-05-01',3 ),
+        ( '鳩山','由紀夫','Hatoyama','Yukio','1947-02-11',75,'男','090-6666-6666','hatoyama@hoge.com','2020-06-01',1 ),
+        ( '麻生','太郎','Aso','Taro','1940-09-20',81,'男','090-7777-7777','aso@hoge.com','2020-07-01',2 ),
+        ( '福田','康夫','Fukuda','Yasuo','1936-07-16',85,'男','090-8888-8888','hukuda@hoge.com','2020-08-01',1 ),
+        ( '小泉','純一郎','Koizumi','Junichiro','1942-01-08',80,'男','090-9999-9999','koizumi@hoge.com','2020-09-01',3 ),
+        ( '森','善朗','Mori','Yoshiro','1937-07-14',84,'男','090-0000-0000','mori@hoge.com','2020-10-01',1 )
+    </insert>
+
+    <update id="alterTableEmployee">
+        ALTER TABLE employee auto_increment = 1;
+    </update>
+
 </mapper>

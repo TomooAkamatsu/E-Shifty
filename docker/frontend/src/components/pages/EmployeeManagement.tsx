@@ -13,6 +13,9 @@ import { useSelectEmployee } from "../../hooks/useSelectEmployee";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useHistory } from "react-router-dom";
 import { useAllEmployees } from "../../hooks/useAllEmployees";
+import { DeleteButton } from "../atoms/button/DeleteButton";
+import { instance } from "../../api/axios";
+import Image from "../../image/reset.png";
 
 export const Employee: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,9 +38,20 @@ export const Employee: VFC = memo(() => {
     getEmployees();
   }, [getEmployees]);
 
+  const onClickReset = useCallback(() => {
+    instance.get("employees/reset").then((r) => console.log(r.data));
+    history.push("/shiftwork_management/employees/redirect");
+  }, [history]);
+
   return (
     <Box>
       <Box align="right" pr={30} pt={5}>
+        <Box float="left" pt={1} pl={8}>
+          <Box float="left" pt={2}>
+            <img src={Image} alt="Image" width="50" height="50" />
+          </Box>
+          <DeleteButton onClick={onClickReset}>リセット</DeleteButton>
+        </Box>
         <PrimaryButton onClick={onClickEmployeeRegistry}>
           従業員の新規登録
         </PrimaryButton>

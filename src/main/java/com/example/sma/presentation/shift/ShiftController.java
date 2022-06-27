@@ -29,15 +29,17 @@ public class ShiftController {
     @GetMapping("/{year}/{month}")
     public List<ShiftForm> getShift(@PathVariable("year") int year, @PathVariable("month") int month) {
 
-        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+//        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+
+        List<Integer> employeeIdList = employeeApplicationService.findAllEmployee().stream().map(Employee::getEmployeeId).toList();
 
         List<List<Shift>> allEmployeeShiftList
-                = shiftApplicationService.findShift(year, month, employeeApplicationService.getEmployeeIdList());
+                = shiftApplicationService.findShift(year, month, employeeIdList);
         List<ShiftPattern> shiftPatterns = shiftApplicationService.findAllShiftPattern();
 
         return allEmployeeShiftList
                 .stream()
-                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns, employeeNameList))
+                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns))
                 .toList();
     }
 
@@ -93,11 +95,12 @@ public class ShiftController {
     public List<VacationRequestListForm> getVacationRequestList() {
         List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
         List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+        List<Employee> employeeList = employeeApplicationService.findAllEmployee();
         List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
 
         List<VacationRequestListForm> hoge =
                 vacationRequestList.stream().filter(individualRequestList -> !CollectionUtils.isEmpty(individualRequestList))
-                        .map(individualRequestList -> new VacationRequestListForm(individualRequestList, employeeNameList)).toList();
+                        .map(individualRequestList -> new VacationRequestListForm(individualRequestList, employeeList)).toList();
 
         return hoge;
     }

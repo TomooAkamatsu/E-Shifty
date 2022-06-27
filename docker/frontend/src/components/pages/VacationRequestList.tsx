@@ -28,7 +28,9 @@ export const VacationRequestList: VFC = memo(() => {
         <Box py={5} px={20}>
           <Box align="right" pr={30} pb={5}>
             <Box float="left" px={10} py={5}>
-              <h1 style={{ fontSize: "30px" }}>赤丸→休み希望</h1>
+              <p style={{ fontSize: "20px" }}>
+                休み希望を出していない人は表示されません
+              </p>
             </Box>
             <PrimaryButton onClick={onClickBack}>
               シフト作成画面に戻る

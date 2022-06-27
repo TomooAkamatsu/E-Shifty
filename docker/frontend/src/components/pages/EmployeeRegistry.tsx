@@ -7,7 +7,6 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { hoursToMinutes } from "date-fns";
 import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { instance } from "../../api/axios";
