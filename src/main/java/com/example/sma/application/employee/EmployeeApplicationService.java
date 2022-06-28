@@ -1,6 +1,7 @@
 package com.example.sma.application.employee;
 
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import com.example.sma.exception.EmptyValueException;
 import com.example.sma.exception.InvalidNumberException;
@@ -133,5 +134,10 @@ public class EmployeeApplicationService {
         employeeRepository.deleteAllEmployee();
         employeeRepository.alterTableEmployee();
         employeeRepository.insertAllEmployee();
+    }
+
+    public Security getLoginInfo(int employeeId) {
+//        todo:null時の処理
+        return employeeRepository.getLoginInfo(employeeId).orElseThrow();
     }
 }

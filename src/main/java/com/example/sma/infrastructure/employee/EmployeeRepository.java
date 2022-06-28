@@ -1,6 +1,7 @@
 package com.example.sma.infrastructure.employee;
 
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -33,4 +34,6 @@ public interface EmployeeRepository {
     void insertAllEmployee();
 
     void alterTableEmployee();
+
+    Optional<Security> getLoginInfo(int employeeId);
 }

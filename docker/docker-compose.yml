@@ -41,7 +41,7 @@ services:
     # image: 878702808415.dkr.ecr.ap-northeast-1.amazonaws.com/shift-management:front
     image: node:16-alpine
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app:cached
     working_dir: /app
     ports:
       - "3000:3000"

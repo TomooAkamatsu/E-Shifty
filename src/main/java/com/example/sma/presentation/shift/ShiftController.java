@@ -94,7 +94,7 @@ public class ShiftController {
     @GetMapping("/vacation-requests")
     public List<VacationRequestListForm> getVacationRequestList() {
         List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
-        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
+//        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
         List<Employee> employeeList = employeeApplicationService.findAllEmployee();
         List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
 

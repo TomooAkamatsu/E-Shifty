@@ -22,6 +22,7 @@ import { instance } from "../../../api/axios";
 import { useMessage } from "../../../hooks/useMessage";
 import { useHistory } from "react-router-dom";
 import { useEmployeeUpdate } from "../../../hooks/useEmployeeUpdate";
+import { useAuthUser } from "../../../provider/login/AuthUserContext";
 
 type Props = {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
   const { isOpen, onClose, selectedEmployee } = props;
   const { showMessage } = useMessage();
   const history = useHistory();
+  const authUser = useAuthUser();
   const {
     newLastName,
     newFirstName,
@@ -132,7 +134,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
       motionPreset="slideInBottom"
     >
       <ModalOverlay>
-        <ModalContent pb={1}>
+        <ModalContent pb={3}>
           <ModalHeader pb={1}>従業員詳細</ModalHeader>
           <ModalCloseButton />
           <ModalBody mx={4}>
@@ -235,10 +237,12 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
               </HStack>
             </Stack>
           </ModalBody>
-          <ModalFooter py={1}>
-            <PrimaryButton onClick={onClickUpdate}>更新</PrimaryButton>
-            <DeleteButton onClick={onClickDelete}>削除</DeleteButton>
-          </ModalFooter>
+          {authUser?.isAdmin && (
+            <ModalFooter py={1}>
+              <PrimaryButton onClick={onClickUpdate}>更新</PrimaryButton>
+              <DeleteButton onClick={onClickDelete}>削除</DeleteButton>
+            </ModalFooter>
+          )}
         </ModalContent>
       </ModalOverlay>
     </Modal>

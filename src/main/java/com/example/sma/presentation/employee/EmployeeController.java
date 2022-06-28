@@ -2,6 +2,7 @@ package com.example.sma.presentation.employee;
 
 import com.example.sma.application.employee.EmployeeApplicationService;
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,12 @@ import java.util.Map;
 public class EmployeeController {
 
     private final EmployeeApplicationService employeeApplicationService;
+
+
+    @GetMapping("login/{employeeId}")
+    public Security login(@PathVariable("employeeId") int employeeId){
+        return employeeApplicationService.getLoginInfo(employeeId);
+    }
 
     @GetMapping
     public List<EmployeeForm> getAllEmployee() {

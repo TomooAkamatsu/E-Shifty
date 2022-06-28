@@ -138,4 +138,13 @@
         ALTER TABLE employee auto_increment = 1;
     </update>
 
+    <select id="getLoginInfo" resultType="Security">
+        SELECT
+            *
+        FROM
+            security
+        WHERE
+            employee_id = #{employeeId}
+    </select>
+
 </mapper>

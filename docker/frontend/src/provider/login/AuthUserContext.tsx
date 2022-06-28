@@ -1,31 +1,74 @@
+import { sha512 } from "js-sha512";
 import React, { createContext, useContext, useState } from "react";
+import { instance } from "../../api/axios";
+import { useMessage } from "../../hooks/useMessage";
+
+type loginArgs = {
+  userId: string;
+  password: string;
+};
 
 type OperationType = {
-  login: (userId: string) => void;
+  login: (object: loginArgs) => void;
   logout: () => void;
 };
+
 type AuthUser = {
   userId: string;
+  isAdmin: boolean;
 };
 
 const AuthUserContext = createContext<AuthUser | null>(null);
 
 const AuthOperationContext = createContext<OperationType>({
-  login: (_) => console.error("Providerが設定されていません"),
+  login: () => console.error("Providerが設定されていません"),
   logout: () => console.error("Providerが設定されていません"),
 });
 
 const AuthUserProvider: React.FC = (props) => {
   const { children } = props;
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
+  const { showMessage } = useMessage();
 
-  const authUserArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-  const login = async (userId: string) => {
-    if (authUserArr.includes(userId)) setAuthUser({ userId: `${userId}` });
+  const login = async (loginArgs: loginArgs) => {
+    const hashPass = sha512(loginArgs.userId + loginArgs.password);
+
+    instance
+      .get(`/employees/login/${loginArgs.userId}`)
+      .then((res) => {
+        const { password, authority } = res.data;
+        if (password === hashPass) {
+          if (authority === "admin")
+            setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: true });
+          if (authority === "employee")
+            setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: false });
+          showMessage({
+            title: "ログインに成功しました",
+            status: "success",
+          });
+        } else {
+          showMessage({
+            title: "ログインに失敗しました",
+            status: "error",
+          });
+        }
+      })
+      .catch(() => {
+        showMessage({
+          title: "ログイン情報が取得できませんでした",
+          status: "error",
+        });
+      });
+
+    // setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: true });
   };
 
   const logout = async () => {
     setAuthUser(null);
+    showMessage({
+      title: "ログアウトしました",
+      status: "success",
+    });
   };
 
   return (

@@ -4,11 +4,13 @@ import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { useShiftList } from "../../hooks/useShiftList";
+import { useAuthUser } from "../../provider/login/AuthUserContext";
 
 export const Shift: VFC = memo(() => {
   const history = useHistory();
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
+  const authUser = useAuthUser();
 
   const { shiftData, getShift, loading, exist } = useShiftList(year, month + 1);
 
@@ -139,9 +141,11 @@ export const Shift: VFC = memo(() => {
         <PrimaryButton onClick={onClickVacationRequest}>
           休み希望の提出確認
         </PrimaryButton>
-        <PrimaryButton onClick={onClickShiftCreation}>
-          来月のシフト作成
-        </PrimaryButton>
+        {authUser?.isAdmin && (
+          <PrimaryButton onClick={onClickShiftCreation}>
+            来月のシフト作成
+          </PrimaryButton>
+        )}
       </Box>
     </>
   );

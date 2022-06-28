@@ -1,6 +1,7 @@
 import {
   Box,
   Center,
+  Flex,
   Spinner,
   useDisclosure,
   Wrap,
@@ -16,12 +17,14 @@ import { useAllEmployees } from "../../hooks/useAllEmployees";
 import { DeleteButton } from "../atoms/button/DeleteButton";
 import { instance } from "../../api/axios";
 import Image from "../../image/reset.png";
+import { useAuthUser } from "../../provider/login/AuthUserContext";
 
 export const Employee: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { onSelectEmployee, selectedEmployee } = useSelectEmployee();
   const { employeesData, getEmployees, loading } = useAllEmployees();
   const history = useHistory();
+  const authUser = useAuthUser();
 
   const onClickEmployee = useCallback(
     (employeeId: number) => {
@@ -45,16 +48,20 @@ export const Employee: VFC = memo(() => {
 
   return (
     <Box>
-      <Box align="right" pr={30} pt={5}>
-        <Box float="left" pt={1} pl={8}>
-          <Box float="left" pt={2}>
-            <img src={Image} alt="Image" width="50" height="50" />
-          </Box>
+      <Box align="right" pr={30} pt={5} h="60px">
+        <Flex float="left" pt={2} pl={10}>
+          <img src={Image} alt="reset" width="50" height="50" />
+        </Flex>
+        <Flex float="left">
           <DeleteButton onClick={onClickReset}>リセット</DeleteButton>
-        </Box>
-        <PrimaryButton onClick={onClickEmployeeRegistry}>
-          従業員の新規登録
-        </PrimaryButton>
+        </Flex>
+        <Flex w={200}>
+          {authUser?.isAdmin && (
+            <PrimaryButton onClick={onClickEmployeeRegistry}>
+              従業員の新規登録
+            </PrimaryButton>
+          )}
+        </Flex>
       </Box>
       {loading ? (
         <Center h="60vh">

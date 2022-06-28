@@ -2,6 +2,12 @@ import { Box, Divider, Flex, Heading, Input, Stack } from "@chakra-ui/react";
 import { ChangeEvent, memo, useState, VFC } from "react";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useLogin } from "../../provider/login/AuthUserContext";
+import { instance } from "../../api/axios";
+
+type loginArgs = {
+  userId: string;
+  password: string;
+};
 
 export const Login: VFC = memo(() => {
   const [employeeId, setEmployeeId] = useState("");
@@ -9,7 +15,8 @@ export const Login: VFC = memo(() => {
   const login = useLogin();
 
   const onClickLogin = () => {
-    login(employeeId);
+    const loginArgs: loginArgs = { userId: employeeId, password: password };
+    login(loginArgs);
   };
 
   const onChangeEmployeeId = (e: ChangeEvent<HTMLInputElement>) => {

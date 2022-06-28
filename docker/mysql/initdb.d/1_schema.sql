@@ -23,7 +23,7 @@ CREATE TABLE employee(
 
 CREATE TABLE security(
     employee_id INT NOT NULL,
-    password VARCHAR(100) NOT NULL,
+    password VARCHAR(300) NOT NULL,
     authority VARCHAR(10) NOT NULL,
     PRIMARY KEY (employee_id)
 );
