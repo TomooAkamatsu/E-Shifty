@@ -2,6 +2,7 @@ package com.example.sma.presentation.employee;
 
 import com.example.sma.application.employee.EmployeeApplicationService;
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import com.example.sma.exception.EmptyValueException;
 import com.example.sma.exception.InvalidNumberException;
@@ -170,6 +171,17 @@ class EmployeeControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"completed\":true,\"targetEmployeeId\":1}"));
+    }
+
+    @Test
+    void 従業員IDに紐づく一件のセキュリティ情報の取得に成功すると200と内容が返ること() throws Exception {
+        when(employeeApplicationService.getLoginInfo(1))
+                .thenReturn(new Security(1,"password","admin"));
+
+        mockMvc.perform(get("/api/employees/login/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"employeeId\":1,\"password\":\"password\",\"authority\":\"admin\"}"));
     }
 
 }

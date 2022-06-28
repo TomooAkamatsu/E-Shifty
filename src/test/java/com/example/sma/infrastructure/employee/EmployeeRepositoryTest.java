@@ -1,6 +1,7 @@
 package com.example.sma.infrastructure.employee;
 
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -157,6 +158,22 @@ class EmployeeRepositoryTest {
     public void 存在しない従業員IDに紐づく一件を検索するとOptinalEmptyが返ること() {
         Optional<Employee> actualEmployee = employeeRepository.findOneEmployee(10);
         assertThat(actualEmployee).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    @Order(11)
+    public void 従業員IDに紐づく対象のセキュリティ情報が検索できること(){
+        Security actualSecurity = employeeRepository.getLoginInfo(1).orElseThrow();
+        assertThat(actualSecurity).isEqualTo(
+                new Security(1,"password","admin")
+        );
+    }
+
+    @Test
+    @Order(12)
+    public void 存在しない従業員IDに紐づく対象のセキュリティ情報を検索するとOptinalEmptyが返ること(){
+        Optional<Security> actualSecurity = employeeRepository.getLoginInfo(11);
+        assertThat(actualSecurity).isEqualTo(Optional.empty());
     }
 
 }

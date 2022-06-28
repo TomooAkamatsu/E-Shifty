@@ -1,6 +1,7 @@
 package com.example.sma.application.employee;
 
 import com.example.sma.domain.models.employee.Employee;
+import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import com.example.sma.exception.EmptyValueException;
 import com.example.sma.exception.NotFoundEmployeeException;
@@ -151,5 +152,22 @@ class EmployeeApplicationServiceTest {
             assertThat(actualWorkingForms.get(i)).isEqualTo(workingFormArr[i]);
             assertThat(actualWorkingForms.get(i)).isInstanceOf(WorkingForm.class);
         });
+    }
+
+    @Test
+    void 従業員IDに紐づく一件のセキュリティ情報が存在すればそのまま返すこと(){
+        when(employeeRepository.getLoginInfo(1))
+                .thenReturn(Optional.of(new Security(1,"password","admin")));
+        Security actual = employeeApplicationService.getLoginInfo(1);
+
+        assertThat(actual).isEqualTo(new Security(1,"password","admin"));
+    }
+
+    @Test
+    void 従業員IDに紐づく一件のセキュリティ情報が存在しなければNotFoundEmployeeExceptionとなること(){
+        when(employeeRepository.getLoginInfo(11)).thenReturn(Optional.empty());
+        assertThatThrownBy(()->{
+            employeeApplicationService.getLoginInfo(11);
+        }).isInstanceOf(NotFoundEmployeeException.class);
     }
 }

@@ -137,7 +137,7 @@ public class EmployeeApplicationService {
     }
 
     public Security getLoginInfo(int employeeId) {
-//        todo:null時の処理
-        return employeeRepository.getLoginInfo(employeeId).orElseThrow();
+        return employeeRepository.getLoginInfo(employeeId)
+                .orElseThrow(()->new NotFoundEmployeeException("対象の従業員がみつかりません"));
     }
 }
