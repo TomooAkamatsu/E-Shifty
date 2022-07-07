@@ -35,7 +35,7 @@ public class EmployeeController {
 
     @GetMapping
     public List<EmployeeForm> getAllEmployee() {
-        List<Employee> employees = employeeApplicationService.findAllEmployee();
+        List<Employee> employees = employeeApplicationService.findActiveEmployee();
         List<EmployeeForm> employeeFormList = new ArrayList<>();
         employees.forEach(employee -> employeeFormList.add(new EmployeeForm(employee)));
         return employeeFormList;
@@ -68,8 +68,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{employeeId}")
-    public EmployeeOperationResult deleteEmployee(@PathVariable("employeeId") int employeeId) {
-        return employeeApplicationService.deleteEmployee(employeeId);
+    public EmployeeOperationResult patchRetirement(@PathVariable("employeeId") int employeeId) {
+        return employeeApplicationService.patchRetirement(employeeId);
     }
 
     @GetMapping("/working-form")

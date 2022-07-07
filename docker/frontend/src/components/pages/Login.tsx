@@ -2,7 +2,6 @@ import { Box, Divider, Flex, Heading, Input, Stack } from "@chakra-ui/react";
 import { ChangeEvent, memo, useState, VFC } from "react";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { useLogin } from "../../provider/login/AuthUserContext";
-import { instance } from "../../api/axios";
 
 type loginArgs = {
   userId: string;

@@ -42,7 +42,7 @@ class EmployeeRepositoryTest {
     @Test
     @Order(2)
     public void 従業員を全件取得できること() {
-        List<Employee> actualEmployeeList = employeeRepository.findAllEmployee();
+        List<Employee> actualEmployeeList = employeeRepository.findActiveEmployee();
         assertThat(actualEmployeeList)
                 .hasSize(5)
                 .contains(
@@ -106,7 +106,7 @@ class EmployeeRepositoryTest {
     @Test
     @Order(7)
     public void 従業員IDに紐づく1件の削除ができること() {
-        List<Employee> actualEmployeeList = employeeRepository.findAllEmployee();
+        List<Employee> actualEmployeeList = employeeRepository.findActiveEmployee();
         assertThat(actualEmployeeList)
                 .hasSize(5)
                 .contains(
@@ -118,7 +118,7 @@ class EmployeeRepositoryTest {
                 );
 
         employeeRepository.deleteEmployee(1);
-        List<Employee> actualEmployeeListAfterDelete = employeeRepository.findAllEmployee();
+        List<Employee> actualEmployeeListAfterDelete = employeeRepository.findActiveEmployee();
         assertThat(actualEmployeeListAfterDelete)
                 .hasSize(4)
                 .contains(
@@ -135,12 +135,12 @@ class EmployeeRepositoryTest {
     @Test
     @Order(8)
     public void 存在しない従業員IDに紐づく1件を削除しようとしても何も起こらないこと() {
-        List<Employee> actualEmployeeList = employeeRepository.findAllEmployee();
+        List<Employee> actualEmployeeList = employeeRepository.findActiveEmployee();
         assertThat(actualEmployeeList).hasSize(5);
 
         employeeRepository.deleteEmployee(6);
 
-        List<Employee> actualEmployeeListAfterDelete = employeeRepository.findAllEmployee();
+        List<Employee> actualEmployeeListAfterDelete = employeeRepository.findActiveEmployee();
         assertThat(actualEmployeeListAfterDelete).hasSize(5);
     }
 

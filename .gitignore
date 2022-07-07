@@ -8,6 +8,7 @@ build/
 /log/
 udemysample.pem
 /docker/frontend/node_modules/
+/docker/frontend/node_modules/.cache/.eslintcache
 
 ### STS ###
 .apt_generated

@@ -1,5 +1,6 @@
 package com.example.sma.presentation.shift;
 
+import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.shift.Shift;
 import com.example.sma.domain.models.shift.ShiftPattern;
 import lombok.Data;
@@ -17,22 +18,13 @@ public class ShiftForm {
     private String[] patternArr;
 
 //    workingFormIdやemployeeIdの照合はget(index)を使用しない方が良いだろうけど、とりあえず
-    ShiftForm(List<Shift> individualShiftList, List<ShiftPattern> shiftPatterns){
+    ShiftForm(List<Shift> individualShiftList, List<ShiftPattern> shiftPatterns, List<Employee> employeeList){
 
-//        一時的な処理
         Map<Integer,String> employeeMap = new LinkedHashMap<>();
 
-        employeeMap.put(1,"岸田");
-        employeeMap.put(2,"菅");
-        employeeMap.put(3,"安倍");
-        employeeMap.put(4,"野田");
-        employeeMap.put(5,"菅");
-        employeeMap.put(6,"鳩山");
-        employeeMap.put(7,"麻生");
-        employeeMap.put(8,"福田");
-        employeeMap.put(9,"小泉");
-        employeeMap.put(10,"森");
-
+        for(Employee employee: employeeList){
+            employeeMap.put(employee.getEmployeeId(),employee.getLastName());
+        }
 
         this.employeeName = employeeMap.get(individualShiftList.get(0).getEmployeeId());
 

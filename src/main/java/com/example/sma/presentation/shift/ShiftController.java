@@ -29,9 +29,8 @@ public class ShiftController {
     @GetMapping("/{year}/{month}")
     public List<ShiftForm> getShift(@PathVariable("year") int year, @PathVariable("month") int month) {
 
-//        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
-
-        List<Integer> employeeIdList = employeeApplicationService.findAllEmployee().stream().map(Employee::getEmployeeId).toList();
+        List<Employee> activeEmployeeListInTheMonth = employeeApplicationService.findActiveEmployeeInTheMonth(year,month);
+        List<Integer> employeeIdList = activeEmployeeListInTheMonth.stream().map(Employee::getEmployeeId).toList();
 
         List<List<Shift>> allEmployeeShiftList
                 = shiftApplicationService.findShift(year, month, employeeIdList);
@@ -39,7 +38,7 @@ public class ShiftController {
 
         return allEmployeeShiftList
                 .stream()
-                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns))
+                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns,activeEmployeeListInTheMonth))
                 .toList();
     }
 
@@ -51,7 +50,7 @@ public class ShiftController {
         if (shiftApplicationService.shiftDontExist(nextMonth.getYear(), nextMonth.getMonthValue())) {
             //todo: 例外処理
             try {
-                shiftApplicationService.createDraft(employeeApplicationService.findAllEmployee());
+                shiftApplicationService.createDraft(employeeApplicationService.findActiveEmployee());
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -63,7 +62,7 @@ public class ShiftController {
                 employeeApplicationService.getEmployeeIdList());
 
 //        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
-        List<Employee> employeeList = employeeApplicationService.findAllEmployee();
+        List<Employee> employeeList = employeeApplicationService.findActiveEmployee();
         List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
 
         return new DraftForm(shiftList, employeeList, shiftPatternList);
@@ -77,7 +76,7 @@ public class ShiftController {
             patchDataMap = mapper.readValue(patchData, new TypeReference<Map<String, String>>() {
             });
             shiftApplicationService.updateDraft(patchDataMap,
-                    employeeApplicationService.findAllEmployee());
+                    employeeApplicationService.findActiveEmployee());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,7 +94,7 @@ public class ShiftController {
     public List<VacationRequestListForm> getVacationRequestList() {
         List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
 //        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
-        List<Employee> employeeList = employeeApplicationService.findAllEmployee();
+        List<Employee> employeeList = employeeApplicationService.findActiveEmployee();
         List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
 
         List<VacationRequestListForm> hoge =

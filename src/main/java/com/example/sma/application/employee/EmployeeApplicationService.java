@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +23,12 @@ public class EmployeeApplicationService {
 
     private final EmployeeRepository employeeRepository;
 
-    public List<Employee> findAllEmployee() {
-        return employeeRepository.findAllEmployee();
+    public List<Employee> findActiveEmployee() {
+        return employeeRepository.findActiveEmployee();
+    }
+
+    public List<Employee> findActiveEmployeeInTheMonth(int year, int month){
+        return employeeRepository.findActiveEmployeeInTheMonth(year, month);
     }
 
     public EmployeeOperationResult insertEmployee(Employee employee) {
@@ -117,13 +123,13 @@ public class EmployeeApplicationService {
         return new EmployeeOperationResult(true, employeeId);
     }
 
-    public EmployeeOperationResult deleteEmployee(int employeeId) {
-        employeeRepository.deleteEmployee(employeeId);
+    public EmployeeOperationResult patchRetirement(int employeeId) {
+        employeeRepository.patchRetirement(employeeId, LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         return new EmployeeOperationResult(true , employeeId);
     }
 
     public List<Integer> getEmployeeIdList() {
-        return employeeRepository.findAllEmployee().stream().map(Employee::getEmployeeId).toList();
+        return employeeRepository.findActiveEmployee().stream().map(Employee::getEmployeeId).toList();
     }
 
     public List<WorkingForm> findAllWorkingForm() {

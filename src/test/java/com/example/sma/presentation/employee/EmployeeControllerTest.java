@@ -68,7 +68,7 @@ class EmployeeControllerTest {
 
     @Test
     void 従業員情報を全件取得に成功すると200で内容を返すこと() throws Exception {
-        when(employeeApplicationService.findAllEmployee()).thenReturn(Arrays.asList(
+        when(employeeApplicationService.findActiveEmployee()).thenReturn(Arrays.asList(
                 new Employee(1, "岸田", "文雄", "Kishida", "Fumio", "1957-07-29", 64, "男", "090-1111-1111", "kishida@hoge.com", "2020-01-01", null, new WorkingForm(1, "正社員")),
                 new Employee(2, "菅", "義偉", "Suga", "Yoshihide", "1948-12-06", 73, "男", "090-2222-2222", "suga@hoge.com", "2020-02-01", null, new WorkingForm(2, "正社員(時短)")),
                 new Employee(3, "安倍", "晋三", "Abe", "Shinzo", "1954-09-21", 67, "男", "090-3333-3333", "abe@hoge.com", "2020-03-01", null, new WorkingForm(1, "正社員"))
@@ -165,7 +165,7 @@ class EmployeeControllerTest {
 
     @Test
     void 従業員の削除に成功すると200と完了メッセージが返ること() throws Exception {
-        when(employeeApplicationService.deleteEmployee(1)).thenReturn(new EmployeeOperationResult(true, 1));
+        when(employeeApplicationService.patchRetirement(1)).thenReturn(new EmployeeOperationResult(true, 1));
 
         mockMvc.perform(delete("/api/employees/1")
                         .accept(MediaType.APPLICATION_JSON))

@@ -4,6 +4,7 @@ import com.example.sma.domain.models.employee.Employee;
 import com.example.sma.domain.models.employee.Security;
 import com.example.sma.domain.models.employee.WorkingForm;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import java.util.Optional;
 public interface EmployeeRepository {
 
     //    従業員の全件取得
-    public List<Employee> findAllEmployee();
+    public List<Employee> findActiveEmployee();
 
     //    従業員を新規登録
     public int insertEmployee(Employee employee);
@@ -36,4 +37,8 @@ public interface EmployeeRepository {
     void alterTableEmployee();
 
     Optional<Security> getLoginInfo(int employeeId);
+
+    void patchRetirement(@Param("employeeId") int employeeId,@Param("date") String date);
+
+    List<Employee> findActiveEmployeeInTheMonth(@Param("year") int year,@Param("month") int month);
 }

@@ -155,8 +155,9 @@ public class ShiftApplicationService {
             //日毎のシフトが入っていない従業員の抽出
             List<Integer> dailyEmptyShiftList = new ArrayList<>();
             for (int i : emptyShiftPatternIndexList) {
-                if (i % daysOfNextMonth == date)
-                    dailyEmptyShiftList.add(i);
+                if (i % daysOfNextMonth == date) dailyEmptyShiftList.add(i);
+                //月末日の場合i % daysOfNextMonth == dateとならないため、処理を追加
+                if (i % daysOfNextMonth == 0 && date == daysOfNextMonth) dailyEmptyShiftList.add(i);
             }
 
             //その日のシフトが入っていない従業員のうち、早番と遅番に入れる正社員の抽出
