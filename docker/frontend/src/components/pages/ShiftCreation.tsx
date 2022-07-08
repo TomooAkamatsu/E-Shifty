@@ -1,4 +1,4 @@
-import { Box, Stack, useDisclosure } from "@chakra-ui/react";
+import { Box, Stack, Text, useDisclosure } from "@chakra-ui/react";
 import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { instance } from "../../api/axios";
@@ -39,6 +39,11 @@ export const ShiftCreation: VFC = memo(() => {
     getDraft();
   }, [getDraft]);
 
+  const nextMonth = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth() + 1
+  );
+
   return (
     <Box align="center" p={5}>
       <Stack spacing={5}>
@@ -49,18 +54,22 @@ export const ShiftCreation: VFC = memo(() => {
             </PrimaryButton>
           </Box>
           <Box textAlign="left" float="left" px={10} py={2}>
-            <h1>
+            <Text fontSize="md">
               自動的に休み希望を反映し、営業日には正社員がAとDに、
               <br />
               残りの従業員でBとCが半々になるようにシフトが作成されています
-            </h1>
-            <h1>手動で変更した分は保存されます</h1>
+              <br />
+              手動で変更した分は保存されます
+            </Text>
           </Box>
           <PrimaryButton onClick={onClickRequestList}>
             提出済みの休み希望一覧を確認
           </PrimaryButton>
           {/* <PrimaryButton onClick={onOpen}>シフトを確定</PrimaryButton> */}
         </Box>
+        <Text fontSize="3xl">{`翌月(${nextMonth.getFullYear()}年${
+          nextMonth.getMonth() + 1
+        }月)のシフト作成`}</Text>
         <ShiftTable draft={draft} loading={loading} />
       </Stack>
       <PrimaryButton onClick={onClickBack}>シフト一覧へ戻る</PrimaryButton>

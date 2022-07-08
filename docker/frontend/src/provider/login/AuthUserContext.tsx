@@ -33,34 +33,34 @@ const AuthUserProvider: React.FC = (props) => {
   const login = async (loginArgs: loginArgs) => {
     const hashPass = sha512(loginArgs.userId + loginArgs.password);
 
-    instance
-      .get(`/employees/login/${loginArgs.userId}`)
-      .then((res) => {
-        const { password, authority } = res.data;
-        if (password === hashPass) {
-          if (authority === "admin")
-            setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: true });
-          if (authority === "employee")
-            setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: false });
-          showMessage({
-            title: "ログインに成功しました",
-            status: "success",
-          });
-        } else {
-          showMessage({
-            title: "ログインに失敗しました",
-            status: "error",
-          });
-        }
-      })
-      .catch(() => {
-        showMessage({
-          title: "ログイン情報が取得できませんでした",
-          status: "error",
-        });
-      });
+    // instance
+    //   .get(`/employees/login/${loginArgs.userId}`)
+    //   .then((res) => {
+    //     const { password, authority } = res.data;
+    //     if (password === hashPass) {
+    //       if (authority === "admin")
+    //         setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: true });
+    //       if (authority === "employee")
+    //         setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: false });
+    //       showMessage({
+    //         title: "ログインに成功しました",
+    //         status: "success",
+    //       });
+    //     } else {
+    //       showMessage({
+    //         title: "ログインに失敗しました",
+    //         status: "error",
+    //       });
+    //     }
+    //   })
+    //   .catch(() => {
+    //     showMessage({
+    //       title: "ログイン情報が取得できませんでした",
+    //       status: "error",
+    //     });
+    //   });
 
-    // setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: true });
+    setAuthUser({ userId: `${loginArgs.userId}`, isAdmin: true });
   };
 
   const logout = async () => {

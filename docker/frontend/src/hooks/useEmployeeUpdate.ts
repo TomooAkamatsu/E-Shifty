@@ -9,7 +9,7 @@ export const useEmployeeUpdate = () => {
   );
   const [newBirthday, setNewBirthday] = useState<string | null>(null);
   const [newGender, setNewGender] = useState<string | null>(null);
-  const [newAge, setNewAge] = useState<number>(0);
+  const [newAge, setNewAge] = useState<number | null>(null);
   const [newPhoneNumber, setNewPhoneNumber] = useState<string | null>(null);
   const [newEmail, setNewEmail] = useState<string | null>(null);
   const [newWorkingForm, setNewWorkingForm] = useState<string | null>(null);

@@ -17,7 +17,6 @@ public class ShiftForm {
     private String employeeName;
     private String[] patternArr;
 
-//    workingFormIdやemployeeIdの照合はget(index)を使用しない方が良いだろうけど、とりあえず
     ShiftForm(List<Shift> individualShiftList, List<ShiftPattern> shiftPatterns, List<Employee> employeeList){
 
         Map<Integer,String> employeeMap = new LinkedHashMap<>();

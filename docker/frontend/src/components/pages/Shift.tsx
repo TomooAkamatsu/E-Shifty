@@ -1,10 +1,12 @@
-import { Box, Center, HStack, Spinner } from "@chakra-ui/react";
-import { memo, useCallback, useEffect, useState, VFC } from "react";
+import { Box, Center, Spinner } from "@chakra-ui/react";
+import { memo, ReactNode, useCallback, useEffect, useState, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 import { useShiftList } from "../../hooks/useShiftList";
 import { useAuthUser } from "../../provider/login/AuthUserContext";
+import { MonthlyShiftSelectButton } from "../molecules/MonthlyShiftSelectButton";
+import { ShiftTableDate } from "../atoms/ShiftTableDate";
 
 export const Shift: VFC = memo(() => {
   const history = useHistory();
@@ -23,20 +25,7 @@ export const Shift: VFC = memo(() => {
     [history]
   );
 
-  const today = new Date();
   const monthOfNowPage = new Date(year, month, 1);
-
-  const lastMonthOfNowPage = new Date(year, month - 1, 1);
-  const onClickLastMonth = () => {
-    setYear(lastMonthOfNowPage.getFullYear());
-    setMonth(lastMonthOfNowPage.getMonth());
-  };
-
-  const nextMonthOfNowPage = new Date(year, month + 1, 1);
-  const onClickNextMonth = () => {
-    setYear(nextMonthOfNowPage.getFullYear());
-    setMonth(nextMonthOfNowPage.getMonth());
-  };
 
   const beginningOfTheMonth = new Date(
     monthOfNowPage.getFullYear(),
@@ -50,11 +39,6 @@ export const Shift: VFC = memo(() => {
   );
 
   const dateList = [];
-
-  useEffect(() => {
-    getShift();
-  }, [getShift]);
-
   for (
     var d = beginningOfTheMonth;
     d <= endOfTheMonth;
@@ -63,37 +47,19 @@ export const Shift: VFC = memo(() => {
     dateList.push(new Date(d));
   }
 
+  useEffect(() => {
+    getShift();
+  }, [getShift]);
+
   return (
     <>
       <Box textAlign="center" p={5}>
-        <Box>
-          <HStack justify="center">
-            <Box>
-              <PrimaryButton
-                onClick={onClickLastMonth}
-              >{`${lastMonthOfNowPage.getFullYear()}年
-      ${lastMonthOfNowPage.getMonth() + 1}月`}</PrimaryButton>
-            </Box>
-            <Box>
-              <h1 style={{ fontSize: "20px", fontWeight: "bold" }}>
-                {`${monthOfNowPage.getFullYear()}年${
-                  monthOfNowPage.getMonth() + 1
-                }月のシフト`}
-              </h1>
-            </Box>
-            <Box>
-              {today.getFullYear() === monthOfNowPage.getFullYear() &&
-              today.getMonth() === monthOfNowPage.getMonth() ? (
-                <Box w={142}></Box>
-              ) : (
-                <PrimaryButton
-                  onClick={onClickNextMonth}
-                >{`${nextMonthOfNowPage.getFullYear()}年
-      ${nextMonthOfNowPage.getMonth() + 1}月`}</PrimaryButton>
-              )}
-            </Box>
-          </HStack>
-        </Box>
+        <MonthlyShiftSelectButton
+          year={year}
+          month={month}
+          setYear={setYear}
+          setMonth={setMonth}
+        />
         {loading ? (
           <Center h="40vh">
             <Spinner size="xl" />
@@ -108,9 +74,7 @@ export const Shift: VFC = memo(() => {
                       名前
                     </Th>
                     {dateList.map((date, index) => (
-                      <Th key={index} p={1} textAlign="center">{`${
-                        date.getMonth() + 1
-                      }/${date.getDate()}`}</Th>
+                      <ShiftTableDate date={date} key={index} />
                     ))}
                   </Tr>
                 </Thead>
@@ -150,3 +114,35 @@ export const Shift: VFC = memo(() => {
     </>
   );
 });
+
+// const getTableDate = (date: Date, index: number): ReactNode => {
+//   if (date.getDay() === 6) {
+//     return (
+//       <Th key={index} p={1} textAlign="center" color="blue.400">
+//         {`${date.getDate()}(${getDayOfWeek(date.getDay())})`}
+//       </Th>
+//     );
+//   }
+//   if (date.getDay() === 0) {
+//     return (
+//       <Th key={index} p={1} textAlign="center" color="red.400">
+//         {`${date.getDate()}(${getDayOfWeek(date.getDay())})`}
+//       </Th>
+//     );
+//   }
+//   return (
+//     <Th key={index} p={1} textAlign="center">
+//       {`${date.getDate()}(${getDayOfWeek(date.getDay())})`}
+//     </Th>
+//   );
+// };
+
+// const getDayOfWeek = (i: number): string => {
+//   if (i === 1) return "月";
+//   if (i === 2) return "火";
+//   if (i === 3) return "水";
+//   if (i === 4) return "木";
+//   if (i === 5) return "金";
+//   if (i === 6) return "土";
+//   return "日";
+// };

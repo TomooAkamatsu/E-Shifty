@@ -27,7 +27,6 @@ public class EmployeeController {
 
     private final EmployeeApplicationService employeeApplicationService;
 
-
     @GetMapping("login/{employeeId}")
     public Security login(@PathVariable("employeeId") int employeeId){
         return employeeApplicationService.getLoginInfo(employeeId);

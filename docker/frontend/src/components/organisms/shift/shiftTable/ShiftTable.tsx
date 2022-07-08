@@ -3,6 +3,7 @@ import { memo, useEffect, VFC } from "react";
 import { useDateList } from "../../../../hooks/useDateList";
 import { useShiftPatterns } from "../../../../hooks/useShiftPatterns";
 import { typeDraft } from "../../../../type/typeDraft";
+import { ShiftTableDate } from "../../../atoms/ShiftTableDate";
 import { ShiftTableBodyTr } from "./ShitTableBodyTr";
 
 type Props = {
@@ -35,9 +36,7 @@ export const ShiftTable: VFC<Props> = memo((props) => {
                 名前
               </Th>
               {firstHalfDateList.map((date, index) => (
-                <Th p={1} textAlign="center" key={index}>{`${
-                  date.getMonth() + 1
-                }/${date.getDate()}`}</Th>
+                <ShiftTableDate date={date} key={index} />
               ))}
             </Tr>
           </Thead>
@@ -57,9 +56,7 @@ export const ShiftTable: VFC<Props> = memo((props) => {
                 名前
               </Th>
               {latterHalfDateList.map((date, index) => (
-                <Th pt={5} textAlign="center" key={index}>{`${
-                  date.getMonth() + 1
-                }/${date.getDate()}`}</Th>
+                <ShiftTableDate date={date} key={index} />
               ))}
             </Tr>
           </Thead>

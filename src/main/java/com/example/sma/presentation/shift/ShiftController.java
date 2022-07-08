@@ -48,7 +48,6 @@ public class ShiftController {
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
 
         if (shiftApplicationService.shiftDontExist(nextMonth.getYear(), nextMonth.getMonthValue())) {
-            //todo: 例外処理
             try {
                 shiftApplicationService.createDraft(employeeApplicationService.findActiveEmployee());
             } catch (Exception e) {
@@ -61,7 +60,6 @@ public class ShiftController {
                 nextMonth.getMonthValue(),
                 employeeApplicationService.getEmployeeIdList());
 
-//        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
         List<Employee> employeeList = employeeApplicationService.findActiveEmployee();
         List<ShiftPattern> shiftPatternList = shiftApplicationService.findAllShiftPattern();
 
@@ -93,7 +91,6 @@ public class ShiftController {
     @GetMapping("/vacation-requests")
     public List<VacationRequestListForm> getVacationRequestList() {
         List<Integer> employeeIdList = employeeApplicationService.getEmployeeIdList();
-//        List<String> employeeNameList = employeeApplicationService.getEmployeeNameList();
         List<Employee> employeeList = employeeApplicationService.findActiveEmployee();
         List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
 
