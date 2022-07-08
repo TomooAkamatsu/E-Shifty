@@ -9,20 +9,20 @@ export const ShiftTableDate: VFC<Props> = memo((props) => {
   const { date } = props;
   if (date.getDay() === 6) {
     return (
-      <Th p={1} textAlign="center" color="blue.400">
+      <Th px={1} pt={5} pb={2} textAlign="center" color="blue.400">
         {`${date.getDate()}(${getDayOfWeek(date.getDay())})`}
       </Th>
     );
   }
   if (date.getDay() === 0) {
     return (
-      <Th p={1} textAlign="center" color="red.400">
+      <Th px={1} pt={5} pb={2} textAlign="center" color="red.400">
         {`${date.getDate()}(${getDayOfWeek(date.getDay())})`}
       </Th>
     );
   }
   return (
-    <Th p={1} textAlign="center">
+    <Th px={1} pt={5} pb={2} textAlign="center">
       {`${date.getDate()}(${getDayOfWeek(date.getDay())})`}
     </Th>
   );

@@ -24,6 +24,7 @@ export const ShiftConfirmModal: VFC<Props> = (props) => {
       onClose={onClose}
       autoFocus={false}
       motionPreset="slideInBottom"
+      isCentered
     >
       <ModalOverlay>
         <ModalContent p={3} justifyContent="center">

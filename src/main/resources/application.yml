@@ -31,7 +31,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sma
     username:
-    password: 
+    password:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true

@@ -53,7 +53,7 @@ export const Shift: VFC = memo(() => {
 
   return (
     <>
-      <Box textAlign="center" p={5}>
+      <Box align="center" p={5} w="100vw">
         <MonthlyShiftSelectButton
           year={year}
           month={month}
@@ -70,7 +70,7 @@ export const Shift: VFC = memo(() => {
               <Table size="sm" variant="striped" colorScheme="blackAlpha">
                 <Thead>
                   <Tr>
-                    <Th p={1} textAlign="center">
+                    <Th pt={5} pb={2} textAlign="center">
                       名前
                     </Th>
                     {dateList.map((date, index) => (

@@ -1,4 +1,14 @@
-import { Center, Spinner, Table, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Spinner,
+  Table,
+  Tbody,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { memo, useEffect, VFC } from "react";
 import { useDateList } from "../../../../hooks/useDateList";
 import { useShiftPatterns } from "../../../../hooks/useShiftPatterns";
@@ -32,7 +42,7 @@ export const ShiftTable: VFC<Props> = memo((props) => {
         <Table size="sm" variant="striped" colorScheme="blackAlpha">
           <Thead>
             <Tr>
-              <Th p={1} textAlign="center">
+              <Th pt={5} pb={2} textAlign="center">
                 名前
               </Th>
               {firstHalfDateList.map((date, index) => (
@@ -52,7 +62,7 @@ export const ShiftTable: VFC<Props> = memo((props) => {
           </Tbody>
           <Thead>
             <Tr>
-              <Th pt={5} textAlign="center">
+              <Th pt={5} pb={2} textAlign="center">
                 名前
               </Th>
               {latterHalfDateList.map((date, index) => (
