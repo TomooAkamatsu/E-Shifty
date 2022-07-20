@@ -16,7 +16,6 @@ import { useHistory } from "react-router-dom";
 import { useAllEmployees } from "../../hooks/useAllEmployees";
 import { DeleteButton } from "../atoms/button/DeleteButton";
 import { instance } from "../../api/axios";
-import Image from "../../image/reset.png";
 import { useAuthUser } from "../../provider/login/AuthUserContext";
 
 export const Employee: VFC = memo(() => {
@@ -49,10 +48,7 @@ export const Employee: VFC = memo(() => {
   return (
     <Box>
       <Box align="right" pr={30} pt={5} h="60px">
-        <Flex float="left" pt={2} pl={10}>
-          <img src={Image} alt="reset" width="50" height="50" />
-        </Flex>
-        <Flex float="left">
+        <Flex float="left" pl={8}>
           <DeleteButton onClick={onClickReset}>リセット</DeleteButton>
         </Flex>
         <Flex w={200}>
@@ -69,7 +65,7 @@ export const Employee: VFC = memo(() => {
         </Center>
       ) : (
         <Box>
-          <Wrap spacing="30px" p={{ base: 4, md: 10 }}>
+          <Wrap spacing="20px" p={{ base: 4, md: 10 }}>
             {employeesData.map((employee) => (
               <WrapItem key={employee.employeeId}>
                 <EmployeeCard

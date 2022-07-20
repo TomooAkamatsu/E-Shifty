@@ -48,7 +48,7 @@ export const Header: VFC = memo(() => {
           onClick={onClickShift}
         >
           <Heading as="h1" fontSize={{ base: "md", md: "lg" }}>
-            シフト管理アプリ
+            E-Shity
           </Heading>
         </Flex>
         <Flex

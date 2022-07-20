@@ -97,7 +97,7 @@ export const EmployeeRegistry: VFC = memo(() => {
       <Box align="right" pr={30} pt={3}>
         <PrimaryButton onClick={onClickBack}>従業員一覧に戻る</PrimaryButton>
       </Box>
-      <Box align="center">
+      <Box align="center" pb={5}>
         <Stack
           w="350px"
           bg="white"
