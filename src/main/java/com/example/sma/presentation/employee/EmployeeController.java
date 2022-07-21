@@ -76,11 +76,11 @@ public class EmployeeController {
         return employeeApplicationService.findAllWorkingForm();
     }
 
-//    魔法のボタン
+//    ポートフォリオ用のリセットボタン
     @GetMapping("/reset")
-    public String reset(){
+    public EmployeeOperationResult reset(){
         employeeApplicationService.reset();
-        return  "くらぁーーっ!!";
+        return  new EmployeeOperationResult(true);
     }
 
 }

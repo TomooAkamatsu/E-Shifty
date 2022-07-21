@@ -29,7 +29,7 @@ public class ShiftController {
     @GetMapping("/{year}/{month}")
     public List<ShiftForm> getShift(@PathVariable("year") int year, @PathVariable("month") int month) {
 
-        List<Employee> activeEmployeeListInTheMonth = employeeApplicationService.findActiveEmployeeInTheMonth(year,month);
+        List<Employee> activeEmployeeListInTheMonth = employeeApplicationService.findActiveEmployeeInTheMonth(year, month);
         List<Integer> employeeIdList = activeEmployeeListInTheMonth.stream().map(Employee::getEmployeeId).toList();
 
         List<List<Shift>> allEmployeeShiftList
@@ -38,7 +38,7 @@ public class ShiftController {
 
         return allEmployeeShiftList
                 .stream()
-                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns,activeEmployeeListInTheMonth))
+                .map(individualShiftList -> new ShiftForm(individualShiftList, shiftPatterns, activeEmployeeListInTheMonth))
                 .toList();
     }
 
@@ -67,7 +67,7 @@ public class ShiftController {
     }
 
     @PatchMapping("/draft")
-    public String patchDraft(@RequestBody String patchData) {
+    public ShiftOperationResult patchDraft(@RequestBody String patchData) {
         Map<String, String> patchDataMap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -79,13 +79,12 @@ public class ShiftController {
             e.printStackTrace();
         }
 
-        return "{\"result\":\"ok\"}";
+        return new ShiftOperationResult(true);
     }
 
     @GetMapping("/draft/recreation")
-    public String draftRecreate() {
-        shiftApplicationService.deleteDraft();
-        return "hoge";
+    public ShiftOperationResult draftRecreate() {
+        return shiftApplicationService.deleteDraft();
     }
 
     @GetMapping("/vacation-requests")
@@ -94,23 +93,21 @@ public class ShiftController {
         List<Employee> employeeList = employeeApplicationService.findActiveEmployee();
         List<List<VacationRequest>> vacationRequestList = shiftApplicationService.findAllVacationRequest(employeeIdList);
 
-        List<VacationRequestListForm> hoge =
+        List<VacationRequestListForm> vacationRequestListResponse =
                 vacationRequestList.stream().filter(individualRequestList -> !CollectionUtils.isEmpty(individualRequestList))
                         .map(individualRequestList -> new VacationRequestListForm(individualRequestList, employeeList)).toList();
 
-        return hoge;
+        return vacationRequestListResponse;
     }
 
     @PostMapping("/vacation-requests/{employeeId}")
-    public String postVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm) {
-        if (!shiftApplicationService.registerVacationRequest(vacationRequestListForm)) return "{\"result\":\"false\"}";
-        return "{\"result\":\"ok\"}";
+    public ShiftOperationResult postVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm) {
+        return shiftApplicationService.registerVacationRequest(vacationRequestListForm);
     }
 
     @PutMapping("/vacation-requests/{employeeId}")
-    public String patchVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm) {
-        shiftApplicationService.updateVacationRequest(vacationRequestListForm);
-        return "{\"result\":\"ok\"}";
+    public ShiftOperationResult patchVacationRequestList(@RequestBody VacationRequestListForm vacationRequestListForm) {
+        return shiftApplicationService.updateVacationRequest(vacationRequestListForm);
     }
 
     @GetMapping("/vacation-requests/{employeeId}")

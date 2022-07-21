@@ -1,11 +1,16 @@
 package com.example.sma.presentation.employee;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class EmployeeOperationResult {
-    private final boolean completed;
-    private final int targetEmployeeId;
+    private boolean completed;
+    private int targetEmployeeId;
+
+    EmployeeOperationResult(boolean completed){
+        this.completed = completed;
+    }
 }
+

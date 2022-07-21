@@ -6,6 +6,7 @@ import com.example.sma.domain.models.shift.ShiftPattern;
 import com.example.sma.domain.models.shift.VacationRequest;
 import com.example.sma.exception.DraftCreationException;
 import com.example.sma.infrastructure.shift.ShiftRepository;
+import com.example.sma.presentation.shift.ShiftOperationResult;
 import com.example.sma.presentation.shift.VacationRequestListForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,31 +47,30 @@ public class ShiftApplicationService {
         return vacationRequests;
     }
 
-    public boolean registerVacationRequest(VacationRequestListForm vacationRequestListForm) {
+    public ShiftOperationResult registerVacationRequest(VacationRequestListForm vacationRequestListForm) {
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
 
         List<VacationRequest> vacationRequests =
                 shiftRepository.findVacationRequest(nextMonth.getYear(), nextMonth.getMonthValue(), vacationRequestListForm.getEmployeeId());
 
-        if (!CollectionUtils.isEmpty(vacationRequests)) return false;
+        if (!CollectionUtils.isEmpty(vacationRequests)) return new ShiftOperationResult(false);
 
 //        空送信された際のバリデーション、現在は正常にとりあえず動いてるけど。。。。
         Arrays.stream(vacationRequestListForm.getRequestDate()).forEach(date ->
                 shiftRepository.insertVacationRequest(vacationRequestListForm.getEmployeeId(), date)
         );
 
-        return true;
+        return new ShiftOperationResult(true);
     }
 
-    public void updateVacationRequest(VacationRequestListForm vacationRequestListForm) {
+    public ShiftOperationResult updateVacationRequest(VacationRequestListForm vacationRequestListForm) {
         deleteVacationRequest(vacationRequestListForm);
-        registerVacationRequest(vacationRequestListForm);
+        return registerVacationRequest(vacationRequestListForm);
     }
 
     public void deleteVacationRequest(VacationRequestListForm vacationRequestListForm) {
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
         shiftRepository.deleteVacationRequest(nextMonth.getYear(), nextMonth.getMonthValue(), vacationRequestListForm.getEmployeeId());
-
     }
 
     public List<VacationRequest> findVacationRequest(int employeeId) {
@@ -165,7 +165,8 @@ public class ShiftApplicationService {
 
             //人が少なく早番と遅番を割り当てられない場合はここで例外をスロー
             // todo 例外条件の調整
-            if (employeeWhoCanWorkEarlyAndLate.size() == 1) throw new DraftCreationException(date + "の組み合わせがないためシフトを作成できません");
+            if (employeeWhoCanWorkEarlyAndLate.size() == 1)
+                throw new DraftCreationException(date + "の組み合わせがないためシフトを作成できません");
 
             //dateが営業日の場合
             if (businessDateList.contains(date)) {
@@ -256,7 +257,7 @@ public class ShiftApplicationService {
         return false;
     }
 
-    public void updateDraft(Map<String, String> patchDataMap, List<Employee> employeesList) {
+    public ShiftOperationResult updateDraft(Map<String, String> patchDataMap, List<Employee> employeesList) {
         List<ShiftPattern> shiftPatternList = findAllShiftPattern();
 
         ShiftPattern changedShiftPattern = shiftPatternList.stream()
@@ -275,10 +276,13 @@ public class ShiftApplicationService {
                 "N"
         );
         shiftRepository.updateShift(patchShift);
+
+        return new ShiftOperationResult(true);
     }
 
-    public void deleteDraft() {
+    public ShiftOperationResult deleteDraft() {
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
-        shiftRepository.deleteShift(nextMonth.getYear(),nextMonth.getMonthValue());
+        shiftRepository.deleteShift(nextMonth.getYear(), nextMonth.getMonthValue());
+        return new ShiftOperationResult(true);
     }
 }
