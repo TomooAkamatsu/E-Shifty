@@ -12,16 +12,16 @@ import { shiftRoutes } from "./shiftRoutes";
 export const Router: VFC = memo(() => {
   return (
     <Switch>
-      <UnAuthRoute exact path="/shiftwork_management/login" component={Login} />
-      <Route exact path="/shiftwork_management/logout" component={Logout} />
-      <Route path="/shiftwork_management/shift/new/redirect">
-        <Redirect to="/shiftwork_management/shift/new" />
+      <UnAuthRoute exact path="/login" component={Login} />
+      <Route exact path="/logout" component={Logout} />
+      <Route path="/shift/draft/redirect">
+        <Redirect to="/shift/draft" />
       </Route>
-      <Route path="/shiftwork_management/employees/redirect">
-        <Redirect to="/shiftwork_management/employees" />
+      <Route path="/employees/redirect">
+        <Redirect to="/employees" />
       </Route>
       <PrivateRoute
-        path="/shiftwork_management/shift"
+        path="/shift"
         render={({ match: { url } }) => (
           <Switch>
             {shiftRoutes.map((route) => (
@@ -37,7 +37,7 @@ export const Router: VFC = memo(() => {
         )}
       />
       <PrivateRoute
-        path="/shiftwork_management/employees"
+        path="/employees"
         render={({ match: { url } }) => (
           <Switch>
             {employeesRoutes.map((route) => (
@@ -53,7 +53,7 @@ export const Router: VFC = memo(() => {
         )}
       />
       <Route path="*">
-        <Redirect to="/shiftwork_management/shift" />
+        <Redirect to="/shift" />
       </Route>
     </Switch>
   );

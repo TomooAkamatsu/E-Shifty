@@ -1,4 +1,4 @@
-import { Box, HStack, Stack, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, HStack, Text, useDisclosure } from "@chakra-ui/react";
 import { memo, useCallback, useEffect, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { instance } from "../../api/axios";
@@ -9,15 +9,15 @@ import { ShiftTable } from "../organisms/shift/shiftTable/ShiftTable";
 
 export const ShiftCreation: VFC = memo(() => {
   const history = useHistory();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onClose } = useDisclosure();
   const { draft, getDraft, loading } = useDraft();
 
   const onClickBack = useCallback(() => {
-    history.push("/shiftwork_management/shift");
+    history.push("/shift");
   }, [history]);
 
   const onClickRequestList = useCallback(() => {
-    history.push("/shiftwork_management/shift/request/list");
+    history.push("/shift/request/list");
   }, [history]);
 
   const onClickConfirm = () => {
@@ -32,7 +32,7 @@ export const ShiftCreation: VFC = memo(() => {
       })
       .catch(() => {});
     getDraft();
-    history.push("/shiftwork_management/shift/new/redirect");
+    history.push("/shift/draft/redirect");
   }, [history, getDraft]);
 
   useEffect(() => {

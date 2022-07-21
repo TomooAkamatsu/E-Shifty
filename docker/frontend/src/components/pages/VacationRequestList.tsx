@@ -11,7 +11,7 @@ export const VacationRequestList: VFC = memo(() => {
     useVacationRequestList();
 
   const onClickBack = useCallback(() => {
-    history.push("/shiftwork_management/shift/new");
+    history.push("/shift/draft");
   }, [history]);
 
   useEffect(() => {

@@ -18,10 +18,7 @@ export const VacationRequest: VFC = memo(() => {
   const history = useHistory();
   const authUser = useAuthUser();
   const { showMessage } = useMessage();
-  const onClickShift = useCallback(
-    () => history.push("/shiftwork_management/shift"),
-    [history]
-  );
+  const onClickShift = useCallback(() => history.push("/shift"), [history]);
 
   const { days, getSelectedVacationRequest, setDays } =
     useSelectedVacationRequest();
@@ -55,7 +52,7 @@ export const VacationRequest: VFC = memo(() => {
                 title: "休み希望日を更新しました",
                 status: "success",
               });
-              history.push("/shiftwork_management/shift");
+              history.push("/shift");
             });
         }
       })

@@ -33,7 +33,7 @@ export const Employee: VFC = memo(() => {
   );
 
   const onClickEmployeeRegistry = useCallback(() => {
-    history.push("/shiftwork_management/employees/new");
+    history.push("/employees/new");
   }, [history]);
 
   useEffect(() => {
@@ -42,14 +42,16 @@ export const Employee: VFC = memo(() => {
 
   const onClickReset = useCallback(() => {
     instance.get("employees/reset").then((r) => console.log(r.data));
-    history.push("/shiftwork_management/employees/redirect");
+    history.push("/employees/redirect");
   }, [history]);
 
   return (
     <Box>
       <Box align="right" pr={30} pt={5} h="60px">
         <Flex float="left" pl={8}>
-          <DeleteButton onClick={onClickReset}>リセット</DeleteButton>
+          <DeleteButton onClick={onClickReset}>
+            リセット(初期データが再投入されます)
+          </DeleteButton>
         </Flex>
         <Flex w={200}>
           {authUser?.isAdmin && (

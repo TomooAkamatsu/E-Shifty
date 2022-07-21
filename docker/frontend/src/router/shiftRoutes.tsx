@@ -11,7 +11,7 @@ export const shiftRoutes = [
     children: <Shift />,
   },
   {
-    path: "/new",
+    path: "/draft",
     exact: true,
     children: <ShiftCreation />,
   },

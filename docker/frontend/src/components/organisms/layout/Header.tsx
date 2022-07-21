@@ -17,18 +17,12 @@ export const Header: VFC = memo(() => {
   const history = useHistory();
   const authUser = useAuthUser();
 
-  const onClickShift = useCallback(
-    () => history.push("/shiftwork_management/shift"),
-    [history]
-  );
+  const onClickShift = useCallback(() => history.push("/shift"), [history]);
   const onClickEmployees = useCallback(
-    () => history.push("/shiftwork_management/employees"),
+    () => history.push("/employees"),
     [history]
   );
-  const onClickLogout = useCallback(
-    () => history.push("/shiftwork_management/logout"),
-    [history]
-  );
+  const onClickLogout = useCallback(() => history.push("/logout"), [history]);
 
   return (
     <>

@@ -7,7 +7,7 @@ export const UnAuthRoute: React.FC<RouteProps> = ({ ...props }) => {
 
   if (isAuthenticated) {
     console.log(`ログイン済みのユーザーは${props.path}へはアクセスできません`);
-    return <Redirect to={"/shiftwork_management/shift"} />;
+    return <Redirect to={"/shift"} />;
   } else {
     return <Route {...props} />;
   }

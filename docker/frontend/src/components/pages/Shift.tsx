@@ -1,5 +1,5 @@
 import { Box, Center, Spinner } from "@chakra-ui/react";
-import { memo, ReactNode, useCallback, useEffect, useState, VFC } from "react";
+import { memo, useCallback, useEffect, useState, VFC } from "react";
 import { useHistory } from "react-router-dom";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 import { Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
@@ -17,11 +17,11 @@ export const Shift: VFC = memo(() => {
   const { shiftData, getShift, loading, exist } = useShiftList(year, month + 1);
 
   const onClickVacationRequest = useCallback(
-    () => history.push("/shiftwork_management/shift/request"),
+    () => history.push("/shift/request"),
     [history]
   );
   const onClickShiftCreation = useCallback(
-    () => history.push("/shiftwork_management/shift/new"),
+    () => history.push("/shift/draft"),
     [history]
   );
 

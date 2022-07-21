@@ -47,7 +47,7 @@ export const EmployeeRegistry: VFC = memo(() => {
   } = useEmployeeRegistry();
 
   const onClickBack = useCallback(() => {
-    history.push("/shiftwork_management/employees");
+    history.push("/employees");
   }, [history]);
 
   const onClickRegistry = () => {
@@ -73,7 +73,7 @@ export const EmployeeRegistry: VFC = memo(() => {
           title: "従業員の新規登録に成功しました",
           status: "success",
         });
-        history.push("/shiftwork_management/employees");
+        history.push("/employees");
       })
       .catch(() => {
         showMessage({

@@ -8,7 +8,7 @@ export const Logout = () => {
   const history = useHistory();
   const logout = useLogout();
   const onClickLogout = () => {
-    history.push("/shiftwork_management/login");
+    history.push("/login");
     logout();
   };
 

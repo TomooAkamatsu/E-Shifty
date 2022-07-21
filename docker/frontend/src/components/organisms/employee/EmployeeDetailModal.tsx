@@ -101,7 +101,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
           title: "更新が完了しました",
           status: "success",
         });
-        history.push("/shiftwork_management/employees/redirect");
+        history.push("/employees/redirect");
       })
       .catch(() => {
         showMessage({
@@ -122,7 +122,7 @@ export const EmployeeDetailModal: VFC<Props> = memo((props) => {
           title: "削除が完了しました",
           status: "success",
         });
-        history.push("/shiftwork_management/employees/redirect");
+        history.push("/employees/redirect");
       })
       .catch(() => {
         showMessage({
