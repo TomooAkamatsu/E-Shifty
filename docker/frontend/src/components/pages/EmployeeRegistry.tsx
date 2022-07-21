@@ -113,21 +113,21 @@ export const EmployeeRegistry: VFC = memo(() => {
           <HStack>
             <FormControl>
               <FormLabel>姓</FormLabel>
-              <Input placeholder="伊藤" onChange={onChangeLastName} />
+              <Input placeholder="佐藤" onChange={onChangeLastName} />
             </FormControl>
             <FormControl>
               <FormLabel>名</FormLabel>
-              <Input placeholder="博文" onChange={onChangeFirstName} />
+              <Input placeholder="一郎" onChange={onChangeFirstName} />
             </FormControl>
           </HStack>
           <HStack>
             <FormControl>
               <FormLabel>姓(ローマ字)</FormLabel>
-              <Input placeholder="Ito" onChange={onChangeRomanLastName} />
+              <Input placeholder="Sato" onChange={onChangeRomanLastName} />
             </FormControl>
             <FormControl>
               <FormLabel>名(ローマ字)</FormLabel>
-              <Input placeholder="Hirofumi" onChange={onChangeRomanFirstName} />
+              <Input placeholder="Ichiro" onChange={onChangeRomanFirstName} />
             </FormControl>
           </HStack>
           <FormControl>
