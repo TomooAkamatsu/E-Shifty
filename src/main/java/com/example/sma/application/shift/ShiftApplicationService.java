@@ -164,12 +164,14 @@ public class ShiftApplicationService {
             List<Integer> employeeWhoCanWorkEarlyAndLate = new ArrayList<>(dailyEmptyShiftList.stream().filter(index -> fullTimeEmployeeIdList.contains(index / daysOfNextMonth + 1)).toList());
 
             //人が少なく早番と遅番を割り当てられない場合はここで例外をスロー
+            // todo 例外条件の調整
             if (employeeWhoCanWorkEarlyAndLate.size() == 1) throw new DraftCreationException(date + "の組み合わせがないためシフトを作成できません");
 
             //dateが営業日の場合
             if (businessDateList.contains(date)) {
 
                 //ランダムに早番と遅番を入れる
+                // todo 遅番と早番の人数を調整
                 Collections.shuffle(employeeWhoCanWorkEarlyAndLate);
                 draft.get(employeeWhoCanWorkEarlyAndLate.get(0) - 1).setShiftPatternId(1);
                 draft.get(employeeWhoCanWorkEarlyAndLate.get(1) - 1).setShiftPatternId(4);
@@ -180,6 +182,7 @@ public class ShiftApplicationService {
                 ));
 
                 //ランダムに残りのシフトを入れる
+                // todo 残りの人数を調整
                 int k = dailyEmptyShiftList.size() / 2;
                 List<Integer> intList = new ArrayList<>(Arrays.asList(k, dailyEmptyShiftList.size() - k));
                 Collections.shuffle(intList);
@@ -264,7 +267,7 @@ public class ShiftApplicationService {
                 .findFirst().orElseThrow();
 
         LocalDateTime nextMonth = LocalDateTime.now().plusMonths(1);
-        int targetDate = Integer.parseInt(patchDataMap.get("targetDate").replace("date","").replace("th", ""));
+        int targetDate = Integer.parseInt(patchDataMap.get("targetDate").replaceAll("\\D", ""));
         Shift patchShift = new Shift(
                 targetEmployee.getEmployeeId(),
                 String.valueOf(nextMonth.getYear()) + "-" + String.format("%02d", nextMonth.getMonthValue()) + "-" + String.format("%02d", targetDate),
