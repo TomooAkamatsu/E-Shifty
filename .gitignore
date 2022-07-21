@@ -8,6 +8,12 @@ build/
 /log/
 udemysample.pem
 docker/frontend/node_modules/
+gradlew
+gradlew.bat
+settings.gradle
+gradle/wrapper/
+.DS_Store
+docker-compose.yml
 
 
 ### STS ###
