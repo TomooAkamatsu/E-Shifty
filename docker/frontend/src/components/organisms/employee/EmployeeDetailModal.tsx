@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   FormControl,
   FormLabel,
   HStack,
@@ -14,7 +13,6 @@ import {
   ModalOverlay,
   Select,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { memo, useEffect, VFC } from "react";

@@ -40,7 +40,7 @@ export const VacationRequest: VFC = memo(() => {
       )
       .then((res) => {
         console.log(res.data);
-        if (res.data.result === "false") {
+        if (res.data.completed === false) {
           instance
             .put(
               `/shift/vacation-requests/${requestDateJSON.employeeId}`,
@@ -54,6 +54,13 @@ export const VacationRequest: VFC = memo(() => {
               });
               history.push("/shift");
             });
+        }
+        if (res.data.completed === true) {
+          showMessage({
+            title: "休み希望日を更新しました",
+            status: "success",
+          });
+          history.push("/shift");
         }
       })
       .catch((err) => {

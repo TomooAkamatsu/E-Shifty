@@ -1,14 +1,4 @@
-import {
-  Box,
-  Center,
-  Spinner,
-  Table,
-  Tbody,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
+import { Center, Spinner, Table, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import { memo, useEffect, VFC } from "react";
 import { useDateList } from "../../../../hooks/useDateList";
 import { useShiftPatterns } from "../../../../hooks/useShiftPatterns";
