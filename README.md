@@ -1,5 +1,7 @@
 ## アプリ概要
 
+[設計書や Gif 動画など Qiita の解説記事はこちら](https://qiita.com/tomo_hasp/items/d8c0cfad9e8246d481ba)
+
 シフト管理作成サービス「E-Shifty」を作成しました。
 ラク(Easy)に Shift を管理できることを目指し、主な機能は以下のとおりです。
 
