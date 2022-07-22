@@ -67,6 +67,10 @@ const AuthUserProvider: React.FC = (props) => {
 
   const guestLogin = async () => {
     setAuthUser({ userId: "1", isAdmin: true });
+    showMessage({
+      title: "ログインに成功しました",
+      status: "success",
+    });
   };
 
   const logout = async () => {
