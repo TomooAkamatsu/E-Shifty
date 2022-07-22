@@ -70,6 +70,7 @@
 
 - シフトを月毎に確認できる
 - 各従業員が翌月の休み希望を提出可能
+  
   <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2602113/4be78dcc-8e3b-2c01-581d-199816df989a.gif" width="60%">
 
 #### 従業員管理
@@ -77,6 +78,7 @@
 - 従業員一覧をカードで一目で確認できる
 - 従業員詳細情報はモーダルから修正可能
 - 新規登録や退職処理も実装
+  
   <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2602113/d0865091-9190-4233-46b6-090e3c45d4dc.gif" width="60%">
 
 #### シフト作成
@@ -86,4 +88,5 @@
 - 残りの B,C をランダムに振り分ける
 - 手動で調整可能かつ、作り直し機能も実装
 - 提出された全従業員の休み一覧も確認できる
+  
   <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2602113/a55cfffa-7148-2f22-61b8-c58635abf4bb.gif" width="60%">
